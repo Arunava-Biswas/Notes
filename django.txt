@@ -1,0 +1,39 @@
+- Django mainly used for developing full scale website or portal.
+- As a data scientist it is better to go with Flask although Django will provide some extra advantages.
+- Django is specially designed to create an entire portal or system.
+- As a data scientist our job is to provide the API then whether the data is visible or not is the responsibility of the UI/UX developer.
+- The AI created by us is the backend part of the entire application.
+
+
+                            Major difference between Flask and Django:
+- Flask mainly follows the MVC (Model-View-Controller) architecture, whereas Django follows MVT (Model-View-Template) architecture.
+- Through Django we can create multipage websites like in React JS whereas in Flask we can create singlepage websites.
+- Django is Monolethic i.e. it defines it's own pattern or template, where as in Flask we can create our own pattern.
+
+
+
+- The need to know the basic Django is that whenever a new project is being discussed whether ML/DL/NLP then it would be shown in end to end way, and there it may be created by Django. Also in an interview to describe an entire project lifecycle we need to know about Django as with the help of it the project will be implemented.
+- By knowing basic Django we are able to know what is our part in the project and what someone else is suppose to do in the same project. So overview is required but not the mastery over the topic.
+
+
+
+- To create a project directory in Django we need to run the following command in admin mode in command prompt/anaconda prompt:
+
+django-admin startproject project_name
+
+- Here we can run any project after entering the project containing the 'manage.py' file with the command:
+
+python manage.py runserver
+
+
+
+- To create our own app (hello_app) we need to write the logic of printing hello_world. So we need to run the command:
+
+python manage.py startapp hello_app
+
+- Now the hello_app directory will get created. Inside this directory we will get all the modules by default with the help of which we can perform different tasks in our app and it will be reflected on the launching page.
+- Go to the 'views.py' file inside the app directory and make the changes we want to be shown on the webpage.
+
+- Inside the app folder there is another file named 'urls.py'. Here we will find the (default path, view.index and the name='index'). It always try to import the view that we created in the 'views.py' file. So it is basically redirecting the urls to the view.
+
+- In Django we create our own app and there will be a master application, so the app we created is just a subset of the entire project, means there may be other apps. But we need to give a control to the master app so that it will be able to execute all the apps. This master app is available inside the original project directory.

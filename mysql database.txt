@@ -1,0 +1,1830 @@
+<--To Create a database-->
+
+// Syntax:
+CREATE DATABASE IF NOT EXISTS dtabase_Name;
+
+// DATABASE name is learn.
+
+CREATE DATABASE IF NOT EXISTS learn;
+
+
+
+
+
+
+
+
+<--To Create Table-->
+
+required elements are Table name, Column names, column datatypes.
+remember there cannot be any space in table_name it can be in camelCase or having '_' in it.
+
+//Syntax :
+
+CREATE TABLE table_name(
+    column1 datatype,
+    column2 datatype,
+    column3 datatype
+);
+
+
+// table_name is personal
+
+CREATE TABLE personal(
+    id INT,
+    name VARCHAR(50),       
+    birth_date DATE,
+    phone VARCHAR(12),
+    gender VARCHAR(1)
+);
+
+// having a limit of 'n' characters in VARCHAR(n)
+
+
+
+
+
+
+
+
+
+
+<--INSERT-->
+
+to insert data in the table.
+remember the column and values must be in sequence.
+
+//Syntax :
+
+INSERT INTO table_name(column1,column2,column3)
+VALUES(value1,value2,value3);
+
+// creating data for Ravi
+
+INSERT INTO `personal` (`id`, `name`, `birth_date`, `phone`, `gender`) 
+VALUES ('1', 'Ravi', '2021-05-12', '12345678', 'm');
+
+
+
+
+
+
+
+
+
+
+<--INSERT multiple rows at one go-->
+
+//Syntax :
+
+INSERT INTO table_name(column1,column2,column3)
+VALUES
+(value1,value2,value3),
+(value1,value2,value3),
+(value1,value2,value3);
+
+// creating data for Rani, Ricky and Kumar
+
+INSERT INTO `personal` (`id`, `name`, `birth_date`, `phone`, `gender`) 
+VALUES 
+('2', 'Rani', '2021-04-11', '12565678', 'f'),
+('3', 'Ricky', '2020-06-10', '25647852', 'm'),
+('4', 'Kumar', '2021-04-11', '56457852', 'm');
+
+
+// remember to use ';' to end the query at the end of the last value.
+
+
+
+
+
+
+
+
+
+<--Constraints-->
+
+Constraints are use to put restrictions on the columns of the data tables i.e. what kind of data to be passed on that column.
+The constraints are: NOT NULL, UNIQUE, DEFAULT, CHECK, FOREIGN KEY, PRIMARY KEY
+
+NOT NULL : atleast some entry is necessary can't left blank.
+CHECK : to make entries conditional.
+UNIQUE : the data passed must be unique i.e. no duplicacy of that particular data,
+DEFAULT : it will be set a value automatically in case left blank.
+
+// Syntax :
+
+CREATE TABLE table_name(
+    datatype1 NOT NULL UNIQUE,
+    datatype2 NOT NULL,      
+    datatype3 NOT NULL CHECK (condition),      
+    datatype4 NOT NULL UNIQUE,      
+    datatype4 NOT NULL DEFAULT 'default_value',      
+);
+
+
+// table name is college
+
+CREATE TABLE college(
+    id INT NOT NULL UNIQUE,                         // so id will be unique and cannot be left alone
+    name VARCHAR(50) NOT NULL,                      // so name  cannot be left alone       
+    age INT NOT NULL CHECK (age >= 18),             // so age must be over or equal to 18
+    gender VARCHAR(1) NOT NULL,                     // so gender cannot be left alone
+    phone VARCHAR(12) NOT NULL UNIQUE,              // so phone will be unique and cannot be left alone
+    city VARCHAR(10) NOT NULL DEFAULT 'Agra'        // so city will be Agra by default if left alone
+);
+
+
+// now inserting record in college table
+
+INSERT INTO `college` (`id`, `name`, `age`, `gender`, `phone`, `city` ) 
+VALUES 
+('1', 'Rani', '20', 'f', '12565678', 'Faridabad'),
+('2', 'Ricky', '22', 'm', '25647852', 'Mumbai'),
+('3', 'Kumar', '21', 'm', '56458752', 'Delhi'),
+('4', 'Fergie', '19', 'f', '56457825', 'Jaipur'),
+('5', 'Alok', '18', 'm', '54557852', 'Chennai');
+
+// now inserting default value in city column
+INSERT INTO `college` (`id`, `name`, `age`, `gender`, `phone` ) 
+VALUES 
+('6', 'Ravi', '20', 'm', '12569678');
+
+****in this case remember to leave the column name also blank for which we want to put the dafault value.
+
+
+
+
+
+
+
+
+
+
+
+<--SELECT-->
+
+to see the data and using various different conditions 
+
+Syntax :
+
+SELECT column1, column2, column3 FROM table_name;
+
+// for all columns at one go
+
+SELECT * FROM table_name;
+
+
+// seeing data from college
+
+SELECT id, name, phone FROM `college`;
+
+// to change a column name use keyword 'AS' which means alias. And in case the alias name has two words then put them in ""
+
+SELECT id AS Id, name AS Student, phone As Phone FROM `college`;
+SELECT id AS Id, name AS "Student Name", phone As Phone FROM `college`;
+
+
+
+
+
+
+
+
+
+
+<--WHERE-->
+
+// for conditional data show we need to use 'WHERE' clause
+
+// Syntax :
+
+SELECT * FROM table_name WHERE condition;
+
+
+// In WHERE we have these comparison operators
+
+=                   equal
+>                   greater than
+>=                  greater than or equal
+<                   less than
+<=                  less than or equal
+<> OR !=            not equal
+BETWEEN             between a certain range
+LIKE                search for a pattern
+IN                  to specify multiple possible values for a column
+
+// here we can see only data for students whose gender is 'f'
+SELECT * FROM `college` WHERE gender = 'f';
+
+// here we can see only data for students whose age is greater than 20
+SELECT * FROM `college` WHERE age > 20;
+
+// here we can see only data for students whose age is less than 20
+SELECT * FROM `college` WHERE age < 20;
+
+// here we can see only data for students whose age is greater than or equal 20 
+SELECT * FROM `college` WHERE age >= 20;
+
+// here we can see only data for students whose age is less than or equal 20 
+SELECT * FROM `college` WHERE age <= 20;
+
+
+// here we can see only data for students whose city is not Agra
+SELECT * FROM `college` WHERE city != "Agra";
+OR
+SELECT * FROM `college` WHERE city <> "Agra";
+
+
+
+
+
+
+
+
+
+
+
+<--AND, OR, NOT operators-->
+
+In SELECT command we can use only one condition with  WHERE clause but for multiple conditions we need to use 'AND' or 'OR' operators with the WHERE clause.
+AND = Both the conditions need to be true.
+OR = Either one of the conditions need to be true.
+NOT = It will make the condition after it false.
+
+// Syntax :
+
+SELECT * FROM table_name WHERE condition1 AND condition2;
+SELECT * FROM table_name WHERE condition1 OR condition2;
+SELECT * FROM table_name WHERE NOT condition;
+
+
+// here we can see only data for students whose gender is 'f' and age is greater than 19
+SELECT * FROM `college` WHERE gender = 'f' AND age > 19;
+
+// here we can see only data for students whose gender is 'f' or age is greater than 19
+SELECT * FROM `college` WHERE gender = 'f' OR age > 19;
+
+// to use both OR and AND conditions in a single query we need to use ()
+// here we can see only data for students whose gender is 'm' or age is greater than 19 and the city is Mumbai
+SELECT * FROM `college` WHERE (gender = 'm' OR age > 19) AND city = 'Mumbai';
+
+// here we can see only data for students whose gender is not 'f'
+SELECT * FROM `college` WHERE NOT gender = 'f';
+
+// here we can see only data for students whose city is neither Jaipur nor Mumbai
+SELECT * FROM `college` WHERE NOT (city = 'Jaipur' OR city = 'Mumbai');
+
+
+
+
+
+
+
+
+
+
+<--IN operator-->
+
+It is a shortcut with which we can search for OR and NOT
+With this we can put as many conditions as we want
+
+// Syntax :
+
+SELECT * FROM table_name WHERE column_name IN (value1, value2);
+SELECT * FROM table_name WHERE column_name NOT IN (value1, value2);
+
+
+// here we can see only data for students whose age is 19 or 21 or 22
+SELECT * FROM `college` WHERE age IN (19,21,22);
+
+// here we can see only data for students whose age is not 19 or 21 or 22
+SELECT * FROM `college` WHERE age NOT IN (19,21,22);
+
+// here we can see only data for students whose city is Mumbai or Chennai or Agra
+SELECT * FROM `college` WHERE city IN ('Mumbai', 'Chennai', 'Agra');
+
+// here we can see only data for students whose city is not Mumbai or Chennai or Agra
+SELECT * FROM `college` WHERE city NOT IN ('Mumbai', 'Chennai', 'Agra');
+
+
+
+
+
+
+
+
+
+
+
+<--BETWEEN operator-->
+
+it will give result for a range
+
+// Syntax :
+SELECT * FROM table_name WHERE column_name BETWEEN value1 AND value2;
+SELECT * FROM table_name WHERE column_name NOT BETWEEN value1 AND value2;
+
+
+// here we can see only data for students whose age is between 19 and 21
+SELECT * FROM `college` WHERE age BETWEEN 19 AND 21;
+
+// here we can see only data for students whose age is not between 19 and 21
+SELECT * FROM `college` WHERE age NOT BETWEEN 19 AND 21;
+
+// now using with string
+
+// here we can see only data for students whose name starts with letter between 'a' and 'k' 
+SELECT * FROM `college` WHERE name BETWEEN "a" AND "k";
+
+**** remember here it will not show the data where name starts with 'k' as it will ignore the last search parameter
+
+// now using with date
+
+// here table is personal 
+// here we can see only data for persons whose birth_date is between 1st Jan 2020 to 31st Dec 2020
+SELECT * FROM `personal` WHERE birth_date BETWEEN '2020-01-01' AND '2020-12-31';
+
+
+
+
+
+
+
+
+
+
+
+
+<--LIKE and Wildcards-->
+
+// LIKE operator :
+ It is use with the wildcards to find data from database.
+
+// Wildcard Characters :
+Mainly 2 characters are use most
+
+%   it represents zero, one, or multiple characters.
+_   it represents only single character.
+
+e.g.
+
+Pattern             Description
+
+LIKE 'a%'           Start with "a".
+LIKE '%a'           End with "a".
+LIKE '%am%'         Have "am" in any position.
+LIKE 'a%m'          Start with "a" and ends with "m".
+LIKE '_a%'          "a" in the second position.
+LIKE '__a%'         "a" in the third position.
+LIKE '_oy'          "o" in the second and "y" in third position.
+
+
+
+// Syntax :
+
+SELECT * FROM table_name WHERE column_name LIKE "pattern";
+SELECT * FROM table_name WHERE column_name NOT LIKE "pattern";
+
+
+// here we can see data for students whose name starts with 'r'
+SELECT * FROM `college` WHERE name LIKE "r%";
+
+// here we can see data for students whose name does not start with 'r'
+SELECT * FROM `college` WHERE name NOT LIKE "r%";
+
+// here we can see data for students in whose name the words 'um' comes in any position
+SELECT * FROM `college` WHERE name LIKE "%um%";
+
+// here we can see data for students whose phone number ends with the words '52'
+SELECT * FROM `college` WHERE phone LIKE "%52";
+
+// here we can see data for students whose name starts with 'r' or 'a'
+SELECT * FROM `college` WHERE name LIKE "r%" OR name LIKE "a%";
+
+// here we can see data for students in whose name we know the second and third characters are 'a' and 'n' but we don't know the first character.
+SELECT * FROM `college` WHERE name LIKE "_an%";
+
+// here we can see data for students in whose name we know the first and third characters are 'r' and 'n' but we don't know the second character.
+SELECT * FROM `college` WHERE name LIKE "r_n%";
+
+
+// We can also use binary search here that is searching in case sensitive
+// here we can see data for students whose name starts with 'r' in case sensitive.
+SELECT * FROM `college` WHERE BINARY name LIKE "r%";
+
+// here we can see data for students whose name starts with 'R' in case sensitive.
+SELECT * FROM `college` WHERE BINARY name LIKE "R%";
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--Regular Expressions-->
+
+This is a way to search multiple pattern in one go. For this we use REGEXP.
+
+In Regular Expressions there are different signs
+
+Sign                Pattern                     Description
+
+^                   '^ra'                       Begining of string with 'ra'.
+$                   'an$'                       End of string with 'an'.
+[...]               '[rms]'                     Any character listed between the square brackets. i.e. it will search all the
+                                                characters separately.
+^[...]              '^[rms]'                    Begin with any character listed between the square brackets. i.e. it will
+                                                search all the words which starts with either 'r' or 'm' or 's'.
+[a-z]               '[a-h]e'                    Match with in the range. It will search for all the words between 'a' and
+                                                'h'that starts with 'a' upto 'h' and on 2nd position there is 'e'.
+p1|p2|p3            'tom|dick|harry'            Matches any of the patterns p1,p2, or p3.Remember no space between | and word.
+
+
+// Syntax :
+
+SELECT * FROM table_name WHERE column_name REGEXP "pattern";
+
+// here we can see data for students whose name starts with 'ra'
+SELECT * FROM `college` WHERE name REGEXP "^ra";
+
+// here we can see data for students whose name ends with 'ni'
+SELECT * FROM `college` WHERE name REGEXP "ni$";
+
+// here we can see data for students in whose name the characters 'u' , 'e', 'o' comes in any position
+SELECT * FROM `college` WHERE name REGEXP "[ueo]";
+
+// here we can see data for students whose name starts with the characters 'r' , 'k', 'a' comes in any position
+SELECT * FROM `college` WHERE name REGEXP "^[rka]";
+
+// here we can see data for students where city has either of the following patterns
+SELECT * FROM `college` WHERE city REGEXP "dab|umb|enn";
+
+// here we can see data for students where city has either starts with 'far' has 'umb' anywhere in the word and ends with 'ra'
+SELECT * FROM `college` WHERE city REGEXP "^far|umb|ra$";
+
+// here we can see data for students where city that has characters from 'a' to 'd' and also have 'i'
+SELECT * FROM `college` WHERE city REGEXP "[a-d]i";
+
+// here we can see data for students where city makes a combination of the searching characters 'ai', 'ri'
+SELECT * FROM `college` WHERE city REGEXP "[ar]i";
+
+**** we can also use ^ $ in [] as '^[rs]i' means find words where it starts with either 'ri' or 'si'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--ORDER BY and DISTINCT-->
+
+// ORDER BY is use to make the list in sorted order either in ascending i.e a-z (ASC) or descending i.e. z-a (DESC). By default it is in ascending order.
+// DISTINCT is use to get the value only once. That is if a city name has been used twice for 2 students then we get the city name only once. It is use to remove duplicacy from data and provide unique values.
+
+// Syntax :
+
+SELECT * FROM table_name ORDER BY column_name1, column_name2 ASC || DESC;
+// now with condition
+SELECT * FROM table_name WHERE condition ORDER BY column_name1, column_name2 ASC || DESC;
+
+SELECT DISTINCT column_name FROM table_name;
+
+
+
+// here we can see data for students in ascending order
+SELECT * FROM `college` ORDER BY name;
+
+// here we can see data for students in descending order
+SELECT * FROM `college` ORDER BY name DESC;
+
+// here we can see data for students in descending order with condition age is above 19
+SELECT * FROM `college` WHERE age > 19 ORDER BY name DESC;
+
+// here we can see city Agra only once even though two students belong to the city
+SELECT DISTINCT city FROM `college`;
+
+// here we can see the age groups of the students
+SELECT DISTINCT age FROM `college` ORDER BY age;
+
+
+
+
+
+
+
+
+
+
+
+<--IS NULL and IS NOT NULL-->
+
+
+// Syntax :
+
+SELECT * FROM table_name WHERE column_name IS NULL;  
+// it will show all the records with null value in that column.
+
+SELECT * FROM table_name WHERE column_name IS NOT NULL;  
+// it will show all the records where there is no NULL value in that column.
+
+
+//here we use table personal
+
+// here we can see the data of people where there is no birth_date
+SELECT * FROM `personal` WHERE birth_date IS NULL;
+
+// here we can see the data of people where there is no name
+SELECT * FROM `personal` WHERE name IS NULL;
+
+// here we can see the data of people where the name column is not empty
+SELECT * FROM `personal` WHERE name IS NOT NULL;
+
+
+**** Remember the NULL value can be checked only by this process and not by using BETWEEN, LIKE etc.
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--LIMIT and OFFSET-->
+
+// LIMIT is use for fetching limited number of records at one go.
+// OFFSET is use for the total number of records in limit i.e. it works as a starting number for each page. It is an optional parameter, it needs to be given before the limit number.
+
+// Syntax :
+
+SELECT * FROM table_name WHERE condition LIMIT number;  
+
+SELECT * FROM table_name WHERE condition LIMIT offset_number, limit_number;  
+
+****Remember the record will start from the next number of the offset_number.
+
+
+// here we can see data for 2 students at one go whose gender is 'm'
+SELECT * FROM `college` WHERE gender = 'm' LIMIT 2;
+
+// here we can see data for 2 students at one go whose gender is 'm' in ascending sorted order
+SELECT * FROM `college` WHERE gender = 'm' ORDER BY name LIMIT 2;
+
+// here we can see data for 2 students after the first 2 students as offset_number is 2
+SELECT * FROM `college` WHERE gender = 'm' LIMIT 2,2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--Aggregate Functions-->
+
+// here we will use a new table named 'employee'
+
+INSERT INTO `employee` ( `name`, `age`, `gender`, `salary`) 
+VALUES 
+('Rani Roy', '20', 'f', '4500'),
+('Ricky Mathur', '28', 'm', '5200'),
+('Sanjiv Kumar', '27', 'm', '6000'),
+('Fergie Dsouza', '39', 'f', '8500'),
+('Virat Kohli', '31', 'm', '6300'),
+('Arpita Kaul', '29', 'f', '4800'),
+('Alok Kumar', '38', 'm', '5700');
+
+
+// COUNT(column_name) = it will return total number of records in that column.
+// MAX(column_name) = it will return the maximum number in that particular column.
+// MIN(column_name) = it will return the minimum number in that particular column.
+// SUM(column_name) = it will return the total of that particular column.
+// AVG(column_name) = it will return the average of that particular column.
+
+
+// Syntax :
+
+SELECT Aggregate_Function_Name(column_name) FROM table_name HAVING condition;
+
+
+// here we can see total number of records in the name column
+SELECT COUNT(name) FROM `employee`;
+or
+SELECT COUNT(*) FROM `employee`;
+
+// here we can see total number of genders in the record we will use DISTINCT so no duplicacy of records
+SELECT COUNT(DISTINCT gender) AS Count FROM `employee`;
+
+****AS means alias it is use to give the resultant column a name
+
+// here we can see maximum salary of the employee
+SELECT MAX(salary) AS Highest_salray FROM `employee`;
+
+// here we can see minimum salary of the employee
+SELECT MIN(salary) AS Lowest_salray FROM `employee`;
+
+// here we can see sum of the total salary
+SELECT SUM(salary) AS Total_salray FROM `employee`;
+
+// here we can see average salary
+SELECT AVG(salary) AS Average_salray FROM `employee`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--UPDATE-->
+
+// it is use for updating or modifying the data in the table. Here 'UPDATE' and 'SET' is keywords.
+
+// Syntax :
+
+UPDATE table_name SET column_name1 = value1, column_name2 = value2 WHERE condition;
+
+****Remember WHERE clause is important in UPDATE because without it all the records will be updated with the new data.
+
+
+
+// here we will change the age and name of the employee Virat Kohli to Vicky Kohli
+UPDATE `employee` SET age = 33, name = 'Vicky Kohli' WHERE name = 'Virat Kohli';
+
+**** here age is integer so value is without '' but name is a string so value must be inside ''
+
+// here we will change the name of the employee Arpita Kaul to Sarita Kumari
+UPDATE `employee` SET name = 'Sarita Kumari' WHERE age = 29;
+
+we can also change records for multiple rows by using IN() in WHERE clause.
+
+// e.g. if we want to change age of students in id 2 and 3
+UPDATE `student` SET age = 19 WHERE id IN(2,3);
+
+
+**** We can use all the operators LIKE, AND, OR etc with the UPDATE.
+
+
+
+
+
+
+
+
+
+
+
+<--COMMIT and ROLLBACK-->
+
+// ROLLBACK : it is use to revert the action. i.e. if we update a data by mistake then to revert the action we use ROLLBACK. Remember when we use ROLLBACK then all the commnads before it will get reverted.
+
+// COMMIT : it is opposite of ROLLBACK i.e. it permanently saves all the commands run before it, and the ROLLBACK will not work upon them. So remember that ROLLBACK will not work on the commands above the COMMIT.
+
+// Syntax :
+UPDATE `student` SET age = 19 WHERE id = 3;
+COMMIT;
+// so the command where id is 4 is permanently saved
+
+UPDATE `student` SET age = 22 WHERE id = 4;
+ROLLBACK;
+// so we can revert the command where id is 4
+
+
+****Remember that ROLLBACK and COMMIT works only with INSERT, UPDATE and DELETE commnad and no other command.
+
+// here we will use table named 'college'
+
+// here we save the data for id 3 and revert the data for id 4
+SELECT * FROM `college`;
+UPDATE `college` SET phone = '22557766' WHERE id = 3;
+COMMIT;
+UPDATE `college` SET phone = '22554466' WHERE id = 4;
+ROLLBACK;
+
+
+
+
+
+
+
+
+
+
+
+<--DELETE-->
+
+// This is use to delete data 
+
+// Syntax :
+DELETE FROM table_name WHERE condition; 
+
+**** Remember to use the DELETE command with WHERE clause else it will delete all the data in the table.
+
+
+// here we will delete data for student id no 8
+DELETE FROM `college` WHERE id = 8; 
+
+
+
+
+
+
+
+
+
+
+
+<--PRIMARY and FOREIGN key-->
+
+// PRIMARY KEY = it is a constraint that always keep unique data that is it will not have duplicity. The difference between PRIMARY KEY and UNIQUE constraint is that in UNIQUE we can store NULL value which cannot be done in PRIMARY KEY. Also PRIMARY KEY can be given to only one column whereas UNIQUE can be given to more than one column.
+
+// AUTO_INCREAMENT = so the number gets automatically increamenated by 1 starting from 1.
+
+// Syntax :
+CREATE TABLE table_name(
+   id INT NOT NULL AUTO_INCREAMENT,
+   name VARCHAR(50) NOT NULL,
+   age INT NOT NULL CHECK(age>=18),
+   gender VARCHAR(10) NOT NULL,
+   city VARCHAR(10) NOT NULL DEFAULT 'Agra',
+   PRIMARY KEY(id)  
+);  
+// the id becomes PRIMARY KEY
+//in this case the id becomes PRIMARY KEY at the time of creation of the table 
+
+// in case the table is already created and we want to provide a PRIMARY KEY
+// Syntax :
+ALTER TABLE table_name ADD PRIMARY KEY(column_name);
+
+
+
+// FOREIGN KEY = it is a key used to link two tables together. A FOREIGN KEY in one table used to point PRIMARY KEY in another table.
+
+// Syntax :
+
+CREATE TABLE city(
+   cid INT NOT NULL AUTO_INCREAMENT,
+   cityname VARCHAR(10) NOT NULL,
+   PRIMARY KEY(cid)
+); 
+// table 1 named city
+
+CREATE TABLE student(
+   id INT NOT NULL AUTO_INCREAMENT,
+   name VARCHAR(50) NOT NULL,
+   age INT NOT NULL CHECK(age>=18),
+   city VARCHAR(10) NOT NULL,
+   PRIMARY KEY(id),
+   FOREIGN KEY(city) REFERENCES city(cid)
+);  
+// table 2 named student
+
+
+in this syntax we have linked city table with student table where we have added FOREIGN KEY(column_name) REFERENCES desired_table_name(PRIMARY KEY);
+it will make the student table very light weight as it will have only id for city. Also it will work very fast when we want to see only data for students belong to a particular city.
+
+in case the table is already created and we want to provide a FOREIGN KEY
+// Syntax :
+ALTER TABLE table_name ADD FOREIGN KEY(column_name) REFERENCES desired_table_name(PRIMARY KEY);
+
+
+
+// here we will create 2 new tables named 'students' and 'City'
+
+CREATE TABLE City(
+   cid INT NOT NULL AUTO_INCREAMENT,
+   cityname VARCHAR(10) NOT NULL,
+   PRIMARY KEY(cid)
+); 
+
+INSERT INTO `City` (`cityname` ) 
+VALUES 
+('Agra'),
+('Mumbai'),
+('Delhi'),
+('Chennai');
+
+CREATE TABLE students(
+   id INT NOT NULL,
+   name VARCHAR(50) NOT NULL,
+   age INT NOT NULL CHECK(age>=18),
+   gender VARCHAR(10) NOT NULL,
+   city INT NOT NULL,
+   PRIMARY KEY(id), 
+   FOREIGN KEY(city) REFERENCES City(cid)
+); 
+// as now we will use city's id so we make city as numbers
+
+INSERT INTO `students` (`id`,`name`, `age`, `gender`,`city` ) 
+VALUES 
+(1, 'Rani', '20', 'f', 1),
+(2, 'Ricky', '22', 'm', 2),
+(3, 'Kumar', '21', 'm', 3),
+(4, 'Sunil', '31', 'm', 1),
+(5, 'Fergie', '19', 'f', 1),
+(6, 'Jaya', '29', 'f', 3),
+(7, 'Alia', '27', 'f', 4),
+(8, 'Neha', '25', 'f', 2),
+(9, 'Alok', '18', 'm', 1);
+
+
+
+
+
+
+
+
+
+
+
+<--INNER JOIN-->
+
+// The INNER JOIN matches each row in one table with every row in the other table to find the common data.
+// Remember JOINs are always applied between 2 tables.
+// It only shows those datas where there is a match between the 2 tables.
+
+// Syntax :
+SELECT * FROM table1 INNER JOIN table2 ON table1.column_name = table2.column_name;
+
+// here we will use tables named 'students' and 'City'
+
+// here we will match the FOREIGN key of 'students' with the PRIMARY key of 'City' table
+SELECT * FROM `students` INNER JOIN `City` ON students.city = City.cid;
+
+// here it will show both the 'cityname' and 'cid' along with the columns of the students table.
+
+// to avoid using the table names again and again we can use alias i.e. 'AS'
+SELECT * FROM `students` AS `s` INNER JOIN `City` AS `C` ON s.city = C.cid;
+
+
+// now by using column_name so we can remove unnecessarry columns.
+SELECT s.id, s.name, s.age, s.gender, C.cityname 
+FROM `students` AS `s` INNER JOIN `City` AS `C` 
+ON s.city = C.cid;
+
+// so here we have removed see the 'city' and 'cid' columns
+
+// we can also use WHERE clause and ORDER BY
+// here we will only see records for students whose city is Agra
+SELECT s.id, s.name, s.age, s.gender, C.cityname 
+FROM `students` AS `s` INNER JOIN `City` AS `C` 
+ON s.city = C.cid 
+WHERE c.cityname = "Agra";
+
+// now using ORDER BY with name column of students table
+SELECT s.id, s.name, s.age, s.gender, C.cityname 
+FROM `students` AS `s` INNER JOIN `City` AS `C` 
+ON s.city = C.cid 
+WHERE c.cityname = "Agra"
+ORDER BY s.name;
+
+// we can also write INNER JOIN as simple JOIN.
+SELECT s.id, s.name, s.age, s.gender, C.cityname 
+FROM `students` AS `s` JOIN `City` AS `C` 
+ON s.city = C.cid 
+WHERE c.cityname = "Agra"
+ORDER BY s.name;
+
+
+
+
+
+
+
+
+
+
+
+<--LEFT JOIN and RIGHT JOIN-->
+
+// The LEFT JOIN returns all records from the left table along with the matched records from the right table.
+
+In case the row from the left table (t1) does not match with any row from the right table(t2), the LEFT JOIN still combines columns of rows from both tables into a new row and include the new row in the result rows. However, it uses NULL for all the columns of the row from the right table.
+
+In other words, LEFT JOIN returns all rows from the left table regardless of whether a row from the left table has a matching row from the right table or not unlike INNER JOIN where it only returns a result when there is a match. If there is no match, the columns of the row from the right table will contain NULL.
+
+// The RIGHT JOIN returns all records from the right table along with the matched records from the left table. it is just the opposite of LEFT JOIN
+
+// Syntax :
+SELECT * FROM table_1 LEFT JOIN table_2 ON table_1.column_name(FOREIGN KEY) = table_2.column_name(PRIMARY KEY);
+SELECT * FROM table_1 RIGHT JOIN table_2 ON table_1.column_name(FOREIGN KEY) = table_2.column_name(PRIMARY KEY);
+
+
+// here we will see the records from students and City table using LEFT JOIN
+SELECT * FROM `students` LEFT JOIN `City` ON students.city = City.cid;
+
+// here we will see all the records from students table even with null value in FOREIGN KEY city but it will not show the cityname at cid 5 in City table as it is in the right table which has no match in the left table.
+
+// we can also see intended columns along with WHERE clause and ORDER BY
+SELECT s.id, s.name, s.age, s.gender, C.cityname 
+FROM `students` AS `s` LEFT JOIN `City` AS `C` 
+ON s.city = C.cid
+WHERE gender = "m"
+ORDER BY s.name;
+
+// here we will see the records from students and City table using RIGHT JOIN
+SELECT * FROM `students` AS `s` RIGHT JOIN `City` AS `C`  ON s.city = C.cid;
+
+
+here it will show all the records from the City column along with the matched columns in the students.
+
+// we can also see intended columns along with WHERE clause and ORDER BY
+SELECT s.id, s.name, s.age, s.gender, C.cityname 
+FROM `students` AS `s` RIGHT JOIN `City` AS `C` 
+ON s.city = C.cid
+ORDER BY s.name;
+
+
+
+
+
+
+
+
+
+
+
+<--CROSS JOIN-->
+
+// CROSS JOIN makes combination of each record from left table with each record from right table. So lets say if in left table we have 4 records and in right we have 3 records so total number of combination will be 3*4 = 12. It is not use that much. If you add a WHERE clause, in case table t1 and t2 has a relationship, the CROSS JOIN works like the INNER JOIN clause.
+
+// Syntax :
+SELECT * FROM t1 CROSS JOIN t2;
+
+Note that different from the INNER JOIN, LEFT JOIN , and RIGHT JOIN clauses, the CROSS JOIN clause does not have a join predicate. In other words, it does not have the ON or USING clause.
+
+// here we will cross join with students and city
+SELECT * FROM `students` CROSS JOIN `City`;
+// or
+SELECT s.id, s.name, C.cityname  FROM `students` AS `s` CROSS JOIN `City` AS `C`;
+// we can use alias for the column names in result also
+SELECT s.id, s.name AS Name, C.cityname AS City  FROM `students` AS `s` CROSS JOIN `City` AS `C`;
+
+we can see the same result without CROSS JOIN also by putting a , inplace of CROSS JOIN
+SELECT s.id, s.name AS Name, C.cityname AS City  FROM `students` AS `s`, `City` AS `C`;
+
+
+
+
+
+
+
+
+
+
+<--JOIN Multiple Tables-->
+
+// It is used for multiple table joining
+
+// Syntax :
+SELECT * FROM table_1
+INNER JOIN table_2 
+ON table_1.column_name = table_2.column_name
+INNER JOIN table_3 
+ON table_1.column_name = table_3.column_name;
+
+// remember that table_2.column_name and table_3.column_name must not be same that is they should be unique.
+table_2.column_name = table_3.column_name = PRIMARY KEY of their respective tables
+table_1.column_name = FOREIGN KEY of it's respective table
+
+// to join them as LEFT JOIN or RIGHT JOIN we need to write them in place of INNER JOIN.
+
+// here we will use 3 tables named Student, City, and Course
+
+CREATE TABLE Course(
+   crid INT NOT NULL AUTO_INCREAMENT,
+   Courses VARCHAR(10) NOT NULL,
+   PRIMARY KEY(crid)
+); 
+
+INSERT INTO `Course` (`Courses` ) 
+VALUES 
+('Btech'),
+('BCA'),
+('BBA');
+
+CREATE TABLE Student(
+   id INT NOT NULL,
+   name VARCHAR(50) NOT NULL,
+   age INT NOT NULL CHECK(age>=18),
+   gender VARCHAR(10) NOT NULL,
+   city INT NOT NULL,
+   courses INT NOT NULL,
+   PRIMARY KEY(id), 
+   FOREIGN KEY(city) REFERENCES City(cid),
+   FOREIGN KEY(courses) REFERENCES Course(crid)
+);
+
+INSERT INTO `Student` (`id`,`name`, `age`, `gender`,`courses`, `city` ) 
+VALUES 
+(1, 'Rani', '20', 'f', 1, 1),
+(2, 'Ricky', '22', 'm', 2, 2),
+(3, 'Kumar', '21', 'm', 1, 3),
+(4, 'Sunil', '31', 'm', 3, 1),
+(5, 'Fergie', '19', 'f', 2, 1),
+(6, 'Jaya', '29', 'f', 1, 3),
+(7, 'Alia', '27', 'f', 3, 4),
+(8, 'Neha', '25', 'f', 2, 2),
+(9, 'Alok', '18', 'm', 2, 1);
+
+
+// here we will see all the records from these 3 different tables using cross join
+SELECT * 
+FROM `Student` AS `s` INNER JOIN `City` AS `C` 
+ON s.city = C.cid
+INNER JOIN `Course` AS `Cr` 
+ON s.courses = Cr.crid;
+
+// now we want customized column names as result
+SELECT s.id AS ID, s.name AS Name, s.age AS Age, s.gender, C.cityname AS City, Cr.Courses AS Course_Name
+FROM `Student` AS `s` INNER JOIN `City` AS `C` 
+ON s.city = C.cid
+INNER JOIN `Course` AS `Cr` 
+ON s.courses = Cr.crid;
+
+// we can also use WHERE and ORDER BY
+SELECT s.id AS ID, s.name AS Name, s.age AS Age, s.gender, C.cityname AS City, Cr.Courses AS Course_Name
+FROM `Student` AS `s` INNER JOIN `City` AS `C` 
+ON s.city = C.cid
+INNER JOIN `Course` AS `Cr` 
+ON s.courses = Cr.crid
+WHERE C.cityname = "Agra"
+ORDER BY Name;
+
+
+
+
+
+
+
+<--GROUP BY and HAVING-->
+
+// The GROUP BY clause is used in conjunction with the SELECT statement and Aggregate functions to group rows together by common column values. We can use all the aggregate functions i.e. sum, avg, min, max. We can use GROUP BY on a single table also.
+
+// The  HAVING clause is used in the SELECT statement to specify filter conditions for a group of rows or aggregates.The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition. If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
+
+// Syntax :
+for multiple tables :
+SELECT * FROM table_1 INNER JOIN table_2
+ON table_1.column_name = table_2.column_name
+WHERE condition 
+GROUP BY column_name(s);
+
+for a single table  :
+SELECT * FROM table_name WHERE condition GROUP BY column_name(s);
+
+for HAVING clause :
+SELECT columns FROM table_name GROUP BY column_name(s) HAVING condition;
+
+****Remember if use WHERE then it will come before GROUP BY and if use HAVING then it will come after GROUP BY
+
+
+// here we will use tables named 'students' and 'City'
+
+// here we will see which city has how many students
+SELECT city, COUNT(city) FROM `Student` GROUP BY city;
+
+// now to see the cityname along with number of students
+SELECT C.cityname, COUNT(s.city) AS Total
+FROM `Student` `s` INNER JOIN `City` `C` 
+ON s.city = C.cid
+GROUP BY city;
+
+// now using with WHERE clause
+// here we will see students data whose age is greater than 21
+SELECT C.cityname, COUNT(s.city) AS Total
+FROM `Student` `s` INNER JOIN `City` `C` 
+ON s.city = C.cid
+WHERE s.age > 21
+GROUP BY city
+ORDER BY COUNT(s.city);
+
+//ORDER BY to be use after GROUP BY
+
+
+// now for HAVING clause
+// here we will see only those city names from where more than 3 students are coming
+SELECT C.cityname, COUNT(s.city) AS Total
+FROM `Student` `s` INNER JOIN `City` `C` 
+ON s.city = C.cid
+GROUP BY city
+HAVING COUNT(s.city) > 3
+ORDER BY COUNT(s.city);
+
+
+
+
+
+
+
+
+
+
+
+<--SubQuery with EXISTS and NOT EXISTS-->
+
+// A MySQL subquery is a query nested within another query such as SELECT, INSERT, UPDATE or DELETE. In addition, a subquery can be nested inside another subquery. A MySQL subquery is called an inner query while the query that contains the subquery is called an outer query. A subquery can be used anywhere that expression is used and must be closed in parentheses.
+
+// EXISTS = if any single record exists in the child then parent command will show results
+// NOT EXISTS = if any single record does not exist in the child then parent command will show results
+
+
+// Syntax :
+SELECT columns FROM table1 WHERE column = (SELECT columns FROM table2 WHERE condition);
+SELECT columns FROM table1 WHERE EXISTS (SELECT columns FROM table2 WHERE condition);
+SELECT columns FROM table1 WHERE NOT EXISTS (SELECT columns FROM table2 WHERE condition);
+
+****here the query for table1 is the parent query and the query for table2 is the subquery.
+
+// here we will see the student names who has opted for BBA
+SELECT name FROM `Student`
+WHERE courses = (SELECT crid FROM `course` WHERE Courses = "BBA");
+
+// here we will see the student names who has opted for BBA and Btech
+SELECT name FROM `Student`
+WHERE courses IN (SELECT crid FROM `course` WHERE Courses IN("BBA", "Btech"));
+
+// here we see for EXISTS and NOT EXISTS
+SELECT name FROM `Student`
+WHERE EXISTS (SELECT crid FROM `course` WHERE Courses IN("BBA", "Btech"));
+
+SELECT name FROM `Student`
+WHERE NOT EXISTS (SELECT crid FROM `course` WHERE Courses IN("Mtech"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--UNION and UNION ALL-->
+
+// UNION operator allows you to combine two or more result sets of queries into a single result set.
+
+// If you use the UNION ALL explicitly, the duplicate rows, if available, remain in the result. Because UNION ALL does not need to handle duplicates, it performs faster than UNION DISTINCT.
+
+// That is UNION ALL shows duplicate records whereas UNION remove them while showing result.
+
+// A JOIN combines result sets horizontally, a UNION appends result set vertically.
+
+// Rules to remember
+Each SELECT statement within UNION must have the same number of columns.
+The columns must also have similar datatypes.
+The columns in each SELECT statement must also be in the same order.
+
+// Syntax :
+SELECT column_1, column_2 FROM table1
+UNION / UNION ALL 
+SELECT column_1, column_2 FROM table2;
+
+we can also use WHERE clause 
+SELECT column_1, column_2 FROM table1 WHERE condition
+UNION / UNION ALL 
+SELECT column_1, column_2 FROM table2 WHERE condition;
+
+
+// here we will use 2 new tables named 'lecturer' and 'pupil'
+
+// now using UNION we can see all the records
+SELECT * FROM `pupil`
+UNION 
+SELECT * FROM `lecturer`;
+
+// now using UNION we can see all the records except the duplicate records
+SELECT name FROM `pupil`
+UNION 
+SELECT name FROM `lecturer`;
+
+// now using UNION we can see all the records including the duplicate records
+SELECT name FROM `pupil`
+UNION ALL
+SELECT name FROM `lecturer`;
+
+**** so in simple words write 2 different querries and then put UNION or UNION ALL between them to see the united effect in the result
+
+
+
+
+
+
+
+
+
+
+
+<--IF and CASE-->
+
+// IF clause is use for conditional based custom columns
+// CASE clause is use for getting conditional base custom column with multiple conditions like in switch case
+
+// Syntax :
+
+for IF clause :
+SELECT column_1, column_2, IF(condition, True Result, False Result) AS alias_name FROM table_name;
+
+for CASE clause :
+SELECT column_1, column_2, 
+CASE 
+   WHEN condition1 THEN result1
+   WHEN condition2 THEN result2
+   WHEN condition3 THEN result3
+   ELSE result alias_name                    // for default case
+END AS alias_name                            // to close the case
+FROM table_name;
+
+// here we need to use 'WHEN' and 'THEN' keywords
+
+// here we use student table
+
+// to see which students are passed and who are failed
+SELECT id, name, percentage, 
+IF(percentage >= 33, "Pass", "Fail") AS Result 
+FROM `Student`;
+
+
+// now we see student result with merit list
+SELECT id, name, percentage, 
+CASE
+   WHEN percentage >= 80 AND  percentage <= 100 THEN "Merit"
+   WHEN percentage >= 60 AND  percentage < 80 THEN "Ist Division"
+   WHEN percentage >= 45 AND  percentage < 60 THEN "IInd Division"
+   WHEN percentage >= 33 AND  percentage < 45 THEN "IIIrd Division"
+   WHEN percentage < 33 THEN "Fail"
+   ELSE "Not Correct %"
+END AS Grade
+FROM `Student`;
+
+// here the 10th id student will show "Not Correct %" as it is above 100
+
+
+// we can also use the CASE clause with UPDATE as we have to update multiple records in one go
+// here we need to give the column_name in CASE clause according to which we want to change the result
+// here the percentage of the students id 3 and 10 will change from 28 and 120 to 39 and 62
+UPDATE `Student` SET 
+percentage = (
+   CASE id
+      WHEN 3 THEN 39
+      WHEN 10 THEN 62
+   END)
+WHERE id IN(3,10);
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--Arithmatic Functions-->
+
+The list of functions are:
+PI() = gives the value of 22/7 or "pi" or a constant value 3.14.
+ROUND() = it will give rounded value for fraction. The .5 is the break point. So incase of (>.5) it will be CEIL value and in case of (<.5) it will be FLOOR value. So '4.3' will be '4' and '4.8' will be '5'.
+CEIL() = it will give higher value for fraction. So for both '4.3' and '4.8' it will show '5'. 
+FLOOR() = it will give lower value for fraction. So for both '4.3' and '4.8' it will show '4'.
+POW() = to find power of the number has 2 parameters 'base' and 'exp'. So (4)^3 will be 64.
+SQRT() = it will give square root value. 
+RAND() = it will give a random value between 0 to 1. 
+ABS() = to show absolute value. i.e. it will  neglect the sign and sho only the value.So '-6.2' and '6.2' will be same '6.2'.
+SIGN() = in case the passed number > 0 then it will return 1, if the number = 0 then it will return 0, and if the number < 0 then it will return -1.
+
+there are some more also but these are core math so not so usefull in web development
+SIN(), COS, TAN(), ASIGN(), ACOS(), ATAN(), ATAN2(), COT(), RADIANS() 
+
+// Syntax :
+SELECT column_1, column_2 (Arithmatic Function) FROM table_name;
+
+// here we will add 5 in the percentage of the students in Student table
+SELECT id, name, (percentage + 5) AS "New Percentage" FROM `Student`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--String Functions-->
+
+UPPER() / UCASE() = convert the letter to uppercase.
+LOWER() / LCASE() = convert the letter to lowercase.
+LENGTH() = returns the size of string in bytes. 
+CHAR_LENGTH() = returns the number of characters in the string including space.
+CONCAT() = concat two strings or integers and string and show them in a new column. It can concat multiple columns.
+CONCAT_WS() = it is same as CONCAT() but it has a 3rd parameter that provides the separator between the strings.
+LTRIM() = it will trim the space from left side of the string.
+RTRIM() = it will trim the space from right side of the string.
+TRIM() = it will trim the space from both side of the string.
+POSITION() = it returns the 1st position of the searched word or string in the main string. e.g. SELECT POSITION("Biswas" IN "Arunava Biswas") AS Name;
+INSTR() = it is same as POSITION but here we don't need IN instead here the searched string will come later separated by ','.e.g. SELECT INSTR("Arunava Biswas", "Biswas") AS Name;
+LOCATE() = it is also like POSITION but here we can define the starting position for the search like here it will start search from 3rd position. e.g SELECT LOCATE("Biswas", "Arunava Biswas", 3) AS Name;
+SUBSTRING() / SUBSTR() = it returns a small part from the large string. It has a starting point as a parameter ans also a length as parameter. e.g. SELECT SUBSTR("Arunava Biswas", 3, 7) AS Name; it will return unava B.
+MID() = it is same as SUBSTR.
+SUBSTRING_INDEX() = it is use for breaking a string from a certain point as we provide a delimiter as parameter. e.g. SELECT SUBSTRING_INDEX("www.google.com", ".", 1) AS Name; it will return everything before the 1st '.' i.e. 'www'. We can also use characters as delimiter.
+LEFT() = it will return all the string before the index number we pass in it. e.g. SELECT LEFT("Arunava Biswas", 3) AS Name; it will return Aru.
+RIGHT() = it is same as LEFT just here it returns the right side from the index position.
+LPAD() = here we can increase the string by providing padding from left side with the character we pass in it. 
+RPAD() = here we can increase the string by providing padding from right side with the character we pass in it.
+SPACE() = it is use to increase space in the string. Not so usefull.
+REVERSE() = it will reverse the string.
+REPEAT() = it will repeat the string.
+REPLACE() = it is for replacement in the string. REPLACE("string", "searching_item", "replace_item")
+STRCMP() = it compares between 2 strings. STRCMP("string1", "string2"). If both are equal then result is '0', if left str > right str then '1', if left str < right str then '-1'
+FIELD() = here we can find a particular string out of multiple strings, after searching it will return it's position as result. FIELD("a", "X", "a", "k")  // here it will return 2 as "a" is in index number 2.
+FIND_IN_SET() = it will search inside a set of strings and returns it's index. Remember there should be no space between set items after ','. FIND_IN_SET("a", "X,a,k,l,m,j")
+FORMAT() = it mainly use with numeric values. It is mainly use to show how many positions we want to show after '.' . e.g.
+FORMAT(255.3565, 2)  returns as 255.36.
+HEX() = it returns hexadecimal form.
+
+
+// it will returns the names in uppercase
+SELECT id, UPPER(name) AS Name, percentage FROM `Student`;
+
+// it will returns the names in lowercase
+SELECT id, LCASE(name) AS Name, percentage FROM `Student`;
+
+// it will returns the number of characters in the name
+SELECT id, name, CHAR_LENGTH(name) AS Length FROM `Student`;
+
+// it will returns the bytes of characters in the name
+SELECT id, name, LENGTH(name) AS Bytes FROM `Student`;
+
+// it will return concated name and percentage
+SELECT id, CONCAT(name, percentage) AS Name FROM `Student`;
+// to give space between them
+SELECT id, CONCAT(name, " ", percentage) AS Name FROM `Student`;
+
+// it will concat name and percentage with '-' sign between them
+SELECT id, CONCAT_WS("-", name, percentage) AS Bytes FROM `Student`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--DATE Functions-->
+
+CURRENT_DATE() = returns current date. It is basically server time.
+CURDATE() = short form of CURRENT_DATE().
+SYSDATE() = same as CURRENT_DATE() as it returns system time.
+NOW() = it is mainly use instead of SYSDATE(). It returns date and time of server.
+DATE() = it returns the date if we pass both date and time in it.
+MONTH() = it returns the month if we pass date or both date and time in it.
+MONTHNAME() = it returns the month name if we pass date or both date and time in it.
+YEAR() = it returns the year if we pass date or both date and time in it.
+QUARTER() = it returns the quarter number if we pass date or both date and time in it.Remember quarter starts from 'January'.
+DAY() = it returns the day if we pass date or both date and time in it.
+DAYOFMONTH() = it returns the day if we pass date or both date and time in it.
+DAYNAME() = it returns the day's name if we pass date or both date and time in it.
+DAYOFWEEK() = it returns the index number of the day if we pass date or both date and time in it.here week starts from SUNDAY
+DAYOFYEAR() = it returns the index number of the dayin the year.
+WEEK() = it returns which week of the year the day belongs to.
+WEEKDAY() = it returns number of day of the week. week starts from SUNDAY.
+YEARWEEK() = it returns both year and week number.
+LAST_DAY() = it returns the last day of the month.
+EXTRACT() = it is universal. i.e. we can extract day,date,month,year,seconds,minute,hour from the date by passing the parameter.
+ADDDATE() = it adds date to the existing date. e.g. SELECT ADDDATE("2019-06-15", INTERVAL 10 DAY); returns 2019-06-25.
+DATE_ADD() = same as ADDDATE.
+MAKEDATE() = creates a new date. here we pass the year and date but it makes it the date of the 1st month. e.g. SELECT MAKEDATE(2019,10); return 2019-01-10.
+SUBDATE() = it is opposite of ADDDATE i.e. it subtract days.e.g. SELECT SUBDATE("2019-06-15", INTERVAL 2 DAY);
+DATEDIFF() = shows difference between 2 dates.e.g. SELECT DATEDIFF("2019-06-15", "2019-08-25");
+TO_DAYS() = shows difference between starting date and the date passed as a parameter.e.g. SELECT TO_DAYS("2019-06-15");
+FROM_DAYS() = opposite of TO_DAYS. here we pass the days.e.g. SELECT FROM_DAYS("224585");
+PERIOD_ADD() = adds a period in the date.e.g. SELECT PERIOD_ADD("224585",5);
+PERIOD_DIFF() = returns difference between 2 periods.e.g. SELECT PERIOD_DIFF("224585","245255");
+DATE_FORMAT() = it is important.To format a date. e.g. SELECT DATE_FORMAT("2019-06-15", "%d/%m/%Y"); returns 15/06/2019
+STR_TO_DATE() = changes the format into mysql format.e.g. SELECT STR_TO_DATE("June 10 2018", "%M %d %Y");returns 2018-07-10
+
+
+
+here we will use personal table
+SELECT id, name, birth_date, YEAR(birth_date) AS Year FROM `personal`;
+SELECT id, name, birth_date, MONTHNAME(birth_date) AS Month FROM `personal`;
+SELECT id, name, birth_date, QUARTER(birth_date) AS Quarter FROM `personal`;
+SELECT id, name, birth_date, DAYNAME(birth_date) AS Day FROM `personal`;
+SELECT id, name, birth_date, WEEK(birth_date) AS Week FROM `personal`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--ALTER-->
+
+// with this ALTER command  we can make various changes in the existing table. like:
+// Add a column in a table.
+// Changing datatype of a column.
+// Changing column name.
+// Adding Constraints to a column.
+// Changing column position.
+// Deleting a column.
+// Renaming the table.
+
+
+
+// Syntax :
+
+   Add column :
+ALTER TABLE table_name ADD column_name datatype;
+
+   Changing datatype of column :
+ALTER TABLE table_name MODIFY column_name datatype;
+
+   Deleting a column :
+ALTER TABLE table_name DROP COLUMN column_name;
+
+   Changing column name :
+ALTER TABLE table_name CHANGE column_name New_name datatype;
+
+   Changing table name :
+ALTER TABLE table_name RENAME new_table_name;
+
+   Adding Constraints to a column here PRIMARY KEY is the constraint :
+ALTER TABLE table_name ADD constraint_name(column_name);
+
+   Changing column position :
+ALTER TABLE table_name MODIFY column_name datatype AFTER column_name1;
+
+// here column_name1 is the name of that column after which we want to put our column.
+
+   to set AUTO_INCREAMENT number :
+ALTER TABLE table_name AUTO_INCREAMENT = starting_digit;
+
+
+// here we will use student table
+
+// here we will add a new column for email
+ALTER TABLE `student` ADD Email varchar(255);
+
+// here we will change the position of email column to 3rd after the id and name column
+ALTER TABLE `student` MODIFY Email varchar(255) AFTER name;
+
+// here we will change the datatype of email column
+ALTER TABLE `student` MODIFY Email int(11);
+
+// here we will add a constraint UNIQUE to the Email column
+ALTER TABLE `student` ADD UNIQUE (Email);
+
+// here we will rename Email
+ALTER TABLE `student` CHANGE Email Email_id varchar(255);
+
+// here we will delete Email_id
+ALTER TABLE `student` DROP COLUMN Email_id;
+
+// here we will rename the table student to student_list
+ALTER TABLE `student` RENAME student_list;
+
+
+**** Sometimes on adding a new record the id of the record doesn't show the next number of the previous entered record as we may have inserted a record in past and delete it, so now the id starts with the next number, So let's say after 3 we get 15 as we have deleted records from 4 to 14 and now new inserted record is having id of 15.
+
+
+**** to solve this problem
+// here we will use course table
+
+// so the next record enters will start from id 4
+ALTER TABLE course AUTO_INCREAMENT = 4;
+
+
+
+
+
+
+
+
+
+
+
+<--DROP and TRUNCATE-->
+
+// DROP will delete the entire table along with it data but TRUNCATE will remove only the data keeping the structure intact.
+
+
+// Syntax :
+
+DROP TABLE table_name;
+
+TRUNCATE TABLE table_name;
+
+
+
+
+
+
+
+
+
+
+
+
+<--VIEW-->
+
+// it is use to see combined data from 2 or more tables. We can achieve the same also using INNER JOIN but the query becomes very complex like
+SELECT * FROM table1 INNER JOIN table2 ON table1.column_name = table2.column_name;
+
+to solve this problem we use VIEW command. It saves the long and complex query in the database so we can use it whenever we want.
+we can modify or delete the view also.
+
+
+
+*****Advantages of view**** :
+
+// Simplify complex query.
+// Provides extra layer of security.
+
+
+*****Disadvantages of view**** :
+
+// Performance decreases with time.
+// It is dependent on tables.
+
+
+
+// Syntax :
+ to create the view :
+CREATE VIEW view_name AS 'query';
+
+   to see the view later :
+SELECT * from view_name;
+
+   to alter the view :
+ALTER VIEW view_name AS 'new_query';
+or
+CREATE OR REPLACE VIEW view_name AS 'new_query';
+
+   to rename the view :
+RENAME TABLE view_name TO new_name;
+
+   to delete the view :
+DROP VIEW view_name;
+
+
+// here the query to be the complex query we want to see later.
+
+
+// here we will use 3 tables named Student, City, and Course
+
+
+// here it is a complex query to see students name in ascending order with their course name.
+SELECT s.id AS ID, s.name AS Name, s.age AS Age, s.gender, Cr.Courses AS Course_Name
+FROM `Student` AS `s` INNER JOIN `Course` AS `Cr` 
+ON s.courses = Cr.crid
+ORDER BY Name;
+
+// now we will see it in VIEW
+CREATE VIEW agra_students AS
+SELECT s.id AS ID, s.name AS Name, s.age AS Age, s.gender, Cr.Courses AS Course_Name
+FROM `Student` AS `s` INNER JOIN `Course` AS `Cr` 
+ON s.courses = Cr.crid
+ORDER BY Name
+
+// now whenever we want to see the same result
+SELECT * from agra_students;
+
+
+// now with alter command where we want to add the cityname also to the previous view
+ALTER VIEW agra_students AS
+SELECT s.id AS ID, s.name AS Name, s.age AS Age, s.gender, C.cityname AS City, Cr.Courses AS Course_Name
+FROM `Student` AS `s` INNER JOIN `Course` AS `Cr` 
+ON s.courses = Cr.crid 
+INNER JOIN `City` AS `C` 
+ON s.city = C.cid
+ORDER BY Name;
+
+// now whenever we want to see the same result
+SELECT * from agra_students;
+
+
+// now to change the view name from agra_students to studentdata
+RENAME TABLE agra_students TO studentdata;
+
+// now whenever we want to see the same result
+SELECT * from studentdata;
+
+
+// now to DROP the view studentdata
+DROP VIEW studentdata;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<--INDEX-->
+
+// to make search inside database faster we use INDEX. The INDEX is permanently saved in the server.
+
+
+// Syntax :
+to create the INDEX :
+CREATE INDEX index_name ON table_name(column_1, column_2, column_3...);
+
+****Mainly those columns are used in which most of the searching took place.
+
+to see how many index are there in the table :
+SHOW INDEX FROM table_name;
+
+to delete the INDEX :
+DROP INDEX index_name ON table_name;
+
+****Points to remember :
+// In case there is a PRIMARY KEY or UNIQUE column in the table then they are automatically set into index.
+// Index only those columns which are frequently use for retrieving data.
+// Index columns that are used for joins to improve join performance.
+// Avoid columns that contain too many NULL values.
+// Small tables do not require indexes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+___________________________________________________________________________________
+<-----------------------------------------MONGODB--------------------------------->
+-----------------------------------------------------------------------------------
+
+1. Database Commands
+
+View all databases
+show dbs
+
+Create a new or switch databases 
+use dbName
+
+View current Database
+db
+
+Delete Database 
+db.dropDatabase()
+
+
+
+2. Collection Commands
+
+Show Collections
+show collections
+
+Create a collection named 'comments'
+db.createCollection('comments')
+
+Drop a collection named 'comments'
+db.comments.drop()
+
+
+
+
+3. Row(Document) Commands
+
+Show all Rows in a Collection 
+db.comments.find()
+
+Show all Rows in a Collection (Prettified)
+db.comments.find().pretty()
+
+Find the first row matching the object
+db.comments.findOne({name: 'Harry'})
+
+Insert One Row
+db.comments.insert({
+    'name': 'Harry',
+    'lang': 'JavaScript',
+    'member_since': 5
+ })
+
+Insert many Rows
+db.comments.insertMany([{
+    'name': 'Harry',
+    'lang': 'JavaScript',
+    'member_since': 5
+    }, 
+    {'name': 'Rohan',
+    'lang': 'Python',
+    'member_since': 3
+    },
+    {'name': 'Lovish',
+    'lang': 'Java',
+    'member_since': 4
+}])
+
+Search in a MongoDb Database
+db.comments.find({lang:'Python'})
+
+Limit the number of rows in output
+db.comments.find().limit(2)
+
+Count the number of rows in the output
+db.comments.find().count()
+
+Update a row
+db.comments.update({name: 'Shubham'},
+{'name': 'Harry',
+    'lang': 'JavaScript',
+    'member_since': 51
+}, {upsert: true})
+
+Mongodb Increment Operator
+db.comments.update({name: 'Rohan'},
+{$inc:{
+    member_since: 2
+}})
+
+Mongodb Rename Operator
+db.comments.update({name: 'Rohan'},
+{$rename:{
+    member_since: 'member'
+}})
+
+Delete Row 
+db.comments.remove({name: 'Harry'})
+
+Less than/Greater than/ Less than or Eq/Greater than or Eq
+db.comments.find({member_since: {$lt: 90}})
+db.comments.find({member_since: {$lte: 90}})
+db.comments.find({member_since: {$gt: 90}})
+db.comments.find({member_since: {$gte: 90}})

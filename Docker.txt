@@ -1,0 +1,355 @@
+-- Docker is a platform for developers and system administrators to build, run and share application with containers.
+-- The use of containers to deploy applications is called containerization.
+
+-- Why Docker is used?
+-- Docker standardizes the environment. 
+-- We need to build the container once and we can deploy it anywhere.
+
+-- Features of containerization:
+- Flexible
+- Lightweight
+- Portable
+- Loosely coupled
+- Scalable
+- Secure
+
+-- A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image.
+-- Using docker build users can create an automated build that executes several command line instructions.
+-- A Docker image is a read-only template that contains a set of instructions for creating a container that can run on the Docker platform.
+-- A Docker container is a lightweight, standalone, executable package of software that includes everything needed to run an application, i.e. code, runtime, system tools, system libraries and settings.
+
+Dockerfile --> Docker Image --> Docker Container --> Performing operations
+
+
+- To create a Dockerfile we need to named the file as 'Dockerfile' without any extension.
+- Remember all the commands of Docker are in capital letters.
+- To create a Docker Image we need to use a base image as we cannot create a Docker Image directly.
+- We can get the base image and it's version from the DockerHub.
+- 'RUN' is use so we can execute the command to create an image file in the Dockerfile from the base image of the DockerHub.
+- To stop a process type 'Ctrl + C'
+- To get out of the docker 'Ctrl + D'
+
+
+
+# getting all the dependencies from the virtual environment
+(venv) C:\Users\Arunava>pip freeze > requirements.txt
+
+in Dockerfile:
+# importing from base image
+FROM python:3.0
+
+# creating a directory where api-app is the directory name.
+WORKDIR /api-app
+
+# copying the dependencies and keep them here
+COPY requirements.txt .
+
+# installing the dependencies
+RUN pip install -r requirements.txt
+
+# copying the folder with the main python file
+# here syntax is: COPY local_machine_filepath (./app) to the foldername inside the container (./app)
+COPY ./app ./app
+
+# now specify the entrypoint to make the executable code run
+CMD ["python", "./app/main.py"]
+
+
+Now create the docker image and create container from it and then run that.
+
+
+
+Example Code for Dockerfile with Ubuntu and Python:
+
+FROM ubuntu:18.04 							(To get the base image of ubuntu from DockerHub)
+
+RUN apt-get update							(To execute the command in the docker file and update the image)
+
+RUN apt-get install -y python3-pip 			(To install the python package)
+
+
+- Now save the file and we will create an image on the base of the Dockerfile we created. 
+- Now open the terminal at the location of the Dockerfile. Write 'cmd' and enter in the filepath area to open the command prompt at that location.
+- Now we can create the Docker Image here with the following command.
+- Remember the '.' with a space after the image name is very important to create the image.
+
+build -t ubuntu:18.0 .						(Here 'ubuntu:18.0' is the image name)
+
+
+- To see the image:
+
+docker images
+
+- Now to execute the image and creating the container:
+
+docker run --name container_name IMAGE ID / REPOSITORY TAG 
+
+- Now to check whether the container is running or not:
+
+docker ps
+
+- But this will show no container as when we created the image we did not specify that the container should run continuously means there is no executable file to run, so when we create container from image  the container is starting and then closed.
+- So now we need to go inside the container we created from the image and we need to execute the operations we performed.
+- Remember the container names and image names must be unique.
+
+docker run -it --name container_name IMAGE ID  	('i' means interactive and 't' means tt)
+
+- It will allow us to enter inside the container we created from the image and the container will not get closed. 
+- Now we can use the Linux command 'ls' to see all the files and folders inside the container.
+- We need to copy the executable python file from it's source to the Dockerfile. We can use the commands we use in Linux to copy paste.
+
+
+
+
+- Running a Python code in the Docker
+
+- Create a python project file.
+- Create a Dockerfile like before.
+
+				FROM base_image
+
+				RUN apt-get update
+
+				RUN apt-get install -y python3-pip
+
+				RUN pip3 install numpy
+
+				RUN pip3 install pandas
+
+				COPY source_foldername/filename/filepath destination_foldername/filename/filepath 
+
+
+- Now save it, and create an image of it so open the command prompt here like before.
+
+				build -t docker_image .
+
+- To see the image:
+
+				docker images
+
+- Now we need to create the container from the image, and we need to execute the python file there, so we need to go inside the container.
+
+				docker run -it --name container_name IMAGE ID
+
+- Now the container is created from the image and we are inside the container. So now we need to see the files inside here, so we can use 'ls'.
+- Now we need to execute the python file.
+
+				python3 pythonfile_name
+
+
+- But this is a lengthy process, we need to write a Dockerfile in such a way so that when we create container from image then automatically the executable python file gets executed.
+- To do this we can use 2 commands either 'CMD' or 'ENTRYPOINT'.
+- The CMD command will run when we create a container from the image.
+- Remember only the layers for the commands like FROM, RUN, COPY, CMD gets created.
+
+
+				FROM base_image
+
+				RUN apt-get update
+
+				RUN apt-get install -y python3-pip
+
+				RUN pip3 install numpy
+				RUN pip3 install pandas
+				or
+				RUN pip install -r requirements.txt 	(to get all the dependencies at one go)
+
+				COPY source_foldername/filename/filepath destination_foldername/filename/filepath
+
+				CMD ["languagename", "filename"] 		(e.g. CMD ["python3", "pythonfile_name"])
+
+- Now save it, create the image, then create container of that image and run the container.
+
+				build -t docker_image .
+
+				docker run -it --name container_name IMAGE ID
+
+
+
+
+-- How to deploy ML projects in Docker?
+
+- So we can put the Docker image to the server or anywhere to execute the project.
+
+-- Dockerfile code:
+
+- As most of the projects are conducted in Anaconda so we will use the i age of Anaconda as base image.
+
+				FROM continuumio/anaconda3:latest
+
+- Let's create a home directory, so anything we do it will be inside the 'home' directory.
+
+				WORKDIR /home
+
+- Now copy the project files from the project folder to the home directory by using the '.'
+
+				COPY project_folder_name .
+
+- Now let's create an image and container using the Dockerfile.
+
+				docker build -t ml_project .
+
+- Now we need to bind the port of our local system with the system where the docker container will run.
+- As here the 'host_system_port_number' is 8888 and 'docker_port_number' is 8080. The docker port number is mentioned in the executing file with .run() where we use the if __name__ == '__main__' concept. 
+- Here the image name is 'ml_project' and tag is 'latest'
+
+				docker run -it --name ml_project_test -p 8888:8080 ml_project:latest
+
+- So now the container is created out of the image and now we will execute the file. So in Dockerfile we need to give the CMD command as it will get execute automatically when it creates container out of the Docker image.
+
+				CMD ["python", "home/app.py"]
+
+- Now after saving the Dockerfile with the new changes again we need to make the image and then create container as we did in the previous case. Her we need to give another container name as the previous name is already present.
+
+				docker run -it --name ml_project_test1 -p 8888:8080 ml_project:latest
+				
+
+- Now if we want to see the result in our local system then we need to access it with the port number we have given for the local system i.e. 8888.
+- So the ML model is running on port 8080 on Docker but we can see that in our local port 8888. 
+127.0.0.1.8888 in the url bar to see the application.
+
+- So now we can say that our project is DOCKERIZED.
+
+- Now to distribute this project in different systems or to deploy on different clouds:
+- Just create container and run the image we created in the docker.
+- But remember that docker engine must be presented in that system.
+
+				docker run -it --name ml_project_test1 -p 8888:8080 ml_project:latest
+
+
+- Now we can move the image file to any system.
+- We need to first save and convert the image to a '.tar' file and then we can share that '.tar' file to anywhere.
+
+-- To save the Docker image and convert to a .tar file:
+				
+				docker save ImageID > fileName.tar
+				
+- Now to run this model to some other system we must ensure that in that system the docker engine is installed around the same version in which the Docker Image is build in our local system. Then we need to convert that .tar file to again an Docker Image.
+
+				docker load < fileName.tar
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+					----------------  DOCKER GITHUB ACTIONS CI/CD PIPELINE  ----------------	
+
+-- What is GITHUB ACTIONS?
+
+- It is a platform to automate software developer workflows. 
+- The CI/CD pipeline is one of many workflows which can be automated using GITHUB ACTIONS.
+
+
+-- GITHUB ACTIONS:
+
+- With GITHUB ACTIONS when something happens IN or TO the repository created by us in the github then automatic ACTIONS are executed in response. And the things that happened IN or TO our repository are called 'GitHub Events'.
+- So the process is:
+		- Listen to the event happened in the repository.
+		- Trigger workflow in response to that event.
+		- These responses are known as Actions.
+		- The Chain of Actions or Combination of Actions make up the workflow.
+		
+
+-- Example of Workflow to GitHub repository with a private project:
+
+- In this case the most common workflow will be the 'CI/CD(Continuous Integration/Continuous Development) PIPELINE'.
+- Here flow is:
+
+Commit the code --> Test the code --> Builds an artifact --> Push the artifact to some storage --> Deploy the application on a deployment server.
+		
+
+-- Example of 'JAVA App with Gradle' building a 'Docker Image' and pushed to a 'Docker Private repository':
+
+1st Step:
+- In GitHub create a public repository.
+- Here after creating it we get the 'Actions' tab at the header section with the help of which we can automate our workflows.
+
+2nd Step:
+- Now push the code from local to the global repository.
+				
+				$ git push
+				
+- After pushing the code if we open the 'Actions' tab we can see a big list of workflow templates, so we don't need to write the workflow code from scratch. We can use one of the templates that matches the technology that our code uses.
+
+- These templates are mainly grouped in 3 main categories:
+	- Deployment Workflows:
+			To deploy our code to cloud services or using some automation tools.
+	
+	- Continuous Integration Workflows:
+			Here we have a list of programming languages and tools we uses, also combination of such tools with the languages e.g. 'Java with Gradle' and 'Java with Maven'.
+			
+	- Build and Test Workflows and Publish Workflows:
+			Here we can build and test the artifact and we can publish the artifact to some repository.
+			
+- So different applications use different combination of tools and it is important for a CI/CD tool to have an easy integration with many different tools, so that it works for different projects.
+
+3rd Step:
+- Here we will chose the 'Java with Gradle' workflow template.
+- So it will automatically creates a configuration view in the repository.
+- The workflow logic will be held in a '.yml' file automatically created in the repository.
+
+			
+			
+Syntax of the Workflow file:
+
+[Name of the workflow. It is optional]
+
+name: Java CI 
+
+[The events that will trigger the following workflow]
+- Here it means everytime someone pushes to the master branch the following workflow will be triggered.
+- Or if everytime a pull request gets created with master branch as a target the following workflow will get executed.
+
+on:
+   push:
+     branches: [ master ]
+   pull_request:
+     branches: [ master ]
+
+
+[These are the workflows to be executed on the events]
+- Jobs are the groups of set of actions that will be executed.
+
+jobs:
+  build:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3			(to checkout a Git repository at a particular version '@v')
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3			(to prepare an environment with a defined version as '@v')
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: build
+		  
+
+
+
+
+-- Workflows on GITHUB ACTIONS get executed in GitHub servers. So github will manage them.
+-- For each new job in the workflow a fresh new GitHub server will be prepared, so one job will run on a single server at a time.
+-- Now we can built a container in docker using the artifact.
+
+
+
+
+		***** Krish Naik Facts *****
+		
+-- To configure GitHub Actions, considering CI/CD Pipeline two folders needed to be created '.github' and 'workflows' one inside another and inside the 'workflows' we needed a yml file named 'main.yml'.
+-- So whenever the code is pushed into the GitHub repository the GitHub repository will seize the entire following thing:
+					'.github\workflows\main.yml'
+
+-- This will have the entire process as soon we commit that what all things we need to do, i.e. build a Dockerfile means building the entire Docker Image and then push the image in the form of a container to the Heroku platform.
+-- So in the 'main.yml' we need to put the CI/CD workflows as we did previously.

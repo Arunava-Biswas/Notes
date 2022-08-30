@@ -1,0 +1,475 @@
+
+***** This is for Windows only *****
+
+
+
+// To see the package installed use pip list command
+
+C:\Users\Arunava\Desktop>pip list
+Package           Version
+----------------- -------
+-sgiref           3.3.1
+asgiref           3.3.1
+astroid           2.4.2
+click             7.1.2
+colorama          0.4.4
+comtypes          1.1.7
+cycler            0.10.0
+Django            3.1.7
+Flask             1.1.2
+isort             5.6.4
+itsdangerous      1.1.0
+Jinja2            2.11.2
+kiwisolver        1.3.2
+lazy-object-proxy 1.4.3
+MarkupSafe        1.1.1
+matplotlib        3.4.3
+mccabe            0.6.1
+numpy             1.21.2
+pandas            1.3.3
+Pillow            8.1.0
+pip               20.3.1
+playsound         1.2.2
+pylint            2.6.0
+pyparsing         2.4.7
+pypiwin32         223
+python-dateutil   2.8.2
+pyttsx3           2.90
+pytz              2020.4
+pywin32           228
+setuptools        49.2.1
+six               1.15.0
+sqlparse          0.4.1
+toml              0.10.1
+Werkzeug          1.0.1
+wrapt             1.12.1
+WARNING: You are using pip version 20.3.1; however, version 21.3 is available.
+You should consider upgrading via the 'c:\python39\python.exe -m pip install --upgrade pip' command.
+
+
+// To create a new environment run command python -m venv environment_name_to_be_created 
+// When run the -m command with a module like 'venv' here then python search the sys.path and execute the module as a main module. So the venv expects an environment name that to be created and then it will go out and create that environment. Like here the environment created is 'project_env'.
+
+
+C:\Users\Arunava\Desktop>python -m venv project_env
+C:\Users\Arunava\Desktop>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Now to activate the environment we need to run command environment_name\Scripts\activate.bat
+// And our environment gets created. We can see that now as the environment_name is specified in () before the command line.
+// Another way of doing this is by typing 'where python' command as it will return the path of the python and our virtual environment will be at the top of that list.
+// The version of python in the environment will be the same as installed in the machine. To use a different version in the virtual environment we need to use vitual envy but now we don't need to do that.
+
+
+
+C:\Users\Arunava\Desktop>project_env\Scripts\activate.bat
+
+(project_env) C:\Users\Arunava\Desktop>where python
+C:\Users\Arunava\Desktop\project_env\Scripts\python.exe
+C:\Python39\python.exe
+C:\Users\Arunava\AppData\Local\Microsoft\WindowsApps\python.exe
+
+
+
+
+
+
+
+
+
+
+
+
+// Now if we do a pip list then we can see all we have is pip and setuptools.
+// So now if we install some packages then they will be installed only in this environment. Like here we install the requests and pytz module.
+
+
+(project_env) C:\Users\Arunava\Desktop>pip list
+Package    Version
+---------- -------
+pip        20.2.3
+setuptools 49.2.1
+WARNING: You are using pip version 20.2.3; however, version 21.3 is available.
+You should consider upgrading via the 'c:\users\arunava\desktop\project_env\scripts\python.exe -m pip install --upgrade pip' command.
+
+(project_env) C:\Users\Arunava\Desktop>pip install requests
+Collecting requests
+  Downloading requests-2.26.0-py2.py3-none-any.whl (62 kB)
+     |████████████████████████████████| 62 kB 157 kB/s
+Collecting certifi>=2017.4.17
+  Downloading certifi-2021.10.8-py2.py3-none-any.whl (149 kB)
+     |████████████████████████████████| 149 kB 2.2 MB/s
+Collecting charset-normalizer~=2.0.0; python_version >= "3"
+  Downloading charset_normalizer-2.0.7-py3-none-any.whl (38 kB)
+Collecting urllib3<1.27,>=1.21.1
+  Downloading urllib3-1.26.7-py2.py3-none-any.whl (138 kB)
+     |████████████████████████████████| 138 kB 6.8 MB/s
+Collecting idna<4,>=2.5; python_version >= "3"
+  Downloading idna-3.2-py3-none-any.whl (59 kB)
+     |████████████████████████████████| 59 kB 1.6 MB/s
+Installing collected packages: certifi, charset-normalizer, urllib3, idna, requests
+Successfully installed certifi-2021.10.8 charset-normalizer-2.0.7 idna-3.2 requests-2.26.0 urllib3-1.26.7
+WARNING: You are using pip version 20.2.3; however, version 21.3 is available.
+You should consider upgrading via the 'c:\users\arunava\desktop\project_env\scripts\python.exe -m pip install --upgrade pip' command.
+
+(project_env) C:\Users\Arunava\Desktop>pip install pytz
+Collecting pytz
+  Downloading pytz-2021.3-py2.py3-none-any.whl (503 kB)
+     |████████████████████████████████| 503 kB 1.3 MB/s
+Installing collected packages: pytz
+Successfully installed pytz-2021.3
+WARNING: You are using pip version 20.2.3; however, version 21.3 is available.
+You should consider upgrading via the 'c:\users\arunava\desktop\project_env\scripts\python.exe -m pip install --upgrade pip' command.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Now if we run pip list again then we can see all the packages installed in our virtual environment. The other packages other than the 'requests' and 'pytz' are the dependancies of this packages.
+
+
+(project_env) C:\Users\Arunava\Desktop>pip list
+Package            Version
+------------------ ---------
+certifi            2021.10.8
+charset-normalizer 2.0.7
+idna               3.2
+pip                20.2.3
+pytz               2021.3
+requests           2.26.0
+setuptools         49.2.1
+urllib3            1.26.7
+WARNING: You are using pip version 20.2.3; however, version 21.3 is available.
+You should consider upgrading via the 'c:\users\arunava\desktop\project_env\scripts\python.exe -m pip install --upgrade pip' command.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Now if we want to export the packages that we are using in this specific environment then we can do that in python with the 'requirements.txt' file. This will allow someone else to create an environment with all the dependencies and packages used by us.
+// To do this we use the command pip freeze
+// It is almost same as pip list but here it will return the name of the packages in correct form to be used in the 'requirements.txt' file.
+
+
+(project_env) C:\Users\Arunava\Desktop>pip freeze
+certifi==2021.10.8
+charset-normalizer==2.0.7
+idna==3.2
+pytz==2021.3
+requests==2.26.0
+urllib3==1.26.7
+
+
+
+
+
+
+
+
+
+
+
+// Now we will create a 'requirements.txt' file and put the information we get from pip freeze inside that.
+// So we create a text file in the desktop named 'requirements.txt' and paste the copied information we get from the pip freeze command.
+
+
+
+
+
+
+
+// Now to deactivate the environment we just need to pass the command deactivate
+
+
+
+(project_env) C:\Users\Arunava\Desktop>deactivate
+C:\Users\Arunava\Desktop>
+
+
+
+
+
+
+
+
+// And if we want to delete the entire virtual environment then it is same as deleting the directory containing the environment. 
+// In windows we pass rmdir environment_name /s
+// '/s' is important as it will remove the directory along with all it;s subdirectory and files in it.
+
+
+C:\Users\Arunava\Desktop>rmdir project_env /s
+project_env, Are you sure (Y/N)? y
+
+
+
+
+
+
+
+
+
+
+// Better practice:
+// Now whenever we create a project we should create our virtual environment inside that project folder and named as 'venv'.
+// 1st create the project directory named 'my_project',
+// Then create the virtual environment named 'venv' in that project directory.
+// Then to activate the environment we do as usual.
+// Now we can install all the packages from the 'requirements.txt' file.
+// For this we use command pip install -r requirements.txt
+// When the '-r' command is used then it expects a 'requirements.txt' file.
+
+
+C:\Users\Arunava\Desktop>mkdir my_project
+
+C:\Users\Arunava\Desktop>python -m venv my_project\venv
+
+C:\Users\Arunava\Desktop>my_project\venv\Scripts\activate.bat
+
+(venv) C:\Users\Arunava\Desktop>pip install -r requirements.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Creating environment with access to system packages we use command python -m venv project_env --system-site-packages
+// here venv is the module name and project_env is the virtual environment name.
+// Now we can see all the packages using pip list here now all the packages from the global version has been imported to tthe virtual environment also. Now here whatever changes we will do is not going to impact in the global python installed packages. We can also add additional package. In this case that package is going to be installed only inside this particular environment.
+// Like here we are going to install a package named SQLAlchemy.
+// Now if we do a pip list then we can see that the package is installed here.
+// Now if we want to see only the packages installed in this environment we use command pip list --local
+// --local also work with pip freeze to create a requirements.txt file only with the packages installed in the environment.	
+
+
+
+C:\Users\Arunava\Desktop>mkdir my_project
+
+C:\Users\Arunava\Desktop>cd my_project
+
+C:\Users\Arunava\Desktop\my_project>python -m venv project_env --system-site-packages
+
+C:\Users\Arunava\Desktop\my_project>project_env\Scripts\activate.bat
+
+(project_env) C:\Users\Arunava\Desktop\my_project>pip list
+Package           Version
+----------------- -------
+-sgiref           3.3.1
+asgiref           3.3.1
+astroid           2.4.2
+click             7.1.2
+colorama          0.4.4
+comtypes          1.1.7
+cycler            0.10.0
+Django            3.1.7
+Flask             1.1.2
+isort             5.6.4
+itsdangerous      1.1.0
+Jinja2            2.11.2
+kiwisolver        1.3.2
+lazy-object-proxy 1.4.3
+MarkupSafe        1.1.1
+matplotlib        3.4.3
+mccabe            0.6.1
+numpy             1.21.2
+pandas            1.3.3
+Pillow            8.1.0
+pip               20.2.3
+playsound         1.2.2
+pylint            2.6.0
+pyparsing         2.4.7
+pypiwin32         223
+python-dateutil   2.8.2
+pyttsx3           2.90
+pytz              2020.4
+pywin32           228
+setuptools        49.2.1
+six               1.15.0
+sqlparse          0.4.1
+toml              0.10.1
+Werkzeug          1.0.1
+wrapt             1.12.1
+WARNING: You are using pip version 20.2.3; however, version 21.3 is available.
+You should consider upgrading via the 'c:\users\arunava\desktop\my_project\project_env\scripts\python.exe -m pip install --upgrade pip' command.
+
+
+(project_env) C:\Users\Arunava\Desktop\my_project>pip install SQLAlchemy
+Collecting SQLAlchemy
+  Downloading SQLAlchemy-1.4.25-cp39-cp39-win_amd64.whl (1.5 MB)
+     |████████████████████████████████| 1.5 MB 1.3 MB/s
+Collecting greenlet!=0.4.17; python_version >= "3" and (platform_machine == "aarch64" or (platform_machine == "ppc64le" or (platform_machine == "x86_64" or (platform_machine == "amd64" or (platform_machine == "AMD64" or (platform_machine == "win32" or platform_machine == "WIN32"))))))
+  Downloading greenlet-1.1.2-cp39-cp39-win_amd64.whl (101 kB)
+     |████████████████████████████████| 101 kB 2.1 MB/s
+Installing collected packages: greenlet, SQLAlchemy
+Successfully installed SQLAlchemy-1.4.25 greenlet-1.1.2
+WARNING: You are using pip version 20.2.3; however, version 21.3 is available.
+You should consider upgrading via the 'c:\users\arunava\desktop\my_project\project_env\scripts\python.exe -m pip install --upgrade pip' command.
+
+(project_env) C:\Users\Arunava\Desktop\my_project>pip list
+Package           Version
+----------------- -------
+-sgiref           3.3.1
+asgiref           3.3.1
+astroid           2.4.2
+click             7.1.2
+colorama          0.4.4
+comtypes          1.1.7
+cycler            0.10.0
+Django            3.1.7
+Flask             1.1.2
+greenlet          1.1.2
+isort             5.6.4
+itsdangerous      1.1.0
+Jinja2            2.11.2
+kiwisolver        1.3.2
+lazy-object-proxy 1.4.3
+MarkupSafe        1.1.1
+matplotlib        3.4.3
+mccabe            0.6.1
+numpy             1.21.2
+pandas            1.3.3
+Pillow            8.1.0
+pip               20.2.3
+playsound         1.2.2
+pylint            2.6.0
+pyparsing         2.4.7
+pypiwin32         223
+python-dateutil   2.8.2
+pyttsx3           2.90
+pytz              2020.4
+pywin32           228
+setuptools        49.2.1
+six               1.15.0
+SQLAlchemy        1.4.25
+sqlparse          0.4.1
+toml              0.10.1
+Werkzeug          1.0.1
+wrapt             1.12.1
+WARNING: You are using pip version 20.2.3; however, version 21.3 is available.
+You should consider upgrading via the 'c:\users\arunava\desktop\my_project\project_env\scripts\python.exe -m pip install --upgrade pip' command.
+
+(project_env) C:\Users\Arunava\Desktop\my_project>pip list --local
+Package    Version
+---------- -------
+greenlet   1.1.2
+pip        20.2.3
+setuptools 49.2.1
+SQLAlchemy 1.4.25
+WARNING: You are using pip version 20.2.3; however, version 21.3 is available.
+You should consider upgrading via the 'c:\users\arunava\desktop\my_project\project_env\scripts\python.exe -m pip install --upgrade pip' command.
+
+
+
+
+
+
+
+
+
+// Now to see that the global system doesnot have that package SQLAlchemy
+
+
+
+(project_env) C:\Users\Arunava\Desktop\my_project>deactivate
+C:\Users\Arunava\Desktop\my_project>pip list
+Package           Version
+----------------- -------
+-sgiref           3.3.1
+asgiref           3.3.1
+astroid           2.4.2
+click             7.1.2
+colorama          0.4.4
+comtypes          1.1.7
+cycler            0.10.0
+Django            3.1.7
+Flask             1.1.2
+isort             5.6.4
+itsdangerous      1.1.0
+Jinja2            2.11.2
+kiwisolver        1.3.2
+lazy-object-proxy 1.4.3
+MarkupSafe        1.1.1
+matplotlib        3.4.3
+mccabe            0.6.1
+numpy             1.21.2
+pandas            1.3.3
+Pillow            8.1.0
+pip               20.3.1
+playsound         1.2.2
+pylint            2.6.0
+pyparsing         2.4.7
+pypiwin32         223
+python-dateutil   2.8.2
+pyttsx3           2.90
+pytz              2020.4
+pywin32           228
+setuptools        49.2.1
+six               1.15.0
+sqlparse          0.4.1
+toml              0.10.1
+Werkzeug          1.0.1
+wrapt             1.12.1
+WARNING: You are using pip version 20.3.1; however, version 21.3 is available.
+You should consider upgrading via the 'c:\python39\python.exe -m pip install --upgrade pip' command.
+
+
+
+(project_env) C:\Users\Arunava\Desktop\my_project>pip freeze --local
+greenlet==1.1.2
+SQLAlchemy==1.4.25
+
+(project_env) C:\Users\Arunava\Desktop\my_project>
+
+
+
+
+
+
+
+
+**** Points to Remember ****
+
+// It is normal to put the virtual environment inside the project folder but never put any of the project files inside the virtual environment.
+// The environment should be something that can be thrown away and then rebuilt again when required.
+// Also never commit the virtual environment to source control. But we can commit the 'requirements.txt' file so others can built the same project using the same packages and modules that we used.

@@ -1,0 +1,912 @@
+**** SQL CTE(Common Table Expressions):  ****
+
+-- What is CTE?
+
+- It is a temporary result set used within a query. CTEs can be used within functions, stored procedures, triggers and views.
+- CTE always starts with the word 'WITH'.
+- Remember it is a temporary table, it does not hold any data. But it must be executed as part of the query.
+- It improves readability and also we can execute the query inside the CTE independently.
+
+-- The benefits of stored CTEs:
+
+- Improves readability.
+- Can run internal query separately.
+- Can be nested.
+- Can be used recursively.
+
+
+Syntax is:
+WITH CTE
+AS
+(
+--query
+)
+
+-- SELECT 
+
+
+
+
+
+# CODE:
+
+# CREATING TABLE NAMED 'payrolls' IN DATABASE 'cte' 
+
+mysql> CREATE TABLE payrolls(
+    -> Id INT,
+    -> EmpId INT,
+    -> Pay_year DATE,
+    -> Pay_Week INT,
+    -> Hours FLOAT,
+    -> Rate FLOAT
+    -> );
+Query OK, 0 rows affected (0.49 sec)
+
+
+# INSERTING VALUES
+
+mysql> INSERT INTO payrolls(Id, EmpId, Pay_year, Pay_Week, Hours, Rate)
+    -> VALUES
+    -> (1, 1, STR_TO_DATE("2016", "%YYYY"), 1, 35.00, 7.50),
+    -> (2, 1, STR_TO_DATE("2016", "%YYYY"), 2, 35.00, 7.50),
+    -> (3, 1, STR_TO_DATE("2016", "%YYYY"), 3, 35.00, 7.50),
+    -> (4, 1, STR_TO_DATE("2016", "%YYYY"), 4, 35.00, 7.50),
+    -> (5, 1, STR_TO_DATE("2016", "%YYYY"), 5, 35.00, 7.50),
+    -> (6, 1, STR_TO_DATE("2016", "%YYYY"), 6, 35.00, 7.50),
+    -> (7, 1, STR_TO_DATE("2016", "%YYYY"), 7, 35.00, 7.50),
+    -> (8, 1, STR_TO_DATE("2016", "%YYYY"), 8, 35.00, 7.50),
+    -> (9, 1, STR_TO_DATE("2016", "%YYYY"), 9, 35.00, 7.50),
+    -> (10, 1, STR_TO_DATE("2016", "%YYYY"), 10, 35.00, 7.50),
+    -> (11, 1, STR_TO_DATE("2016", "%YYYY"), 11, 35.00, 7.50),
+    -> (12, 1, STR_TO_DATE("2016", "%YYYY"), 12, 35.00, 7.50),
+    -> (1002, 2, STR_TO_DATE("2016", "%YYYY"), 1, 32.00, 9.25),
+    -> (1003, 2, STR_TO_DATE("2016", "%YYYY"), 2, 32.00, 9.25),
+    -> (1004, 2, STR_TO_DATE("2016", "%YYYY"), 3, 32.00, 9.25),
+    -> (1005, 2, STR_TO_DATE("2016", "%YYYY"), 4, 32.00, 9.25),
+    -> (1006, 2, STR_TO_DATE("2016", "%YYYY"), 5, 32.00, 9.25),
+    -> (1007, 2, STR_TO_DATE("2016", "%YYYY"), 6, 32.00, 9.25),
+    -> (1008, 2, STR_TO_DATE("2016", "%YYYY"), 7, 32.00, 9.25),
+    -> (1009, 2, STR_TO_DATE("2016", "%YYYY"), 8, 32.00, 9.25)
+    -> ;
+Query OK, 20 rows affected (0.13 sec)
+Records: 20  Duplicates: 0  Warnings: 0
+
+
+mysql> SELECT * FROM payrolls;
++------+-------+------------+----------+-------+------+
+| Id   | EmpId | Pay_year   | Pay_Week | Hours | Rate |
++------+-------+------------+----------+-------+------+
+|    1 |     1 | 2016-00-00 |        1 |    35 |  7.5 |
+|    2 |     1 | 2016-00-00 |        2 |    35 |  7.5 |
+|    3 |     1 | 2016-00-00 |        3 |    35 |  7.5 |
+|    4 |     1 | 2016-00-00 |        4 |    35 |  7.5 |
+|    5 |     1 | 2016-00-00 |        5 |    35 |  7.5 |
+|    6 |     1 | 2016-00-00 |        6 |    35 |  7.5 |
+|    7 |     1 | 2016-00-00 |        7 |    35 |  7.5 |
+|    8 |     1 | 2016-00-00 |        8 |    35 |  7.5 |
+|    9 |     1 | 2016-00-00 |        9 |    35 |  7.5 |
+|   10 |     1 | 2016-00-00 |       10 |    35 |  7.5 |
+|   11 |     1 | 2016-00-00 |       11 |    35 |  7.5 |
+|   12 |     1 | 2016-00-00 |       12 |    35 |  7.5 |
+| 1002 |     2 | 2016-00-00 |        1 |    32 | 9.25 |
+| 1003 |     2 | 2016-00-00 |        2 |    32 | 9.25 |
+| 1004 |     2 | 2016-00-00 |        3 |    32 | 9.25 |
+| 1005 |     2 | 2016-00-00 |        4 |    32 | 9.25 |
+| 1006 |     2 | 2016-00-00 |        5 |    32 | 9.25 |
+| 1007 |     2 | 2016-00-00 |        6 |    32 | 9.25 |
+| 1008 |     2 | 2016-00-00 |        7 |    32 | 9.25 |
+| 1009 |     2 | 2016-00-00 |        8 |    32 | 9.25 |
++------+-------+------------+----------+-------+------+
+20 rows in set (0.00 sec)
+
+
+### Let's find out which workers re paid above average?
+
+- 1st we need to find out the average paid per week, for this we use AVG()
+
+mysql> SELECT AVG(Rate) FROM payrolls;
++-----------+
+| AVG(Rate) |
++-----------+
+|       8.2 |
++-----------+
+1 row in set (0.07 sec)
+
+- Now we will use the CTE to find out the same result. 
+
+mysql> WITH AveragePay
+    -> AS(
+    ->     SELECT AVG(Rate) AS A_Rate FROM payrolls
+    -> )
+    -> SELECT * FROM AveragePay;
++--------+
+| A_Rate |
++--------+
+|    8.2 |
++--------+
+1 row in set (0.04 sec)
+
+
+- Now we will find which are the employees who are paid higher than the average.
+
+mysql> WITH AveragePay
+    -> AS(
+    ->     SELECT AVG(Rate) AS A_Rate FROM payrolls
+    -> )
+    -> SELECT * FROM payrolls
+    -> WHERE Rate >= (SELECT A_Rate FROM AveragePay);
++------+-------+------------+----------+-------+------+
+| Id   | EmpId | Pay_year   | Pay_Week | Hours | Rate |
++------+-------+------------+----------+-------+------+
+| 1002 |     2 | 2016-00-00 |        1 |    32 | 9.25 |
+| 1003 |     2 | 2016-00-00 |        2 |    32 | 9.25 |
+| 1004 |     2 | 2016-00-00 |        3 |    32 | 9.25 |
+| 1005 |     2 | 2016-00-00 |        4 |    32 | 9.25 |
+| 1006 |     2 | 2016-00-00 |        5 |    32 | 9.25 |
+| 1007 |     2 | 2016-00-00 |        6 |    32 | 9.25 |
+| 1008 |     2 | 2016-00-00 |        7 |    32 | 9.25 |
+| 1009 |     2 | 2016-00-00 |        8 |    32 | 9.25 |
++------+-------+------------+----------+-------+------+
+8 rows in set (0.05 sec)
+
+
+
+### Calculate number of weeks each employee has worked?
+
+mysql> WITH NumberWeeks
+    -> AS
+    -> (
+    ->   SELECT EmpId, COUNT(Pay_Week) AS Weeks_Worked
+    ->   FROM payrolls
+    ->   GROUP BY EmpId
+    -> )
+    -> SELECT * FROM NumberWeeks;
++-------+--------------+
+| EmpId | Weeks_Worked |
++-------+--------------+
+|     1 |           12 |
+|     2 |            8 |
++-------+--------------+
+2 rows in set (0.06 sec)  
+
+
+### Now join it with the actual payrolls table.
+
+- As both the CTE and the table has a common column EmpId so we will use alias in the Join
+
+mysql> WITH NumberWeeks
+    -> AS
+    -> (
+    ->   SELECT EmpId, COUNT(Pay_Week) AS Weeks_Worked
+    ->   FROM payrolls
+    ->   GROUP BY EmpId
+    -> )
+    -> SELECT * FROM NumberWeeks AS A
+    -> INNER JOIN  payrolls AS B ON A.EmpId = B.EmpId;
++-------+--------------+------+-------+------------+----------+-------+------+
+| EmpId | Weeks_Worked | Id   | EmpId | Pay_year   | Pay_Week | Hours | Rate |
++-------+--------------+------+-------+------------+----------+-------+------+
+|     1 |           12 |    1 |     1 | 2016-00-00 |        1 |    35 |  7.5 |
+|     1 |           12 |    2 |     1 | 2016-00-00 |        2 |    35 |  7.5 |
+|     1 |           12 |    3 |     1 | 2016-00-00 |        3 |    35 |  7.5 |
+|     1 |           12 |    4 |     1 | 2016-00-00 |        4 |    35 |  7.5 |
+|     1 |           12 |    5 |     1 | 2016-00-00 |        5 |    35 |  7.5 |
+|     1 |           12 |    6 |     1 | 2016-00-00 |        6 |    35 |  7.5 |
+|     1 |           12 |    7 |     1 | 2016-00-00 |        7 |    35 |  7.5 |
+|     1 |           12 |    8 |     1 | 2016-00-00 |        8 |    35 |  7.5 |
+|     1 |           12 |    9 |     1 | 2016-00-00 |        9 |    35 |  7.5 |
+|     1 |           12 |   10 |     1 | 2016-00-00 |       10 |    35 |  7.5 |
+|     1 |           12 |   11 |     1 | 2016-00-00 |       11 |    35 |  7.5 |
+|     1 |           12 |   12 |     1 | 2016-00-00 |       12 |    35 |  7.5 |
+|     2 |            8 | 1002 |     2 | 2016-00-00 |        1 |    32 | 9.25 |
+|     2 |            8 | 1003 |     2 | 2016-00-00 |        2 |    32 | 9.25 |
+|     2 |            8 | 1004 |     2 | 2016-00-00 |        3 |    32 | 9.25 |
+|     2 |            8 | 1005 |     2 | 2016-00-00 |        4 |    32 | 9.25 |
+|     2 |            8 | 1006 |     2 | 2016-00-00 |        5 |    32 | 9.25 |
+|     2 |            8 | 1007 |     2 | 2016-00-00 |        6 |    32 | 9.25 |
+|     2 |            8 | 1008 |     2 | 2016-00-00 |        7 |    32 | 9.25 |
+|     2 |            8 | 1009 |     2 | 2016-00-00 |        8 |    32 | 9.25 |
++-------+--------------+------+-------+------------+----------+-------+------+
+20 rows in set (0.00 sec)
+
+
+
+
+
+
+
+
+#### USING THE WORKBENCH ####
+
+-- Creating tables
+create table emp
+( emp_ID int, 
+emp_NAME varchar(50),
+SALARY int);
+
+
+create table sales
+(
+	store_id  		int,
+	store_name  	varchar(50),
+	product			varchar(50),
+	quantity		int,
+	cost			int
+);
+
+
+
+-- inserting values
+insert into emp(emp_ID, emp_NAME, SALARY)
+values
+(101, 'Mohan', 40000),
+(102, 'James', 50000),
+(103, 'Robin', 60000),
+(104, 'Carol', 70000),
+(105, 'Alice', 80000),
+(106, 'Jimmy', 90000);
+
+
+insert into sales(store_id, store_name, product, quantity, cost)
+values
+(1, 'Apple Originals 1','iPhone 12 Pro', 1, 1000),
+(1, 'Apple Originals 1','MacBook pro 13', 3, 2000),
+(1, 'Apple Originals 1','AirPods Pro', 2, 280),
+(2, 'Apple Originals 2','iPhone 12 Pro', 2, 1000),
+(3, 'Apple Originals 3','iPhone 12 Pro', 1, 1000),
+(3, 'Apple Originals 3','MacBook pro 13', 1, 2000),
+(3, 'Apple Originals 3','MacBook Air', 4, 1100),
+(3, 'Apple Originals 3','iPhone 12', 2, 1000),
+(3, 'Apple Originals 3','AirPods Pro', 3, 280),
+(4, 'Apple Originals 4','iPhone 12 Pro', 2, 1000),
+(4, 'Apple Originals 4','MacBook pro 13', 1, 2500);
+
+
+-- checking tables
+select * from emp;
+select * from sales;
+
+
+-- Now using CTE it is also known as Sub Query Factoring.
+-- 1st case:
+-- Fetch only employees who earn more than average salary of all the employees.
+
+-- Here 1st we need to find the average salary and for that we will use the 'WITH' clause.
+-- Always remember whenever using the 'WITH' clause it should take place before the main 'select' statement.
+-- Here the 'avg_sal' is the returning column from the 'with' clause 
+-- which we will use in the main 'select' statement for the condition.
+-- In SQL whenever there is a query associated with the 'WITH' clause it first runs that query.
+-- In the 'cast()' 'signed' is used for integer.
+
+with average_salary (avg_sal) as
+			(select cast(avg(SALARY) as signed) from emp)
+select *
+from emp as e, average_salary as av
+where e.salary > av.avg_sal;
+
+
+-- 2nd case
+-- Find stores whose sales were better than the average sales accross all the stores.
+
+-- seperating the query into parts:
+
+-- without the 'WITH' clause:
+
+-- 1) Total sales per each store and keep it as 'total_Sales'
+
+select s.store_id, sum(cost) as total_sales_per_store
+from sales as s
+group by s.store_id;
+
+
+-- 2) Find the average sales with respect to all the stores and keep it 'avg_sales'
+
+select cast(avg(total_sales_per_store) as unsigned) as avg_sales_for_all_stores
+from(select s.store_id, sum(cost) as total_sales_per_store
+	from sales as s
+	group by s.store_id) as x;
+
+
+-- 3) Find the stores where Total_Sales is greater than Avg_Sales of all the stores. 
+
+select *
+from    (select s.store_id, sum(cost) as total_sales_per_store
+			from sales as s
+			group by s.store_id) as Total_Sales
+join    (select cast(avg(total_sales_per_store) as unsigned) as avg_sales_for_all_stores
+		from(select s.store_id, sum(cost) as total_sales_per_store
+				from sales as s
+				group by s.store_id) as x) as Avg_Sales
+  on Total_Sales.total_sales_per_store > Avg_Sales.avg_sales_for_all_stores;
+
+
+-- Here we did it using sub queries. 
+-- Here the problem is the query is very complex as we used sub query inside another sub query.
+-- Also it use same sub query multiple times, hence it impacts the performence.  
+-- So when we need to run same sub query multiple times or the query has become too big or complex to read then we should use CTE. 
+
+
+
+-- Now using the 'WITH' clause
+
+with Total_Sales(store_id, total_sales_per_store) as
+		(select s.store_id, sum(cost) as total_sales_per_store
+		 from sales as s
+		 group by s.store_id),
+	 Avg_Sales(avg_sales_for_all_stores) as
+		(select cast(avg(total_sales_per_store) as unsigned) as avg_sales_for_all_stores
+		 from Total_Sales)
+select *
+from Total_Sales as ts
+join Avg_Sales as av
+on ts.total_sales_per_store > av.avg_sales_for_all_stores;
+
+
+
+--- So the actual syntax is:
+
+WITH temporary_tableName(returning_columnNames) as
+				(query)
+main query
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+***** SQL WINDOW Functions ******
+
+-- WINDOW Functions
+-- These are also refer as Analytic Function.
+-- They are used to perform data analysis calculations.
+-- They address an important need compared to 'GROUP BY' clause to return the underlying data.
+-- 'OVER' clause determines windows(sets of rows).
+-- 'PARTITION BY' clause splits the result set in to partitions on which the Window function is applied.
+
+
+-- Functions are:
+
+-- Aggregate: COUNT, SUM, AVG, MIN, MAX
+-- Offset: FIRST_VALUE, LAST_VALUE, LEAD, LAG
+-- Statistical: PERCENT_RANK, CUME_DIST, PERCENTILE_CONT, PERCENTILE_DISC
+
+-- Frames:
+-- Rows:
+-- Range:
+
+code:
+
+-- using database window_func:
+use window_func;
+
+-- creating table:
+CREATE TABLE employee (
+    emp_ID INT,
+    emp_NAME VARCHAR(50),
+    DEPT_NAME VARCHAR(50),
+    SALARY INT
+);
+
+-- inserting data:
+insert into employee (emp_ID, emp_NAME, DEPT_NAME, SALARY) 
+values
+(101, 'Mohan', 'Admin', 4000),
+(102, 'Rajkumar', 'HR', 3000),
+(103, 'Akbar', 'IT', 4000),
+(104, 'Dorvin', 'Finance', 6500),
+(105, 'Rohit', 'HR', 3000),
+(106, 'Rajesh',  'Finance', 5000),
+(107, 'Preet', 'HR', 7000),
+(108, 'Maryam', 'Admin', 4000),
+(109, 'Sanjay', 'IT', 6500),
+(110, 'Vasudha', 'IT', 7000),
+(111, 'Melinda', 'IT', 8000),
+(112, 'Komal', 'IT', 10000),
+(113, 'Gautham', 'Admin', 2000),
+(114, 'Manisha', 'HR', 3000),
+(115, 'Chandni', 'IT', 4500),
+(116, 'Satya', 'Finance', 6500),
+(117, 'Adarsh', 'HR', 3500),
+(118, 'Tejaswi', 'Finance', 5500),
+(119, 'Cory', 'HR', 8000),
+(120, 'Monica', 'Admin', 5000),
+(121, 'Rosalin', 'IT', 6000),
+(122, 'Ibrahim', 'IT', 8000),
+(123, 'Vikram', 'IT', 8000),
+(124, 'Dheeraj', 'IT', 11000);
+
+
+SELECT * from employee;
+
+-- Using Aggregate functions:
+
+-- To know the max salaried employee in the table:
+SELECT MAX(SALARY) as max_salary from employee;
+
+-- Using Aggregate function as Window Function
+-- Without window function, SQL will reduce the no of records.
+-- Here we will find the max salaried employee from each department. 
+SELECT 
+    dept_name, MAX(salary)
+FROM
+    employee
+GROUP BY dept_name;
+
+
+-- By using MAX as an window function, SQL will not reduce records but the result will be shown corresponding to each record.
+-- Here for every record we will be able to see the column max_salary. 
+-- Here we are using an 'over()' clause. As a result the 'MAX()' transform to a WINDOW function from an Aggregate Function.
+SELECT e.*,
+MAX(SALARY) over() as max_salary
+FROM employee e;
+
+
+-- Now if we want to catch the max_salary corresponding to each department
+-- Then we will use the 'partition by' clause with the column name as here it is 'DEPT_NAME' inside the over clause.
+SELECT e.*,
+MAX(SALARY) over(PARTITION BY dept_name) as max_salary
+FROM employee e;
+
+
+-- row_number(), rank() and dense_rank()
+-- row_number() is use to get unique row numbers
+
+-- Here we will get row number upto 24 as there are 24 records
+SELECT e.*,
+row_number() over() as rn
+FROM employee e;
+
+
+-- Here we will get row number for each departmets separately as we use the partition by clause. 
+-- Here for each department the row number will reset from 1. 
+SELECT e.*,
+row_number() over(PARTITION BY dept_name) as rn
+FROM employee e;
+
+
+-- Actual usage:
+-- Fetch the first 2 employees from each department to join the company.
+-- Assume that the emp_ID of the employee joined later is higher than the older employees. 
+SELECT * FROM (
+	SELECT e.*,
+	row_number() over(PARTITION BY dept_name ORDER BY emp_id) as rn
+	FROM employee e) x
+WHERE x.rn < 3;
+
+
+-- Fetch the top 3 employees in each department earning the max salary.
+-- Here if 2 employees earning same salary then it will assign the same rank.  
+-- But for every duplicate record it is going to skip a value. 
+SELECT * FROM (
+	SELECT e.*,
+	rank() over(PARTITION BY dept_name ORDER BY salary DESC) as rnk
+	FROM employee e) x
+WHERE x.rnk < 4;
+
+-- dense_rank() will not skip any value even if there is duplicate values
+SELECT e.*,
+dense_rank() over(PARTITION BY dept_name ORDER BY salary DESC) as dense_rnk
+FROM employee e;
+
+
+-- Checking the difference between rank, dense_rnk and row_number window functions:
+SELECT e.*, 
+rank() over(PARTITION BY dept_name ORDER BY salary DESC) as rnk,
+dense_rank() over(PARTITION BY dept_name ORDER BY salary DESC) as dense_rnk,
+row_number() over(PARTITION BY dept_name ORDER BY salary DESC) as rn
+FROM employee e;
+
+
+-- lead and lag
+-- lag() : To check if the salary of the current employee is higher or lower than the previous employee. 
+-- lead() : It is similar to lag but here it will show rows that following the current record i.e. the next record. 
+-- Here it will return null for the 1st salary for each department as ther is no previous salary for that department. 
+-- lag(m,n) : The parameter 'm' means to how many records previous to the current record and 'n' is for the default value.
+-- lead() can also take 2 parameters like lag(). 
+SELECT e.*,
+lag(salary) over (PARTITION BY dept_name ORDER BY emp_id) as prev_emp_salary,
+lead(salary) over (PARTITION BY dept_name ORDER BY emp_id) as next_emp_salary
+FROM employee e;
+
+-- Here to check 2 records previous to the current record and default value is 0. 
+-- Here to check 2 records next to the current record and default value is 0. 
+SELECT e.*,
+lag(salary, 2, 0) over (PARTITION BY dept_name ORDER BY emp_id) as prev_emp_salary,
+lead(salary, 2, 0) over (PARTITION BY dept_name ORDER BY emp_id) as next_emp_salary
+FROM employee e;
+
+
+
+-- Actual usage:
+-- fetch a query to display if the salary of an employee is higher, lower or equal to the previous employee.
+SELECT e.*,
+lag(salary) over(PARTITION BY dept_name ORDER BY emp_id) as prev_empl_sal,
+case when e.salary > lag(salary) over(partition by dept_name ORDER BY emp_id) then 'Higher than previous employee'
+     when e.salary < lag(salary) over(PARTITION BY dept_name ORDER BY emp_id) then 'Lower than previous employee'
+	 when e.salary = lag(salary) over(PARTITION BY dept_name ORDER BY emp_id) then 'Same than previous employee' 
+end as sal_range
+FROM employee e;
+
+
+
+
+-- WINDOW Functions part 1:
+-- How to write SQL Query using Frame clause, CUME_DIST clause
+
+-- using the database:
+use window_func;
+
+-- creating table:
+CREATE TABLE product
+( 
+    product_category varchar(255),
+    brand varchar(255),
+    product_name varchar(255),
+    price int
+);
+
+
+-- inserting values:
+INSERT INTO product VALUES
+('Phone', 'Apple', 'iPhone 12 Pro Max', 1300),
+('Phone', 'Apple', 'iPhone 12 Pro', 1100),
+('Phone', 'Apple', 'iPhone 12', 1000),
+('Phone', 'Samsung', 'Galaxy Z Fold 3', 1800),
+('Phone', 'Samsung', 'Galaxy Z Flip 3', 1000),
+('Phone', 'Samsung', 'Galaxy Note 20', 1200),
+('Phone', 'Samsung', 'Galaxy S21', 1000),
+('Phone', 'OnePlus', 'OnePlus Nord', 300),
+('Phone', 'OnePlus', 'OnePlus 9', 800),
+('Phone', 'Google', 'Pixel 5', 600),
+('Laptop', 'Apple', 'MacBook Pro 13', 2000),
+('Laptop', 'Apple', 'MacBook Air', 1200),
+('Laptop', 'Microsoft', 'Surface Laptop 4', 2100),
+('Laptop', 'Dell', 'XPS 13', 2000),
+('Laptop', 'Dell', 'XPS 15', 2300),
+('Laptop', 'Dell', 'XPS 17', 2500),
+('Earphone', 'Apple', 'AirPods Pro', 280),
+('Earphone', 'Samsung', 'Galaxy Buds Pro', 220),
+('Earphone', 'Samsung', 'Galaxy Buds Live', 170),
+('Earphone', 'Sony', 'WF-1000XM4', 250),
+('Headphone', 'Sony', 'WH-1000XM4', 400),
+('Headphone', 'Apple', 'AirPods Max', 550),
+('Headphone', 'Microsoft', 'Surface Headphones 2', 250),
+('Smartwatch', 'Apple', 'Apple Watch Series 6', 1000),
+('Smartwatch', 'Apple', 'Apple Watch SE', 400),
+('Smartwatch', 'Samsung', 'Galaxy Watch 4', 600),
+('Smartwatch', 'OnePlus', 'OnePlus Watch', 220);
+
+
+-- checking the table's data:
+SELECT * FROM product;
+
+
+
+
+-- WINDOW Functions part 2:
+
+-- FIRST_VALUE 
+-- first_value() : It can be use to extract the very first value of a column within a partition. It accepts one argument i.e. the column name. 
+-- Remember it is necessarry to use the 'over' whenever using the window function. 
+-- Write query to display the most expensive product under each category (corresponding to each record)
+SELECT *,
+first_value(product_name) over(PARTITION BY product_category ORDER BY price DESC) as most_exp_product
+from product;
+
+-- Here the name of the most expensive product of each category will be shown for the rest products in that category. 
+
+
+-- LAST_VALUE 
+-- last_value() : fetch the very last record of a particular partition. It is almost the opposite of first_value(). 
+-- Write query to display the least expensive product under each category (corresponding to each record)
+SELECT *,
+last_value(product_name) over(PARTITION BY product_category ORDER BY price DESC) as least_exp_product  
+FROM product;
+
+-- But here it is not exactly correct because of the default FRAME clause the SQL is using. 
+-- Whenever we use the Window function it creates an window or partition and apply that window function to each of those partitions.
+-- Inside those partitions some subsets are created which are called 'FRAME'. 
+-- So a FRAME is a subset of a partition. 
+
+
+
+-- The FRAME clause is mentioned inside the over clause after the ORDER BY clause
+-- So we need to mention our FRAME clause there after the ORDER BY clause. 
+-- The default FRAME clause in SQL is: 'RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW'
+-- unbounded preceding : row preceding to the current row and 'unbounded' means very first row of the partition. 
+-- So what happens here is when it pursue the first record there is no preceding record as a result the preceding row and the current row become the same. 
+-- Now for the second record the unbounded preceding will point to the first record of the partition and the current row will be the second row of the partition. 
+-- Then the last value will be the last row i.e. the second row. Same will happen for the next records and so on. 
+-- This is why the FRAME clause become important in last_value(), nth_value() and most of the aggregate functions.
+-- Now we will change the FRAME clause. 
+-- Here we will change the current row to something that will point the very last row of that partition. 
+-- For this we will use UNBOUNDED FOLLOWING, i.e. all the records following the current row. And unbounded means either to the begining or the end. 
+
+SELECT *,
+last_value(product_name) 
+	over(PARTITION BY product_category ORDER BY price DESC
+		RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) 
+as least_exp_product  
+FROM product;
+
+
+-- Now using both the first_value and last_value:
+SELECT *,
+first_value(product_name) over(PARTITION BY product_category ORDER BY price DESC) 
+as most_exp_product,
+last_value(product_name) 
+	over(PARTITION BY product_category ORDER BY price DESC
+		RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) 
+as least_exp_product    
+FROM product;
+
+-- We can also use ROWS in place of RANGE in the FRAME clause as it will consider what different rows need to be considered within a frame. 
+SELECT *,
+first_value(product_name) over(PARTITION BY product_category ORDER BY price DESC) 
+as most_exp_product,
+last_value(product_name) 
+	over(PARTITION BY product_category ORDER BY price DESC
+		ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) 
+as least_exp_product    
+FROM product;
+
+
+
+-- Difference between RANGE and ROWS come when there are duplicate records.
+-- For this we create a condition using the WHERE clause. 
+-- Change the unbounded following to current row.
+-- Now for the products having the same price the least expensive product will change for each row. 
+SELECT *,
+first_value(product_name) over(PARTITION BY product_category ORDER BY price DESC) 
+as most_exp_product,
+last_value(product_name) 
+	over(PARTITION BY product_category ORDER BY price DESC
+		ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) 
+as least_exp_product    
+FROM product
+WHERE product_category ='Phone';
+
+
+
+-- Now if we change it to RANGE the products will be same for the same price. 
+SELECT *,
+first_value(product_name) over(PARTITION BY product_category ORDER BY price DESC) 
+as most_exp_product,
+last_value(product_name) 
+	over(PARTITION BY product_category ORDER BY price DESC
+		RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) 
+as least_exp_product    
+FROM product
+WHERE product_category ='Phone';
+
+
+
+
+-- Alternate way to write SQL query using Window functions
+-- Here we will use the window clause using an alias and put it after the OVER clause. 
+SELECT *,
+first_value(product_name) over w as most_exp_product,
+last_value(product_name) over w as least_exp_product    
+FROM product
+-- WHERE product_category ='Phone'
+window w as (PARTITION BY product_category ORDER BY price DESC
+            RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING);
+            
+
+
+-- NTH_VALUE 
+-- nth_value() : Here we can specify the position from where the value to be fetched. 
+-- Here we need to pass 2 arguments the column name and the position as here it is 2. 
+-- So it will check every second record as we needed the second most expensive product for each category. 
+-- It will return a null value if the position is not available, i.e. if we pass 5 we will get null for all the categories where the products numbers are less than 5. 
+-- Write query to display the Second most expensive product under each category.
+SELECT *,
+first_value(product_name) over w as most_exp_product,
+last_value(product_name) over w as least_exp_product,
+nth_value(product_name, 2) over w as second_most_exp_product
+FROM product
+window w as (PARTITION BY product_category ORDER BY price DESC
+            RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING);
+
+
+
+-- NTILE
+-- ntile() : To group together a set of data within the partition and then place it into certain buckets. 
+-- SQl will try to keep almost equal number of records for each partitions. 
+-- Write a query to segregate all the expensive phones, mid range phones and the cheaper phones.
+SELECT x.product_name, 
+CASE WHEN x.buckets = 1 THEN 'Expensive Phones'
+     WHEN x.buckets = 2 THEN 'Mid Range Phones'
+     WHEN x.buckets = 3 THEN 'Cheaper Phones' 
+END as Phone_Category
+FROM (
+    SELECT *,
+    ntile(3) over (ORDER BY price DESC) as buckets
+    FROM product
+    WHERE product_category = 'Phone') x;
+
+-- So here we created three buckets for the each range of phones i.e. Expensive, Mid Range and Cheaper. 
+-- As here we pass number of buckets as 3 so it creates 4 records for 1st and 3 records each for 2nd and 3rd. 
+
+
+
+-- CUME_DIST (cumulative distribution) 
+-- Use to find the distribution percentage of each record with respect to all the rows in a result set. It always return a value within range of 0 and 1. 
+/*  Formula = Current Row no (or Row No with value same as current row) / Total no of rows */
+
+-- Query to fetch all products which are constituting the first 30% 
+-- of the data in products table based on price.
+SELECT product_name, cume_dist_percetage
+FROM (
+    SELECT *,
+    cume_dist() over (order by price desc) as cume_distribution,
+    round(cume_dist() over (order by price desc) * 100,2) as cume_dist_percetage
+    from product) x
+where x.cume_distribution <= 0.3;
+
+SELECT *,
+cume_dist() over (ORDER BY price DESC) as cume_distribution,
+round(cume_dist() over (ORDER BY price DESC)* 100, 2) as cume_dist_percentage
+FROM product;
+
+
+
+
+-- PERCENT_RANK (relative rank of the current row / Percentage Ranking)
+-- It provides a relative rank to each row. 
+/* Formula = Current Row No - 1 / Total no of rows - 1 */
+
+-- Query to identify how much percentage more expensive is "Galaxy Z Fold 3" when compared to all products.
+SELECT product_name, per
+FROM (
+    SELECT *,
+    percent_rank() over(ORDER BY price),
+    round(percent_rank() over(ORDER BY price)* 100, 2) as per
+    from product) x
+WHERE x.product_name='Galaxy Z Fold 3';
+
+
+-- So the Galaxy Z Fold 3 is 80% more expensive than all the other products. 
+
+
+
+
+
+
+---- SQL Order of Execution is:
+- FROM, including JOINs
+- WHERE
+- GROUP BY
+- HAVING
+- WINDOW functions
+- SELECT
+- DISTINCT
+- UNION
+- ORDER BY
+- LIMIT and OFFSET
+
+	 	 	 	 
+
+
+
+
+        -------------------- Differences between different Key terms ------------------------------
+
+-- WHERE v/s HAVING:
+____________________
+
+- 'WHERE' is used for filtering rows, it works on row's data but not on aggregated data.
+Syntax:
+		SELECT columnNames FROM tableName WHERE condition;
+
+- 'HAVING' works on aggregated data. It mainly works with the 'GROUP BY' clause. It is basically gives the condition for the GROUP BY.
+- We cannot use the 'WHERE' when there are Aggregate functions, so instead we need to use 'HAVING'.
+- Aggregate functions (COUNT, MAX, MIN, AVG, SUM) used to perform calculations on multiple rows of a single column. It returns a single value. It is used to summarize data.
+- Like if we want to find the maximum salary of a employee table:
+- We cannot pass this query: 
+		SELECT Aggregate_Function(columnName) FROM tableName WHERE condition
+- Here we need to use the HAVING clause so the correct syntax will be:
+		SELECT Aggregate_Function(columnName) FROM tableName HAVING condition
+		
+
+
+-- UNION v/s UNION ALL:
+_______________________
+
+- 'UNION' removes duplicate records.
+- 'UNION ALL' does not remove the duplicate records i.e. it will return all the values.
+- UNION operator combines result set of two or more select statements. But each 'SELECT' statement must have:
+	Same number of columns.
+	Columns must have similar datatypes.
+	Columns must be in same order.
+
+Syntax:
+		SELECT columnNames FROM tableName1
+		UNION / UNION ALL
+		SELECT columnNames FROM tableName2
+		
+
+
+-- IN v/s EIXSTS:
+_________________
+
+- 'IN' mainly used for multiple OR clauses in the WHERE clause.
+- 'IN' compares one value to several values.
+Syntax:
+		SELECT columnNames FROM tableName WHERE condition1 OR condition2 OR condition3
+It can be written as using IN:
+		SELECT columnNames FROM tableName WHERE condition IN (1,2,3)
+		
+- 'EIXSTS' will return boolean values i.e. True or False.
+- 'EXISTS' tells us wheteher a query returns any result or not.
+Syntax:
+		SELECT columnNames FROM tableName1 WHERE EXISTS(SELECT columnNames FROM tableName2 WHERE condition)
+
+- Thumb Rule:
+- For 'IN' there should be big outer query and small inner query.
+- For 'EXISTS' there should be small outer query and big inner query.	
+
+	
+
+
+-- GROUP BY v/s ORDER BY:
+_________________________
+
+- 'ORDER BY' is used for sorting the data in Ascending or Descending order.
+- 'GROUP BY' is used with aggregate functions. Here it groups all the rows of a column with similar values.
+Syntax:
+		SELECT columnNames FROM tableName ORDER BY columnName
+		SELECT columnNames, Aggregate_Function(columnName) FROM tableName GROUP BY columnName
+		
+- Points to remember:
+	'WHERE' cannot be used after the 'GROUP BY', instead we need to use 'HAVING'.
+
+
+
+-- JOIN v/s SUBQUERY:
+_____________________	
+
+- Both are used to combine data from different tables into a single result.
+- 'JOIN' is faster than 'SUBQUERY'.
+- In SUBQUERY the select can take place only from the table1, but in JOIN it can happen from any tables.
+- Suppose we have 2 tables 'customers' and 'orders'.
+- So in case of SUBQUERY it will be:
+		SELECT cust_id, cust_name, phone FROM customers WHERE cust_id IN (SELECT cust_id FROM orders)
+
+- But in JOIN it will be:
+		SELECT c.cust_id, c.cust_name, c.phone, o.order_id 
+		FROM customers c
+		JOIN orders o
+		ON c.cust_id = o.cust_id
+
+- As we can see in case of SUBQUERY we could not return the order_id of the order table but we can do that in case of JOIN.
+
+
+
+
+-- JOIN v/s UNION:
+__________________
+
+- 'UNION' combines rows whereas 'JOIN' merges columns.
+- For 'UNION' it is not necessary to have same columnNames in the different tables but number of columns and their datatypes must be same in all the tables.
+- 'JOIN' combines rows from two or more tables based on a related common column between the tables.
+- 'JOIN' will increase the table horizontally and 'UNION' will increase it vertically.

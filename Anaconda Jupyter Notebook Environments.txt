@@ -1,0 +1,267 @@
+- To see how many environments are presently running:
+
+(base) C:\Users\Arunava> conda env list
+# conda environments:
+#
+base                  *  C:\Users\Arunava\anaconda3
+Machine Learning         C:\Users\Arunava\anaconda3\envs\Machine Learning
+
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+- To activate a different environment:
+
+(base) C:\Users\Arunava> conda activate env1 
+(env1) C:\Users\Arunava>
+
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+- To create a new environment:
+** Here environment name is 'myenv' and we need to give the python version we want to use as in this case it is python 3.9
+
+(base) C:\Users\Arunava> conda create -n myenv python=3.9
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.8.3
+  latest version: 4.11.0
+
+Please update conda by running
+
+    $ conda update -n base -c defaults conda
+
+
+
+## Package Plan ##
+
+  environment location: C:\Users\Arunava\anaconda3\envs\myenv
+
+  added / updated specs:
+    - python=3.9
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    ca-certificates-2021.10.26 |       haa95532_4         116 KB
+    certifi-2021.10.8          |   py39haa95532_2         152 KB
+    openssl-1.1.1m             |       h2bbff1b_0         4.8 MB
+    pip-21.2.4                 |   py39haa95532_0         1.8 MB
+    python-3.9.7               |       h6244533_1        16.5 MB
+    setuptools-58.0.4          |   py39haa95532_0         778 KB
+    sqlite-3.37.2              |       h2bbff1b_0         799 KB
+    tzdata-2021e               |       hda174b7_0         112 KB
+    wheel-0.37.1               |     pyhd3eb1b0_0          33 KB
+    wincertstore-0.2           |   py39haa95532_2          15 KB
+    ------------------------------------------------------------
+                                           Total:        25.1 MB
+
+The following NEW packages will be INSTALLED:
+
+  ca-certificates    pkgs/main/win-64::ca-certificates-2021.10.26-haa95532_4
+  certifi            pkgs/main/win-64::certifi-2021.10.8-py39haa95532_2
+  openssl            pkgs/main/win-64::openssl-1.1.1m-h2bbff1b_0
+  pip                pkgs/main/win-64::pip-21.2.4-py39haa95532_0
+  python             pkgs/main/win-64::python-3.9.7-h6244533_1
+  setuptools         pkgs/main/win-64::setuptools-58.0.4-py39haa95532_0
+  sqlite             pkgs/main/win-64::sqlite-3.37.2-h2bbff1b_0
+  tzdata             pkgs/main/noarch::tzdata-2021e-hda174b7_0
+  vc                 pkgs/main/win-64::vc-14.2-h21ff451_1
+  vs2015_runtime     pkgs/main/win-64::vs2015_runtime-14.27.29016-h5e58377_2
+  wheel              pkgs/main/noarch::wheel-0.37.1-pyhd3eb1b0_0
+  wincertstore       pkgs/main/win-64::wincertstore-0.2-py39haa95532_2
+
+
+Proceed ([y]/n)? y
+
+
+Downloading and Extracting Packages
+python-3.9.7         | 16.5 MB   | ############################################################################ | 100%
+certifi-2021.10.8    | 152 KB    | ############################################################################ | 100%
+wincertstore-0.2     | 15 KB     | ############################################################################ | 100%
+pip-21.2.4           | 1.8 MB    | ############################################################################ | 100%
+wheel-0.37.1         | 33 KB     | ############################################################################ | 100%
+sqlite-3.37.2        | 799 KB    | ############################################################################ | 100%
+ca-certificates-2021 | 116 KB    | ############################################################################ | 100%
+openssl-1.1.1m       | 4.8 MB    | ############################################################################ | 100%
+setuptools-58.0.4    | 778 KB    | ############################################################################ | 100%
+tzdata-2021e         | 112 KB    | ############################################################################ | 100%
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+#
+# To activate this environment, use
+#
+#     $ conda activate myenv
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+
+(base) C:\Users\Arunava>
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+- Now to check whether the environment is created or not:
+
+(base) C:\Users\Arunava> conda env list
+# conda environments:
+#
+base                  *  C:\Users\Arunava\anaconda3
+Machine Learning         C:\Users\Arunava\anaconda3\envs\Machine Learning
+myenv                    C:\Users\Arunava\anaconda3\envs\myenv
+
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+- Now to launch the Jupyter notebook in this environment:
+** Here 1st we need to activate the virtual environment where we want to run the Jupyter notebook.
+** Then we need to install 'ipykernel' by using pip command.
+** After that we need to install the environment name using the pykernel command.
+
+(base) C:\Users\Arunava> conda activate myenv
+
+(myenv) C:\Users\Arunava> pip install --user ipykernel
+Collecting ipykernel
+  Downloading ipykernel-6.9.1-py3-none-any.whl (128 kB)
+     |████████████████████████████████| 128 kB 2.2 MB/s
+Collecting traitlets<6.0,>=5.1.0
+  Downloading traitlets-5.1.1-py3-none-any.whl (102 kB)
+     |████████████████████████████████| 102 kB 2.1 MB/s
+Collecting tornado<7.0,>=4.2
+  Downloading tornado-6.1-cp39-cp39-win_amd64.whl (422 kB)
+     |████████████████████████████████| 422 kB 3.3 MB/s
+Collecting jupyter-client<8.0
+  Downloading jupyter_client-7.1.2-py3-none-any.whl (130 kB)
+     |████████████████████████████████| 130 kB ...
+Collecting debugpy<2.0,>=1.0.0
+  Downloading debugpy-1.5.1-cp39-cp39-win_amd64.whl (4.4 MB)
+     |████████████████████████████████| 4.4 MB ...
+Collecting matplotlib-inline<0.2.0,>=0.1.0
+  Downloading matplotlib_inline-0.1.3-py3-none-any.whl (8.2 kB)
+Collecting nest-asyncio
+  Downloading nest_asyncio-1.5.4-py3-none-any.whl (5.1 kB)
+Collecting ipython>=7.23.1
+  Downloading ipython-8.0.1-py3-none-any.whl (747 kB)
+     |████████████████████████████████| 747 kB 6.4 MB/s
+Collecting pickleshare
+  Downloading pickleshare-0.7.5-py2.py3-none-any.whl (6.9 kB)
+Collecting stack-data
+  Downloading stack_data-0.2.0-py3-none-any.whl (21 kB)
+Collecting black
+  Downloading black-22.1.0-cp39-cp39-win_amd64.whl (1.1 MB)
+     |████████████████████████████████| 1.1 MB 3.3 MB/s
+Collecting backcall
+  Downloading backcall-0.2.0-py2.py3-none-any.whl (11 kB)
+Collecting pygments
+  Downloading Pygments-2.11.2-py3-none-any.whl (1.1 MB)
+     |████████████████████████████████| 1.1 MB 6.4 MB/s
+Collecting jedi>=0.16
+  Downloading jedi-0.18.1-py2.py3-none-any.whl (1.6 MB)
+     |████████████████████████████████| 1.6 MB ...
+Collecting decorator
+  Downloading decorator-5.1.1-py3-none-any.whl (9.1 kB)
+Requirement already satisfied: setuptools>=18.5 in c:\users\arunava\anaconda3\envs\myenv\lib\site-packages (from ipython>=7.23.1->ipykernel) (58.0.4)
+Collecting prompt-toolkit!=3.0.0,!=3.0.1,<3.1.0,>=2.0.0
+  Downloading prompt_toolkit-3.0.28-py3-none-any.whl (380 kB)
+     |████████████████████████████████| 380 kB ...
+Requirement already satisfied: colorama in c:\users\arunava\appdata\roaming\python\python39\site-packages (from ipython>=7.23.1->ipykernel) (0.4.4)
+Collecting pyzmq>=13
+  Downloading pyzmq-22.3.0-cp39-cp39-win_amd64.whl (1.0 MB)
+     |████████████████████████████████| 1.0 MB 6.4 MB/s
+Collecting jupyter-core>=4.6.0
+  Downloading jupyter_core-4.9.2-py3-none-any.whl (86 kB)
+     |████████████████████████████████| 86 kB 956 kB/s
+Collecting python-dateutil>=2.1
+  Using cached python_dateutil-2.8.2-py2.py3-none-any.whl (247 kB)
+Collecting entrypoints
+  Downloading entrypoints-0.4-py3-none-any.whl (5.3 kB)
+Collecting parso<0.9.0,>=0.8.0
+  Downloading parso-0.8.3-py2.py3-none-any.whl (100 kB)
+     |████████████████████████████████| 100 kB 1.8 MB/s
+Collecting pywin32>=1.0
+  Downloading pywin32-303-cp39-cp39-win_amd64.whl (9.3 MB)
+     |████████████████████████████████| 9.3 MB 3.3 MB/s
+Collecting wcwidth
+  Downloading wcwidth-0.2.5-py2.py3-none-any.whl (30 kB)
+Requirement already satisfied: six>=1.5 in c:\users\arunava\appdata\roaming\python\python39\site-packages (from python-dateutil>=2.1->jupyter-client<8.0->ipykernel) (1.15.0)
+Collecting pathspec>=0.9.0
+  Downloading pathspec-0.9.0-py2.py3-none-any.whl (31 kB)
+Collecting platformdirs>=2
+  Downloading platformdirs-2.5.1-py3-none-any.whl (14 kB)
+Collecting mypy-extensions>=0.4.3
+  Downloading mypy_extensions-0.4.3-py2.py3-none-any.whl (4.5 kB)
+Collecting typing-extensions>=3.10.0.0
+  Downloading typing_extensions-4.1.1-py3-none-any.whl (26 kB)
+Collecting click>=8.0.0
+  Downloading click-8.0.4-py3-none-any.whl (97 kB)
+     |████████████████████████████████| 97 kB 1.1 MB/s
+Collecting tomli>=1.1.0
+  Downloading tomli-2.0.1-py3-none-any.whl (12 kB)
+Collecting asttokens
+  Downloading asttokens-2.0.5-py2.py3-none-any.whl (20 kB)
+Collecting pure-eval
+  Downloading pure_eval-0.2.2-py3-none-any.whl (11 kB)
+Collecting executing
+  Downloading executing-0.8.2-py2.py3-none-any.whl (16 kB)
+Installing collected packages: wcwidth, typing-extensions, traitlets, tomli, pywin32, pure-eval, platformdirs, pathspec, parso, mypy-extensions, executing, click, asttokens, tornado, stack-data, pyzmq, python-dateutil, pygments, prompt-toolkit, pickleshare, nest-asyncio, matplotlib-inline, jupyter-core, jedi, entrypoints, decorator, black, backcall, jupyter-client, ipython, debugpy, ipykernel
+  WARNING: The script pygmentize.exe is installed in 'C:\Users\Arunava\AppData\Roaming\Python\Python39\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts jupyter-migrate.exe, jupyter-troubleshoot.exe and jupyter.exe are installed in 'C:\Users\Arunava\AppData\Roaming\Python\Python39\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts black-primer.exe, black.exe and blackd.exe are installed in 'C:\Users\Arunava\AppData\Roaming\Python\Python39\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts jupyter-kernel.exe, jupyter-kernelspec.exe and jupyter-run.exe are installed in 'C:\Users\Arunava\AppData\Roaming\Python\Python39\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  WARNING: The scripts ipython.exe and ipython3.exe are installed in 'C:\Users\Arunava\AppData\Roaming\Python\Python39\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+Successfully installed asttokens-2.0.5 backcall-0.2.0 black-22.1.0 click-8.0.4 debugpy-1.5.1 decorator-5.1.1 entrypoints-0.4 executing-0.8.2 ipykernel-6.9.1 ipython-8.0.1 jedi-0.18.1 jupyter-client-7.1.2 jupyter-core-4.9.2 matplotlib-inline-0.1.3 mypy-extensions-0.4.3 nest-asyncio-1.5.4 parso-0.8.3 pathspec-0.9.0 pickleshare-0.7.5 platformdirs-2.5.1 prompt-toolkit-3.0.28 pure-eval-0.2.2 pygments-2.11.2 python-dateutil-2.8.2 pywin32-303 pyzmq-22.3.0 stack-data-0.2.0 tomli-2.0.1 tornado-6.1 traitlets-5.1.1 typing-extensions-4.1.1 wcwidth-0.2.5
+WARNING: You are using pip version 21.3.1; however, version 22.0.3 is available.
+You should consider upgrading via the 'C:\Users\Arunava\anaconda3\envs\myenv\python.exe -m pip install --upgrade pip' command.
+
+
+(myenv) C:\Users\Arunava> python -m ipykernel install --user --name=myenv
+Installed kernelspec myenv in C:\Users\Arunava\AppData\Roaming\jupyter\kernels\myenv
+
+** If we get the message Installed kernelspec myenv in (file_location) then after go to the file location we can see the json file in the following format
+
+{
+ "argv": [
+  "C:\\Users\\Arunava\\anaconda3\\envs\\myenv\\python.exe",
+  "-m",
+  "ipykernel_launcher",
+  "-f",
+  "{connection_file}"
+ ],
+ "display_name": "myenv",
+ "language": "python",
+ "metadata": {
+  "debugger": true
+ }
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- Now to open the jupyter notebook here:
+** first install jupyter notebook then run it
+
+(myenv) C:\Users\Arunava>conda install jupyter
+(data) C:\Users\Arunava>jupyter notebook
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- To remove an environment use conda env remove --name environment_name
+
+(base) C:\Users\Arunava\Desktop\Data Science> conda env remove --name myenv
+
+Remove all packages in environment C:\Users\Arunava\anaconda3\envs\myenv:
+
+
+(base) C:\Users\Arunava\Desktop\Data Science>conda env list
+# conda environments:
+#
+base                  *  C:\Users\Arunava\anaconda3
+Machine Learning         C:\Users\Arunava\anaconda3\envs\Machine Learning
+data                     C:\Users\Arunava\anaconda3\envs\data

@@ -1,0 +1,165 @@
+API (Application Programming Interface)
+- An API is a way of communication between two applications based on different platforms written in same or different languages.
+
+-- API Gateway:
+A product which is in a webpage or mobileapp may have many functionalites or tasks which get broken down into some microservices.
+- So the API Gateway will reside directly between the client (webpage/mobileapp) and the microservices. This is called (Direct Client to Microservices Communication). So it is like a filter where all the request comes from the client and then it gets directed towards the microservices it requested for.
+- Benefits are: increased client performance, reduce latency, much faster UI/product page, better client experience.
+- It also provides better security for the front end client page.
+- It is also helpful for Protocol Translation. So here we can change the HTTPS to HTTP for the API and microservices.
+- We can also create dedicated API Gateway for different UIs.
+
+
+SAP: SAP – systems, applications, and products. The software itself was developed by one of the largest software companies in the world, SAP (both the company and software share the same name).
+
+OCR: OCR stands for "Optical Character Recognition." It is a technology that recognizes text within a digital image. It is commonly used to recognize text in scanned documents and images.
+
+URL: URL stands for "Uniform Resource Locators". 
+
+API: 
+
+- APIs are mechanisms that enable two software components to communicate with each other using a set of definitions and protocols. For example, the weather bureau’s software system contains daily weather data. The weather app on your phone “talks” to this system via APIs and shows you daily weather updates on your phone.
+
+- API stands for Application Programming Interface. E.g. different applications like "Gpay" we use in our daily life both in desktop and mobiles.
+
+- API architecture is usually explained in terms of client and server. The application sending the request is called the client, and the application sending the response is called the server. So in the Gpay example, the Bank's database is the server, and the mobile app is the client. 
+
+- Now the application and the banking server may use different programming languages and thus to set communication between these two we need a common link. The API works as that link. So API is a bridge/service in between two heterogenous/homogenous applications.
+
+- So now if we create an application and someone else want to use it, so instead of giving him the access of the entire application we can create an API and send it to that person.
+
+- There are many frameworks in python to create an API like "Flask", "Django" etc. 
+
+- There are four different ways that APIs can work depending on when and why they were created.
+
+
+
+SOAP APIs:
+
+- These APIs use 'Simple Object Access Protocol'. Client and server exchange messages using XML. This is a less flexible API that was more popular in the past.
+
+
+
+RPC APIs:
+
+- These APIs are called 'Remote Procedure Calls'. The client completes a function (or procedure) on the server, and the server sends the output back to the client.
+
+
+
+Websocket APIs:
+
+- Websocket API is another modern web API development that uses JSON objects to pass data. A WebSocket API supports two-way communication between client apps and the server. The server can send callback messages to connected clients, making it more efficient than REST API.
+
+
+
+REST APIs: 
+
+- These are the most popular and flexible APIs found on the web today. It stands for 'Representational State Transfer'. The client sends requests to the server as data. The server uses this client input to start internal functions and returns output data back to the client. Let’s look at REST APIs in more detail below.
+
+
+- Flask is a 'Micro Web Development Framework'.
+
+- From whatever system the call is made to a Backend, that system is called as Client and whoever is executing the backend logic is called Server.
+
+- Both 'GET' and 'POST' request is use to transfer the data. So by 'GET' and 'POST' we can send a data to the server or the Backend.
+
+- 'PUT' is for update and 'DELETE' is for delete data.
+
+- e.g. In Google server when we search for anything they use the 'GET' method but when we signin in the Gmail then it uses the 'POST' method.
+
+- In 'GET' method:
+- here we send 'URL + Query'
+- here the request is directly sent to the URL
+- requests can be cached
+- requests remain in the browser history
+- requests can be bookmarked
+- requests should never be used when dealing with sensitive data
+- requests have length restrictions
+- requests are only used to request data (not modify)
+
+- In 'POST' method:
+- here we send 'data into the body'
+- requests are never cached
+- requests do not remain in the browser history
+- requests cannot be bookmarked
+- requests have no restrictions on data length
+
+
+
+
+
+
+
+                                                ---- REST API from PHP Course ----
+
+API : Application Programme Interface
+
+Let's assume we create a website using PHP and a database using MySql. Now we want to create 2 mobile based apps of the same website one for android where we use 'Android' language and one for iphone where we use 'Swift' language. Now these 2 will not be able to fetch the data from MySql directly as they have their own libraries and databases. But as we want to use the same database we write a program called 'API' which takes request from all the 3 languages that is 'PHP', 'Android' and 'Swift' and send it to MySql and in response what it gets from MySql it returns to the requester a JSON data.
+
+e.g. 
+When we try to login into a website they give us an option that we can login using our google or facebook login. What happens here is that Google and Facebook provide us with a free API which we can use in the website as it will save time for signup.
+
+Another one is using google map to show address.
+Another one is SMS sent by company's to provide OTP or product adertisement.
+Another one is payment gateway.
+
+
+Some APIs are free and some are payable.
+Payable APIs has following categories:
+Open APIS : Anyone can use it. e.g. Facebook API. That is we can use Facebook API in our website to make the user login.
+Partner APIs : This is payable. e.g. If we want to sent some advertisement SMS or OTP to the customers of our website. In this case we use 3rd party from whom we purchase those SMS.
+Internal APIs : These are private APIs. These are mainly use by company for self use purpose.
+
+
+To create Web Services APIs:
+Remember they use HTTP protocols. That is it must contain an url. These are mainly of 4 types.
+SOAP = It is one of the popular API but it only supports xml format.
+XML-RPC = This is normal API. Like creating a JSON  format from a PHP file. This is not secure. Use it for personal use only.
+JSON-RPC = This is also normal API. Like creating a JSON  format from a PHP file. This is not secure. Use it for personal use only.
+REST = This is the most popular one. As it supports many formats like xml,JSON,text,user-defined.It is easy to use also. It is also known as RESTFUL API.
+
+REST : Representational State Transfer
+
+To use this we need to know the HTTP methods of this.
+GET = This is use to read data. Sending data using the head (url).
+PUT = This is use to update data. We can also use a method name 'PATCH' to do the same function.
+POST = This is use to insert data. Sending the data using the body.
+DELETE = This is use to delete data.
+
+
+To work Restful API with PHP we need to pass an extra information named 'header information'. There are many header information the most used is 'content type'. It states that the result API will be in which format in the user page.
+syntax is:
+header('Content-Type : application/json');  // in this case the return data will be in JSON format
+
+
+// These are optional headers.
+header('Access-Control-Allow-Methods : PUT');  //It is to state that which REST API method we will use.
+
+header('Access-Control-Allow-Methods : PUT,GET,DELETE');  //this is for multiple methods 
+
+header('Access-Control-Allow-Origin : *');  //this is mainly for security. '*' means anyone can access this page. To make it usable for a particular website we need to give the name of that website in place of '*'. e.g. 
+header('Access-Control-Allow-Origin : www.site-B.com');  // now only site-B can access the API
+
+header('Access-Control-Allow-Headers : <header-name>');  // this is also for security. here we pass the name of the headers we want to use in our website. It makes the page almost hack-proof as the hackers cannot pass any header of their choice as we have made the choice for him.
+
+
+There are also many headers to read go to: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+
+
+                                                        ******************
+
+
+
+-- REST API:
+- (REST) Representational State Transfer
+- They are all about communication between clients and servers.
+- They are simple and standardized.
+- They are Scalable (easy to make modifications with growing complexity of services) and Stateless (no need to worry about what data in which state).
+- They have high performance due to the fact that they support cache.
+- The building blocks for REST API are the request send from client to the server and the response it recieves from the server.
+
+- In REST the CRUD gets operated as follows:
+CREATE -> POST
+READ   -> GET
+UPDATE -> PUT
+DELETE -> DELETE

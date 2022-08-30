@@ -1,0 +1,3368 @@
+MySQL80 Password: Arun@va_6isw@5#12345
+MySQL80 new Password: Password
+Windows service details as MySQL80
+
+To change the password:
+1st go to the directory bin in MySQL Server from Command prompt in admin mode.
+Enter the new password with the command:
+mysqladmin -u <user> -p password <new_password>
+Then enter the old password. So it is just to create new password not to reset it in case the password is forgotten
+
+
+C:\WINDOWS\system32>cd C:\Program Files\MySQL\MySQL Server 8.0\bin
+C:\Program Files\MySQL\MySQL Server 8.0\bin>mysqladmin -u root -p password Password
+Enter password: ********************
+mysqladmin: [Warning] Using a password on the command line interface can be insecure.
+Warning: Since password will be sent to server in plain text, use ssl connection to ensure password safety.
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>
+
+
+
+
+To change default port number:
+
+- To see the current port number
+
+mysql> select @@port;
++--------+
+| @@port |
++--------+
+|   3306 |
++--------+
+1 row in set (0.02 sec)
+
+
+- Now to change the port number:
+- 1st stop all the services of MySQL. For this go to 'services' in search of Windows then go to 'MySQL80', and see the status. If it is 'Running' click on the 'Stop the service' option at the left top corner.
+- After it gets stopped open the configuration file of the MySQL server and there change the port number. For this go to:
+C:\ProgramData(hidden file)\MySQL\MySQL Server 8.0
+
+- Now there is a file named 'my.ini', it is the configuration file.
+- Remember befor make changes to the port number we need to give full access to this file, or else after saving the changes it will not allow.
+- So to give full control: 
+Right click on the file-> Properties-> Security-> System-> Edit-> tick all the Permissions-> Apply-> Ok
+
+- Now open the file using any editor, Use the find option and change all the default port numbers to a desired number. Now save the file and close it.
+- Now go to services and start the MySQL service.
+
+- Now in MySQL Workbench select the 'range' icon (for configure option), and there select 'Local instances MySQL80' and change the port number to new one.
+- Now click on 'Test Connection', give the password.
+
+
+
+--- To load data automatically from Python in mysql:
+
+- If LOCAL capability is disabled, on either the server or client side, a client that attempts to issue a LOAD DATA LOCAL statement receives the following error message:
+
+Error is: 3948 (42000): Loading local data is disabled; this must be enabled on both the client and server sides
+
+
+- To overcome this use the following: 
+
+
+mysql> show global variables like 'local_infile';
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| local_infile  | OFF   |
++---------------+-------+
+1 row in set (0.37 sec)
+
+mysql> set global local_infile=true;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> show global variables like 'local_infile';
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| local_infile  | ON    |
++---------------+-------+
+1 row in set (0.00 sec)
+
+mysql> exit;
+
+
+Then use the following query:
+
+LOAD DATA LOCAL INFILE 'source\\location\\or\\file\\path' 
+INTO TABLE pollution 
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n';
+
+
+
+							********** MySQL **********
+
+
+PostgreSQL, Oracle Database, MySQL, SQLite are not databases, these are Database Management Systems (DBMS). 
+SQL is the language we use to interact with our relational database management systems.
+
+
+
+
+Now let's create a database named it as demo1.
+*** Remember the ';' is very important at the end of every query. Otherwise the code will not run.
+*** Use the '\! cls' command to clear the command line.
+*** Use '\q' to quit the CLI.
+
+
+mysql> create database demo1;
+Query OK, 1 row affected (0.10 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| demo1              |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+
+mysql> \! cls
+
+
+
+
+To delete a database we use 'DROP' command.
+Here we will create a database named 'testing_db' and then delete it.
+
+
+mysql> CREATE DATABASE testing_db;
+Query OK, 1 row affected (0.10 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| demo1              |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| testing_db         |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> DROP DATABASE testing_db;
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| demo1              |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+
+
+
+Let's use the database. Now to use a database we need to use the 'use' word. 
+
+
+mysql> USE demo1;
+Database changed
+
+
+
+
+To see which database we are currently in use the command 'SELECT database();'. If we are not using a database then it will return a 'NULL' value.
+
+
+mysql> SELECT database();
++------------+
+| database() |
++------------+
+| demo1      |
++------------+
+1 row in set (0.00 sec)
+
+
+
+
+Now add some tables in the database and put some data in it. The table's name is 'cats'.
+*** Remember to use plurals in creating table names, it is a good practice.
+To check the table is created we can use 'SHOW TABLES;' or to know more specifically about a table we use 'SHOW COLUMNS FROM <table_name>;' or we can also use the 'DESCRIBE' or 'DESC' keyword with the table_name.
+
+
+mysql> CREATE TABLE cats (
+    -> name VARCHAR(100),
+    -> age INT
+    -> );
+Query OK, 0 rows affected (0.57 sec)
+
+mysql>
+mysql>
+mysql> SHOW TABLES;
++-----------------+
+| Tables_in_demo1 |
++-----------------+
+| cats            |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql>
+mysql> SHOW COLUMNS FROM cats;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| name  | varchar(100) | YES  |     | NULL    |       |
+| age   | int          | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.05 sec)
+
+mysql> DESC cats;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| name  | varchar(100) | YES  |     | NULL    |       |
+| age   | int          | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+
+
+
+Now to delete a table we use the same 'DROP' command. But if we want to just delete the contents of the table we use 'TRUNCATE' command. It keeps the heading and the datatypes while deleting the data in the table.
+
+
+
+
+**** Practice ****
+Q. Create a pastries table that contains 2 columns 'name' and 'quantity', 'name' is 50 characters max. Then inspect the table/columns in the CLI. And then delete the table. Then check whether the tables is deleted or not?
+
+Ans.
+
+mysql> CREATE TABLE pastries (
+    -> name VARCHAR(50),
+    -> quantity INT
+    -> );
+Query OK, 0 rows affected (0.60 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> DESC pastries;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| name     | varchar(50) | YES  |     | NULL    |       |
+| quantity | int         | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> DROP TABLE pastries;
+Query OK, 0 rows affected (0.35 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SHOW TABLES;
++-----------------+
+| Tables_in_demo1 |
++-----------------+
+| cats            |
++-----------------+
+1 row in set (0.00 sec)
+
+
+
+
+Now lets insert data in the table for this we use the 'INSERT' command. We will use the 'cats' table for this. Always remember that the sequence of the datatypes should match with the sequence of the entered data. Also remember that we can insert multiple values at one go.
+
+
+mysql> INSERT INTO cats (name, age)
+    -> VALUES
+    -> ("Jetson", 7),
+    -> ("Milo", 3),
+    -> ("Victoria", 12)
+    -> ;
+Query OK, 3 rows affected (0.20 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+
+mysql> INSERT INTO cats (age, name)
+    -> VALUES
+    -> (1, 'Blue')
+    -> ;
+Query OK, 1 row affected (0.05 sec)
+
+
+
+
+Now to check the data is to use the 'SELECT' command.
+
+
+mysql> SELECT * FROM cats;
++----------+------+
+| name     | age  |
++----------+------+
+| Jetson   |    7 |
+| Mil0     |    3 |
+| Victoria |   12 |
+| Blue     |    1 |
++----------+------+
+4 rows in set (0.00 sec)
+
+
+
+
+**** Practice ****
+Q. Create a persons table where columns are 'first_name' is 20 char limit, 'last_name' is 20 char limit and age. Now populate it with data for 'Tina Belchar', 13 and 'Bob Belchar', 42 but insert it with different order. Then put multiple names at one go for 'Linda Belchar', 45, 'Philip Frond', 38, 'Calvin Fischoeder', 70. Then check whether the data is in the table or not?
+
+Ans.
+
+mysql> CREATE TABLE persons (
+    -> first_name VARCHAR(20),
+    -> last_name VARCHAR(20),
+    -> age INT
+    -> );
+Query OK, 0 rows affected (0.47 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO persons (first_name, last_name, age)
+    -> VALUES ('Tina', 'Belcher', 13);
+Query OK, 1 row affected (0.05 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO persons (last_name, age, first_name)
+    -> VALUES ('Belcher', 42, 'Bob');
+Query OK, 1 row affected (0.12 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO persons (first_name, last_name, age)
+    -> VALUES
+    -> ('Linda', 'Belcher', 45),
+    -> ('Philip', 'Frond', 38),
+    -> ('Calvin', 'Fischoeder', 70);
+Query OK, 3 rows affected (0.10 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT * FROM persons;
++------------+------------+------+
+| first_name | last_name  | age  |
++------------+------------+------+
+| Tina       | Belcher    |   13 |
+| Bob        | Belcher    |   42 |
+| Linda      | Belcher    |   45 |
+| Philip     | Frond      |   38 |
+| Calvin     | Fischoeder |   70 |
++------------+------------+------+
+5 rows in set (0.00 sec)
+
+
+
+
+*** If we try to put an entire string into the table Where it will breach the data barrier we put during the creation of the table, then we will get a warning. We can use 'SHOW WARNINGS' to see the warnings. We will also face the warning situation when we mismatch the datatype.
+
+
+
+
+NULL means "The value is not known" and it is not 0. That means the columns can have unknown values when the Null column shows 'YES' in the table.
+
+
+mysql> DESC cats;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| name  | varchar(100) | YES  |     | NULL    |       |
+| age   | int          | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO cats (name) VALUES ('Alabama');
+Query OK, 1 row affected (0.10 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT * FROM cats;
++----------+------+
+| name     | age  |
++----------+------+
+| Jetson   |    7 |
+| Mil0     |    3 |
+| Victoria |   12 |
+| Blue     |    1 |
+| Alabama  | NULL |
++----------+------+
+5 rows in set (0.00 sec)
+
+
+
+
+To overcome this situation we can specify 'NOT NULL' when we create a table. Let's try it this time on a new table named 'cats2'.
+
+
+mysql> CREATE TABLE cats2 (
+    -> name VARCHAR (50) NOT NULL,
+    -> age INT NOT NULL
+    -> );
+Query OK, 0 rows affected (0.44 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> DESC cats2;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| name  | varchar(50) | NO   |     | NULL    |       |
+| age   | int         | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO cats2 (name) VALUES('Texas');
+ERROR 1364 (HY000): Field 'age' doesn't have a default value
+
+
+
+
+So here we have to put a Default value for the Not Null during table creation. If we left the Null to be stay as it is then we can put the value as 'Null' explicitly but if we use the NOT NULL then the value cannot be Null even explicitly.
+
+
+mysql> CREATE TABLE cats3(
+    -> name VARCHAR(50)NOT NULL DEFAULT 'Unnamed',
+    -> age INT NOT NULL DEFAULT 99
+    -> );
+Query OK, 0 rows affected (0.42 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> DESC cats3;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| name  | varchar(50) | NO   |     | Unnamed |       |
+| age   | int         | NO   |     | 99      |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO cats3 (name) VALUES ('Blue');
+Query OK, 1 row affected (0.12 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT * FROM cats3;
++------+------+
+| name | age  |
++------+------+
+| Blue |   99 |
++------+------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO cats3 (age) VALUES (7);
+Query OK, 1 row affected (0.07 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT * FROM cats3;
++---------+------+
+| name    | age  |
++---------+------+
+| Blue    |   99 |
+| Unnamed |    7 |
++---------+------+
+2 rows in set (0.00 sec)
+
+
+
+
+The key column is for the distinct value, i.e. it will be uniquely identifiable. For this we will use 'Primary Key' i.e. an unique identifier for a row. We can also add the AUTO_INCREAMENT with that column name to make the column increase automatically by 1.
+
+
+mysql> CREATE TABLE unique_cats(
+    -> cat_id INT NOT NULL AUTO_INCREMENT,
+    -> name VARCHAR(100),
+    -> age INT,
+    -> PRIMARY KEY (cat_id)
+    -> );
+Query OK, 0 rows affected (0.46 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> DESC unique_cats;
++--------+--------------+------+-----+---------+------------------+
+| Field  | Type         | Null | Key | Default | Extra            |
++--------+--------------+------+-----+---------+------------------+
+| cat_id | int          | NO   | PRI | NULL    | auto_increment  |
+| name   | varchar(100) | YES  |     | NULL    |                  |
+| age    | int          | YES  |     | NULL    |                  |
++--------+--------------+------+-----+---------+------------------+
+3 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO unique_cats (cat_id, name, age) VALUES (1, 'Fred', 5);
+Query OK, 1 row affected (0.08 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO unique_cats (name, age) VALUES ('Rocky', 3);
+Query OK, 1 row affected (0.08 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT * FROM unique_cats;
++--------+------+------+
+| cat_id | name | age  |
++--------+------+------+
+|      1 | Fred |    5 |
+|	   2 | Rocky|    3 |
++--------+------+------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO unique_cats (cat_id, name, age) VALUES (1, 'Jerry', 4);
+ERROR 1062 (23000): Duplicate entry '1' for key 'unique_cats.PRIMARY'
+
+
+
+
+*** Practice ***
+Q. Define an employees table, with the following fields:
+	id - number (automatically increaments), mandatory, primary key
+	last_name - text, mandatory
+	first_name - text, mandatory
+	middle_name - text, non mandatory
+	age - number, mandatory
+	current_status - text, mandatory, defaults to 'employed'
+	
+Ans.
+
+CREATE TABLE employees(
+    -> id INT NOT NULL AUTO_INCREMENT,
+    -> last_name VARCHAR(50) NOT NULL,
+    -> first_name VARCHAR(50) NOT NULL,
+    -> middle_name VARCHAR(50),
+    -> age INT NOT NULL,
+    -> current_status VARCHAR(50) NOT NULL DEFAULT 'employed',
+    -> PRIMARY KEY (id)
+    -> );
+Query OK, 0 rows affected (1.03 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> DESC employees;
++----------------+-------------+------+-----+----------+----------------+
+| Field          | Type        | Null | Key | Default  | Extra          |
++----------------+-------------+------+-----+----------+----------------+
+| id             | int         | NO   | PRI | NULL     | auto_increment |
+| last_name      | varchar(50) | NO   |     | NULL     |                |
+| first_name     | varchar(50) | NO   |     | NULL     |                |
+| middle_name    | varchar(50) | YES  |     | NULL     |                |
+| age            | int         | NO   |     | NULL     |                |
+| current_status | varchar(50) | NO   |     | employed |                |
++----------------+-------------+------+-----+----------+----------------+
+6 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO employees (id, last_name, first_name, middle_name, age, current_status) VALUES (1, 'Verma', 'Ravi', 'Kumar', 34, 'intern');
+Query OK, 1 row affected (0.06 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT * FROM employees;
++----+-----------+------------+-------------+-----+----------------+
+| id | last_name | first_name | middle_name | age | current_status |
++----+-----------+------------+-------------+-----+----------------+
+|  1 | Verma     | Ravi       | Kumar       |  34 | intern         |
++----+-----------+------------+-------------+-----+----------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql> INSERT INTO employees (last_name, first_name, age, current_status) VALUES ('Sharma', 'Arjun', 29, 'resigned');
+Query OK, 1 row affected (0.10 sec)
+
+mysql>
+mysql> INSERT INTO employees (last_name, first_name, age) VALUES ('Kohli', 'Birat', 37);
+Query OK, 1 row affected (0.07 sec)
+
+mysql>
+mysql> INSERT INTO employees (last_name, first_name, middle_name, age, current_status) VALUES ('Lohia', 'Ram', 'Monohar', 62, 'retired');
+Query OK, 1 row affected (0.10 sec)
+
+mysql>
+mysql> INSERT INTO employees (last_name, first_name, middle_name, age, current_status) VALUES ('Bhushan', 'Bharat', 'Rajeev', 32, 'employed');
+Query OK, 1 row affected (0.10 sec)
+
+mysql>
+mysql>
+mysql> SELECT * FROM employees;
++----+-----------+------------+-------------+-----+----------------+
+| id | last_name | first_name | middle_name | age | current_status |
++----+-----------+------------+-------------+-----+----------------+
+|  1 | Verma     | Ravi       | Kumar       |  34 | intern         |
+|  2 | Sharma    | Arjun      | NULL        |  29 | resigned       |
+|  3 | Kohli     | Birat      | NULL        |  37 | employed       |
+|  4 | Lohia     | Ram        | Monohar     |  62 | retired        |
+|  5 | Bhushan   | Bharat     | Rajeev      |  32 | employed       |
++----+-----------+------------+-------------+-----+----------------+
+5 rows in set (0.00 sec)
+
+
+
+
+**** CRUD Operations ****
+
+Create, Read, Update, Delete.
+
+** CREATE **
+
+For this we will create a table named 'cats'. 
+Then we will insert some data into the cats table.
+
+mysql> CREATE TABLE cats(
+    -> cat_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    -> name VARCHAR(100),
+    -> breed VARCHAR(100),
+    -> age INT
+    -> );
+Query OK, 0 rows affected (0.41 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> DESC cats;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| cat_id | int          | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(100) | YES  |     | NULL    |                |
+| breed  | varchar(100) | YES  |     | NULL    |                |
+| age    | int          | YES  |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> INSERT INTO cats(name, breed, age)
+    -> VALUES
+    -> ('Ringo', 'Tabby', 4),
+    -> ('Cindy', 'Maine Coon', 10),
+    -> ('Dumbledore', 'Maine Coon', 11),
+    -> ('Egg', 'Persian', 4),
+    -> ('Misty', 'Tabby', 13),
+    -> ('George Michael', 'Ragdoll', 9),
+    -> ('Jackson', 'Sphynx', 7);
+Query OK, 7 rows affected (0.08 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+
+
+
+** READ **
+
+Now we will read data from the cats table.
+
+
+mysql> SELECT * FROM cats;
++--------+----------------+------------+------+
+| cat_id | name           | breed      | age  |
++--------+----------------+------------+------+
+|      1 | Ringo          | Tabby      |    4 |
+|      2 | Cindy          | Maine Coon |   10 |
+|      3 | Dumbledore     | Maine Coon |   11 |
+|      4 | Egg            | Persian    |    4 |
+|      5 | Misty          | Tabby      |   13 |
+|      6 | George Michael | Ragdoll    |    9 |
+|      7 | Jackson        | Sphynx     |    7 |
++--------+----------------+------------+------+
+7 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT name, age FROM cats;
++----------------+------+
+| name           | age  |
++----------------+------+
+| Ringo          |    4 |
+| Cindy          |   10 |
+| Dumbledore     |   11 |
+| Egg            |    4 |
+| Misty          |   13 |
+| George Michael |    9 |
+| Jackson        |    7 |
++----------------+------+
+7 rows in set (0.00 sec)
+
+
+
+
+** WHERE **
+
+This is a condition to find data about a particular. It is case insensitive, use '' when trying to find a non integer value. It is used with every command (Select, Update, Delete).
+
+
+mysql> SELECT * FROM cats WHERE age=4;
++--------+-------+---------+------+
+| cat_id | name  | breed   | age  |
++--------+-------+---------+------+
+|      1 | Ringo | Tabby   |    4 |
+|      4 | Egg   | Persian |    4 |
++--------+-------+---------+------+
+2 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT * FROM cats WHERE breed = 'Maine Coon';
++--------+------------+------------+------+
+| cat_id | name       | breed      | age  |
++--------+------------+------------+------+
+|      2 | Cindy      | Maine Coon |   10 |
+|      3 | Dumbledore | Maine Coon |   11 |
++--------+------------+------------+------+
+2 rows in set (0.00 sec)
+
+
+** Challenge: Write a SQL that selects the rows where the 'cat_id' same as 'age'.
+
+mysql> SELECT cat_id, age FROM cats WHERE cat_id = age;
++--------+------+
+| cat_id | age  |
++--------+------+
+|      4 |    4 |
+|      7 |    7 |
++--------+------+
+2 rows in set (0.00 sec)
+
+
+
+
+Aliases are there to make data reading easier for this we use 'AS'.
+
+
+mysql> SELECT cat_id AS id, name FROM cats;
++----+----------------+
+| id | name           |
++----+----------------+
+|  1 | Ringo          |
+|  2 | Cindy          |
+|  3 | Dumbledore     |
+|  4 | Egg            |
+|  5 | Misty          |
+|  6 | George Michael |
+|  7 | Jackson        |
++----+----------------+
+7 rows in set (0.00 sec)
+
+
+
+
+** UPDATE **
+
+This is use to update the existing data inside a table, here the 'SET' keyword is very important, also remember to use the WHERE clause with the update or else it will update all the rows in the table.
+Eample as in here we will update the breed to 'Shorthair' for all those cats whose breed are currently 'Tabby'.
+
+
+Default data before updatation:
+mysql> SELECT * FROM cats;
++--------+----------------+------------+------+
+| cat_id | name           | breed      | age  |
++--------+----------------+------------+------+
+|      1 | Ringo          | Tabby      |    4 |
+|      2 | Cindy          | Maine Coon |   10 |
+|      3 | Dumbledore     | Maine Coon |   11 |
+|      4 | Egg            | Persian    |    4 |
+|      5 | Misty          | Tabby      |   13 |
+|      6 | George Michael | Ragdoll    |    9 |
+|      7 | Jackson        | Sphynx     |    7 |
++--------+----------------+------------+------+
+7 rows in set (0.00 sec)
+
+Now data after updatation:
+mysql>
+mysql>
+mysql>
+mysql> UPDATE cats SET breed='Shorthair' WHERE breed='Tabby';
+Query OK, 2 rows affected (0.13 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM cats;
++--------+----------------+------------+------+
+| cat_id | name           | breed      | age  |
++--------+----------------+------------+------+
+|      1 | Ringo          | Shorthair  |    4 |
+|      2 | Cindy          | Maine Coon |   10 |
+|      3 | Dumbledore     | Maine Coon |   11 |
+|      4 | Egg            | Persian    |    4 |
+|      5 | Misty          | Shorthair  |   13 |
+|      6 | George Michael | Ragdoll    |    9 |
+|      7 | Jackson        | Sphynx     |    7 |
++--------+----------------+------------+------+
+7 rows in set (0.00 sec)
+
+
+
+
+** DELETE **
+
+It is almost same as Select. Also here the WHERE clause is important or else it will delete all the rows in a table.
+Also remember after deletation the ids will not change as when a data is inserted in the table it receives an unique id so when we delete that data the id also gets deleted. So here after 3 we will get 5 in the id column as the id 4 is being deleted.
+
+
+mysql> DELETE FROM cats WHERE name='Egg';
+Query OK, 1 row affected (0.02 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT * FROM cats;
++--------+----------------+------------+------+
+| cat_id | name           | breed      | age  |
++--------+----------------+------------+------+
+|      1 | Ringo          | Shorthair  |    4 |
+|      2 | Cindy          | Maine Coon |   10 |
+|      3 | Dumbledore     | Maine Coon |   11 |
+|      5 | Misty          | Shorthair  |   13 |
+|      6 | George Michael | Ragdoll    |    9 |
+|      7 | Jackson        | Sphynx     |    7 |
++--------+----------------+------------+------+
+7 rows in set (0.00 sec)
+
+
+
+
+
+**** Mega Challenge Section ****
+Exercises for all the previous commands (CRUD).
+
+The Annual Closet Inventory
+- Create a new database named 'shirts_db'.
+- Create a new table named 'shirts'. It will look like the following:
+
+shirt_id	article		color	shirt_size	last_worn
+1			t-shirt		white	S			10
+2			t-shirt		green	S			200
+3			polo shirt	black	M			10
+4			tank top	blue	S			50
+5			t-shirt		pink	S			0
+6			polo shirt	red		M			5
+7			tank top	white	S			200
+8			tank top	blue	M			15
+
+- Now Add a new shirt (purple, polo shirt, M, 50).
+- Select all shirts but only article and color column.
+- Select all medium shirts without the id column.
+- Update all polo shirts size to 'L'.
+- Update the shirt last worn 15 days ago change it to 0 days.
+- Update all white shirts change size to 'XS' and color to 'off white'.
+- Delete all old shirts that are last worn 200 days ago.
+- Delete all tank tops.
+- Delete all shirts make the table an empty table.
+- Drop the entire shirts table.
+
+Ans.
+mysql> CREATE DATABASE shirts_db;
+Query OK, 1 row affected (0.14 sec)
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| demo1              |
+| information_schema |
+| mysql              |
+| mysql_python       |
+| performance_schema |
+| shirts_db          |
+| sys                |
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql> USE shirts_db;
+Database changed
+mysql>
+mysql> SELECT DATABASE();
++------------+
+| DATABASE() |
++------------+
+| shirts_db  |
++------------+
+1 row in set (0.00 sec)
+
+
+mysql> CREATE TABLE shirts(
+    -> shirt_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    -> article VARCHAR(100),
+    -> color VARCHAR(30),
+    -> shirt_size VARCHAR(20),
+    -> last_worn INT
+    -> );
+Query OK, 0 rows affected (0.90 sec)
+
+mysql>
+mysql>
+mysql> DESC shirts;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| shirt_id   | int          | NO   | PRI | NULL    | auto_increment |
+| article    | varchar(100) | YES  |     | NULL    |                |
+| color      | varchar(30)  | YES  |     | NULL    |                |
+| shirt_size | varchar(20)  | YES  |     | NULL    |                |
+| last_worn  | int          | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+
+mysql> INSERT INTO shirts(article, color, shirt_size, last_worn)
+    -> VALUES
+    -> ('t-shirt', 'white', 'S', 10),
+    -> ('t-shirt', 'green', 'S', 200),
+    -> ('polo shirt', 'black', 'M', 10),
+    -> ('tank top', 'blue', 'S', 50),
+    -> ('t-shirt', 'pink', 'S', 0),
+    -> ('polo shirt', 'red', 'M', 5),
+    -> ('tank top', 'white', 'S', 200),
+    -> ('tank top', 'blue', 'M', 15);
+Query OK, 8 rows affected (0.09 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql>
+mysql> SELECT * FROM shirts;
++----------+------------+-------+------------+-----------+
+| shirt_id | article    | color | shirt_size | last_worn |
++----------+------------+-------+------------+-----------+
+|        1 | t-shirt    | white | S          |        10 |
+|        2 | t-shirt    | green | S          |       200 |
+|        3 | polo shirt | black | M          |        10 |
+|        4 | tank top   | blue  | S          |        50 |
+|        5 | t-shirt    | pink  | S          |         0 |
+|        6 | polo shirt | red   | M          |         5 |
+|        7 | tank top   | white | S          |       200 |
+|        8 | tank top   | blue  | M          |        15 |
++----------+------------+-------+------------+-----------+
+8 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql> INSERT INTO shirts(color, article, shirt_size, last_worn) VALUES ('purple', 'polo shirt', 'M', 50);
+Query OK, 1 row affected (0.06 sec)
+
+mysql>
+mysql>
+mysql> SELECT * FROM shirts;
++----------+------------+--------+------------+-----------+
+| shirt_id | article    | color  | shirt_size | last_worn |
++----------+------------+--------+------------+-----------+
+|        1 | t-shirt    | white  | S          |        10 |
+|        2 | t-shirt    | green  | S          |       200 |
+|        3 | polo shirt | black  | M          |        10 |
+|        4 | tank top   | blue   | S          |        50 |
+|        5 | t-shirt    | pink   | S          |         0 |
+|        6 | polo shirt | red    | M          |         5 |
+|        7 | tank top   | white  | S          |       200 |
+|        8 | tank top   | blue   | M          |        15 |
+|        9 | polo shirt | purple | M          |        50 |
++----------+------------+--------+------------+-----------+
+9 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT article, color FROM shirts;
++------------+--------+
+| article    | color  |
++------------+--------+
+| t-shirt    | white  |
+| t-shirt    | green  |
+| polo shirt | black  |
+| tank top   | blue   |
+| t-shirt    | pink   |
+| polo shirt | red    |
+| tank top   | white  |
+| tank top   | blue   |
+| polo shirt | purple |
++------------+--------+
+9 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT article, color, shirt_size, last_worn FROM shirts WHERE shirt_size = 'M';
++------------+--------+------------+-----------+
+| article    | color  | shirt_size | last_worn |
++------------+--------+------------+-----------+
+| polo shirt | black  | M          |        10 |
+| polo shirt | red    | M          |         5 |
+| tank top   | blue   | M          |        15 |
+| polo shirt | purple | M          |        50 |
++------------+--------+------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> UPDATE shirts SET shirt_size = 'L' WHERE article = 'polo shirt';
+Query OK, 3 rows affected (0.10 sec)
+Rows matched: 3  Changed: 3  Warnings: 0
+
+mysql> SELECT * FROM shirts;
++----------+------------+--------+------------+-----------+
+| shirt_id | article    | color  | shirt_size | last_worn |
++----------+------------+--------+------------+-----------+
+|        1 | t-shirt    | white  | S          |        10 |
+|        2 | t-shirt    | green  | S          |       200 |
+|        3 | polo shirt | black  | L          |        10 |
+|        4 | tank top   | blue   | S          |        50 |
+|        5 | t-shirt    | pink   | S          |         0 |
+|        6 | polo shirt | red    | L          |         5 |
+|        7 | tank top   | white  | S          |       200 |
+|        8 | tank top   | blue   | M          |        15 |
+|        9 | polo shirt | purple | L          |        50 |
++----------+------------+--------+------------+-----------+
+9 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> UPDATE shirts SET last_worn = 0 WHERE last_worn = 15;
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM shirts WHERE last_worn = 15;
+Empty set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> UPDATE shirts SET shirt_size = 'XS', color = 'off white' WHERE color = 'white';
+Query OK, 2 rows affected (0.06 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM shirts;
++----------+------------+-----------+------------+-----------+
+| shirt_id | article    | color     | shirt_size | last_worn |
++----------+------------+-----------+------------+-----------+
+|        1 | t-shirt    | off white | XS         |        10 |
+|        2 | t-shirt    | green     | S          |       200 |
+|        3 | polo shirt | black     | L          |        10 |
+|        4 | tank top   | blue      | S          |        50 |
+|        5 | t-shirt    | pink      | S          |         0 |
+|        6 | polo shirt | red       | L          |         5 |
+|        7 | tank top   | off white | XS         |       200 |
+|        8 | tank top   | blue      | M          |         0 |
+|        9 | polo shirt | purple    | L          |        50 |
++----------+------------+-----------+------------+-----------+
+9 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> DELETE FROM shirts WHERE last_worn = 200;
+Query OK, 2 rows affected (0.10 sec)
+
+mysql> SELECT * FROM shirts;
++----------+------------+-----------+------------+-----------+
+| shirt_id | article    | color     | shirt_size | last_worn |
++----------+------------+-----------+------------+-----------+
+|        1 | t-shirt    | off white | XS         |        10 |
+|        3 | polo shirt | black     | L          |        10 |
+|        4 | tank top   | blue      | S          |        50 |
+|        5 | t-shirt    | pink      | S          |         0 |
+|        6 | polo shirt | red       | L          |         5 |
+|        8 | tank top   | blue      | M          |         0 |
+|        9 | polo shirt | purple    | L          |        50 |
++----------+------------+-----------+------------+-----------+
+7 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> DELETE FROM shirts WHERE article = 'tank top';
+Query OK, 2 rows affected (0.08 sec)
+
+mysql> SELECT * FROM shirts;
++----------+------------+-----------+------------+-----------+
+| shirt_id | article    | color     | shirt_size | last_worn |
++----------+------------+-----------+------------+-----------+
+|        1 | t-shirt    | off white | XS         |        10 |
+|        3 | polo shirt | black     | L          |        10 |
+|        5 | t-shirt    | pink      | S          |         0 |
+|        6 | polo shirt | red       | L          |         5 |
+|        9 | polo shirt | purple    | L          |        50 |
++----------+------------+-----------+------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql> DELETE FROM shirts;
+Query OK, 5 rows affected (0.11 sec)
+
+mysql> SELECT * FROM shirts;
+Empty set (0.00 sec)
+
+mysql> DESC shirts;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| shirt_id   | int          | NO   | PRI | NULL    | auto_increment |
+| article    | varchar(100) | YES  |     | NULL    |                |
+| color      | varchar(30)  | YES  |     | NULL    |                |
+| shirt_size | varchar(20)  | YES  |     | NULL    |                |
+| last_worn  | int          | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> DROP TABLE shirts;
+Query OK, 0 rows affected (0.66 sec)
+
+mysql> DESC shirts;
+ERROR 1146 (42S02): Table 'shirts_db.shirts' doesn't exist
+mysql>
+mysql>
+mysql> SHOW TABLES;
+Empty set (0.00 sec)
+
+
+
+
+----- STRING Functions -----
+
+To run a file from the mysql database we need to use the following syntax:
+	source file_name.sql;
+
+** Remember to store the file with a .sql extension in the database to make the syntax work.
+
+
+Now create a table named books and fill it with the following data in mysql workbench in a new database named 'book_shop'.
+
+CREATE TABLE books 
+    (
+        book_id INT NOT NULL AUTO_INCREMENT,
+        title VARCHAR(100),
+        author_fname VARCHAR(100),
+        author_lname VARCHAR(100),
+        released_year INT,
+        stock_quantity INT,
+        pages INT,
+        PRIMARY KEY(book_id)
+    );
+	
+
+
+ INSERT INTO books (title, author_fname, author_lname, released_year, stock_quantity, pages)
+VALUES
+('The Namesake', 'Jhumpa', 'Lahiri', 2003, 32, 291),
+('Norse Mythology', 'Neil', 'Gaiman',2016, 43, 304),
+('American Gods', 'Neil', 'Gaiman', 2001, 12, 465),
+('Interpreter of Maladies', 'Jhumpa', 'Lahiri', 1996, 97, 198),
+('A Hologram for the King: A Novel', 'Dave', 'Eggers', 2012, 154, 352),
+('The Circle', 'Dave', 'Eggers', 2013, 26, 504),
+('The Amazing Adventures of Kavalier & Clay', 'Michael', 'Chabon', 2000, 68, 634),
+('Just Kids', 'Patti', 'Smith', 2010, 55, 304),
+('A Heartbreaking Work of Staggering Genius', 'Dave', 'Eggers', 2001, 104, 437),
+('Coraline', 'Neil', 'Gaiman', 2003, 100, 208),
+('What We Talk About When We Talk About Love: Stories', 'Raymond', 'Carver', 1981, 23, 176),
+("Where I'm Calling From: Selected Stories", 'Raymond', 'Carver', 1989, 12, 526),
+('White Noise', 'Don', 'DeLillo', 1985, 49, 320),
+('Cannery Row', 'John', 'Steinbeck', 1945, 95, 181),
+('Oblivion: Stories', 'David', 'Foster Wallace', 2004, 172, 329),
+('Consider the Lobster', 'David', 'Foster Wallace', 2005, 92, 343);
+
+
+
+mysql> SELECT * FROM books;
++---------+-----------------------------------------------------+--------------+----------------+---------------+----------------+-------+
+| book_id | title                                               | author_fname | author_lname   | released_year | stock_quantity | pages |
++---------+-----------------------------------------------------+--------------+----------------+---------------+----------------+-------+
+|       1 | The Namesake                                        | Jhumpa       | Lahiri         |          2003 |             32 |   291 |
+|       2 | Norse Mythology                                     | Neil         | Gaiman         |          2016 |             43 |   304 |
+|       3 | American Gods                                       | Neil         | Gaiman         |          2001 |             12 |   465 |
+|       4 | Interpreter of Maladies                             | Jhumpa       | Lahiri         |          1996 |             97 |   198 |
+|       5 | A Hologram for the King: A Novel                    | Dave         | Eggers         |          2012 |            154 |   352 |
+|       6 | The Circle                                          | Dave         | Eggers         |          2013 |             26 |   504 |
+|       7 | The Amazing Adventures of Kavalier & Clay           | Michael      | Chabon         |          2000 |             68 |   634 |
+|       8 | Just Kids                                           | Patti        | Smith          |          2010 |             55 |   304 |
+|       9 | A Heartbreaking Work of Staggering Genius           | Dave         | Eggers         |          2001 |            104 |   437 |
+|      10 | Coraline                                            | Neil         | Gaiman         |          2003 |            100 |   208 |
+|      11 | What We Talk About When We Talk About Love: Stories | Raymond      | Carver         |          1981 |             23 |   176 |
+|      12 | Where I'm Calling From: Selected Stories            | Raymond      | Carver         |          1989 |             12 |   526 |
+|      13 | White Noise                                         | Don          | DeLillo        |          1985 |             49 |   320 |
+|      14 | Cannery Row                                         | John         | Steinbeck      |          1945 |             95 |   181 |
+|      15 | Oblivion: Stories                                   | David        | Foster Wallace |          2004 |            172 |   329 |
+|      16 | Consider the Lobster                                | David        | Foster Wallace |          2005 |             92 |   343 |
++---------+-----------------------------------------------------+--------------+----------------+---------------+----------------+-------+
+16 rows in set (0.00 sec)
+
+
+
+
+Now let's create a new database named 'book_shop'.
+
+
+mysql> CREATE DATABASE book_shop;
+Query OK, 1 row affected (0.07 sec)
+
+mysql> USE book_shop;
+Database changed
+mysql>
+mysql>
+mysql> SHOW tables;
+Empty set (0.00 sec)
+
+
+
+
+1. CONCAT:
+Now let's concatinate the fname and lname of the authors in the database.
+For this we use the CONCAT().
+
+mysql> SELECT CONCAT('Hello', '...', 'World');
++---------------------------------+
+| CONCAT('Hello', '...', 'World') |
++---------------------------------+
+| Hello...World                   |
++---------------------------------+
+1 row in set (0.03 sec)
+
+
+mysql> SELECT author_fname, author_lname FROM books;
++--------------+----------------+
+| author_fname | author_lname   |
++--------------+----------------+
+| Jhumpa       | Lahiri         |
+| Neil         | Gaiman         |
+| Neil         | Gaiman         |
+| Jhumpa       | Lahiri         |
+| Dave         | Eggers         |
+| Dave         | Eggers         |
+| Michael      | Chabon         |
+| Patti        | Smith          |
+| Dave         | Eggers         |
+| Neil         | Gaiman         |
+| Raymond      | Carver         |
+| Raymond      | Carver         |
+| Don          | DeLillo        |
+| John         | Steinbeck      |
+| David        | Foster Wallace |
+| David        | Foster Wallace |
++--------------+----------------+
+16 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql> SELECT author_fname, author_lname, CONCAT(author_fname, ' ', author_lname) AS author_name FROM books;
++--------------+----------------+----------------------+
+| author_fname | author_lname   | author_name          |
++--------------+----------------+----------------------+
+| Jhumpa       | Lahiri         | Jhumpa Lahiri        |
+| Neil         | Gaiman         | Neil Gaiman          |
+| Neil         | Gaiman         | Neil Gaiman          |
+| Jhumpa       | Lahiri         | Jhumpa Lahiri        |
+| Dave         | Eggers         | Dave Eggers          |
+| Dave         | Eggers         | Dave Eggers          |
+| Michael      | Chabon         | Michael Chabon       |
+| Patti        | Smith          | Patti Smith          |
+| Dave         | Eggers         | Dave Eggers          |
+| Neil         | Gaiman         | Neil Gaiman          |
+| Raymond      | Carver         | Raymond Carver       |
+| Raymond      | Carver         | Raymond Carver       |
+| Don          | DeLillo        | Don DeLillo          |
+| John         | Steinbeck      | John Steinbeck       |
+| David        | Foster Wallace | David Foster Wallace |
+| David        | Foster Wallace | David Foster Wallace |
++--------------+----------------+----------------------+
+16 rows in set (0.00 sec)
+
+
+CONCAT_WS() is for seperator sign between many concat items, so instead of typing each time the seperator we use the CONCAT_WS(). Here the 1st sign is the seperator we want between all the strings. Like here if we want to put a column that is like 'Title-fname-lname'.
+
+mysql>
+mysql> SELECT CONCAT_WS('-', title, author_fname, author_lname) AS title_with_author_name FROM books;
++--------------------------------------------------------------------+
+| title_with_author_name                                             |
++--------------------------------------------------------------------+
+| The Namesake-Jhumpa-Lahiri                                         |
+| Norse Mythology-Neil-Gaiman                                        |
+| American Gods-Neil-Gaiman                                          |
+| Interpreter of Maladies-Jhumpa-Lahiri                              |
+| A Hologram for the King: A Novel-Dave-Eggers                       |
+| The Circle-Dave-Eggers                                             |
+| The Amazing Adventures of Kavalier & Clay-Michael-Chabon           |
+| Just Kids-Patti-Smith                                              |
+| A Heartbreaking Work of Staggering Genius-Dave-Eggers              |
+| Coraline-Neil-Gaiman                                               |
+| What We Talk About When We Talk About Love: Stories-Raymond-Carver |
+| Where I'm Calling From: Selected Stories-Raymond-Carver            |
+| White Noise-Don-DeLillo                                            |
+| Cannery Row-John-Steinbeck                                         |
+| Oblivion: Stories-David-Foster Wallace                             |
+| Consider the Lobster-David-Foster Wallace                          |
++--------------------------------------------------------------------+
+16 rows in set (0.00 sec)
+
+
+
+
+2. SUBSTRING:
+It works with parts of Strings, if we want only a ceratin part of the string. In MySQL the string count starts with 1.
+
+Like here if we want only the first 7 characters.
+
+mysql> SELECT SUBSTRING('Hello World', 1, 7);
++--------------------------------+
+| SUBSTRING('Hello World', 1, 7) |
++--------------------------------+
+| Hello W                        |
++--------------------------------+
+1 row in set (0.00 sec)
+
+And if we pass just 1 number then it will start from that index and go upto last.
+
+mysql> SELECT SUBSTRING('Hello World', 7);
++-----------------------------+
+| SUBSTRING('Hello World', 7) |
++-----------------------------+
+| World                       |
++-----------------------------+
+1 row in set (0.00 sec)
+
+
+We can also use it with -ve number, in that case it will start from the behind.
+
+
+Let's print the 1st 10 characters of the title of the books.
+
+mysql> SELECT SUBSTRING(title, 1, 10) AS short_title FROM books;
++-------------+
+| short_title |
++-------------+
+| The Namesa  |
+| Norse Myth  |
+| American G  |
+| Interprete  |
+| A Hologram  |
+| The Circle  |
+| The Amazin  |
+| Just Kids   |
+| A Heartbre  |
+| Coraline    |
+| What We Ta  |
+| Where I'm   |
+| White Nois  |
+| Cannery Ro  |
+| Oblivion:   |
+| Consider t  |
++-------------+
+16 rows in set (0.00 sec)
+
+
+
+
+Now using both CONCAT and SUBSTRING together like if we want to put a '...' after each name.
+
+
+mysql> SELECT
+    ->  CONCAT
+    ->  (
+    ->          SUBSTRING(title, 1, 10),
+    ->          '...'
+    ->  ) AS 'Short title'
+    -> FROM books;
++---------------+
+| Short title   |
++---------------+
+| The Namesa... |
+| Norse Myth... |
+| American G... |
+| Interprete... |
+| A Hologram... |
+| The Circle... |
+| The Amazin... |
+| Just Kids...  |
+| A Heartbre... |
+| Coraline...   |
+| What We Ta... |
+| Where I'm ... |
+| White Nois... |
+| Cannery Ro... |
+| Oblivion: ... |
+| Consider t... |
++---------------+
+16 rows in set (0.45 sec)
+
+
+
+
+3. REPLACE:
+It replace parts of string. It will replace all the occurences. Also remember it is case sensitive.
+
+
+mysql> SELECT REPLACE('Hello World. The World is watching us.', 'World', 'Everyone');
++------------------------------------------------------------------------+
+| REPLACE('Hello World. The World is watching us.', 'World', 'Everyone') |
++------------------------------------------------------------------------+
+| Hello Everyone. The Everyone is watching us.                           |
++------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql>
+mysql> SELECT
+    -> REPLACE('cheese bread coffee milk', ' ', ' and ');
++---------------------------------------------------+
+| REPLACE('cheese bread coffee milk', ' ', ' and ') |
++---------------------------------------------------+
+| cheese and bread and coffee and milk              |
++---------------------------------------------------+
+1 row in set (0.00 sec)
+
+
+
+
+4. REVERSE:
+It reverse strings.
+
+
+mysql> SELECT REVERSE('Hello World');
++------------------------+
+| REVERSE('Hello World') |
++------------------------+
+| dlroW olleH            |
++------------------------+
+1 row in set (0.03 sec)
+
+
+
+
+5. CHAR_LENGTH:
+Counts characters in a string.
+
+mysql> SELECT CHAR_LENGTH('Hello World') AS 'Length';
++--------+
+| Length |
++--------+
+|     11 |
++--------+
+1 row in set (0.00 sec)
+
+
+
+
+6. UPPER() and LOWER():
+Change a string's case.
+
+
+mysql> SELECT UPPER('hello world');
++----------------------+
+| UPPER('hello world') |
++----------------------+
+| HELLO WORLD          |
++----------------------+
+1 row in set (0.05 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT LOWER('HELLO WORLD');
++----------------------+
+| LOWER('HELLO WORLD') |
++----------------------+
+| hello world          |
++----------------------+
+1 row in set (0.00 sec)
+
+
+
+
+
+**** Challenge ****
+
+Q. Reverse and Uppercase the following sentence:
+'Why does my cat look at me with such hatred?'
+
+Ans.
+
+mysql> SELECT REVERSE
+    -> (
+    ->  UPPER('Why does my cat look at me with such hatred?')
+    -> ) AS 'Reverse Upper String';
++----------------------------------------------+
+| Reverse Upper String                         |
++----------------------------------------------+
+| ?DERTAH HCUS HTIW EM TA KOOL TAC YM SEOD YHW |
++----------------------------------------------+
+1 row in set (0.00 sec)
+
+
+Q. Replace all the spaces in book title with '->'.
+
+Ans.
+
+mysql> SELECT REPLACE(title, ' ', '->') AS title FROM books;
++--------------------------------------------------------------+
+| title                                                        |
++--------------------------------------------------------------+
+| The->Namesake                                                |
+| Norse->Mythology                                             |
+| American->Gods                                               |
+| Interpreter->of->Maladies                                    |
+| A->Hologram->for->the->King:->A->Novel                       |
+| The->Circle                                                  |
+| The->Amazing->Adventures->of->Kavalier->&->Clay              |
+| Just->Kids                                                   |
+| A->Heartbreaking->Work->of->Staggering->Genius               |
+| Coraline                                                     |
+| What->We->Talk->About->When->We->Talk->About->Love:->Stories |
+| Where->I'm->Calling->From:->Selected->Stories                |
+| White->Noise                                                 |
+| Cannery->Row                                                 |
+| Oblivion:->Stories                                           |
+| Consider->the->Lobster                                       |
++--------------------------------------------------------------+
+16 rows in set (0.00 sec)
+
+
+
+Q. Print the author_lname from books both forwards and backwards.
+
+Ans.
+
+mysql> SELECT author_lname AS forwards, REVERSE(author_lname) AS backwards FROM books;
++----------------+----------------+
+| forwards       | backwards      |
++----------------+----------------+
+| Lahiri         | irihaL         |
+| Gaiman         | namiaG         |
+| Gaiman         | namiaG         |
+| Lahiri         | irihaL         |
+| Eggers         | sreggE         |
+| Eggers         | sreggE         |
+| Chabon         | nobahC         |
+| Smith          | htimS          |
+| Eggers         | sreggE         |
+| Gaiman         | namiaG         |
+| Carver         | revraC         |
+| Carver         | revraC         |
+| DeLillo        | olliLeD        |
+| Steinbeck      | kcebnietS      |
+| Foster Wallace | ecallaW retsoF |
+| Foster Wallace | ecallaW retsoF |
++----------------+----------------+
+16 rows in set (0.00 sec)
+
+
+Q. Print entire name of the authors in capital letters.
+
+Ans.
+
+mysql> SELECT UPPER (CONCAT(author_fname, ' ', author_lname)) AS 'full name in caps' FROM books;
++----------------------+
+| full name in caps    |
++----------------------+
+| JHUMPA LAHIRI        |
+| NEIL GAIMAN          |
+| NEIL GAIMAN          |
+| JHUMPA LAHIRI        |
+| DAVE EGGERS          |
+| DAVE EGGERS          |
+| MICHAEL CHABON       |
+| PATTI SMITH          |
+| DAVE EGGERS          |
+| NEIL GAIMAN          |
+| RAYMOND CARVER       |
+| RAYMOND CARVER       |
+| DON DELILLO          |
+| JOHN STEINBECK       |
+| DAVID FOSTER WALLACE |
+| DAVID FOSTER WALLACE |
++----------------------+
+16 rows in set (0.00 sec)
+
+
+Q. Now print a statement for each book with it's title and released_year in a text format like: 'title was released in released_year'.
+
+Ans.
+
+mysql> SELECT CONCAT( title, ' was released in ', released_year) AS blurb FROM books;
++--------------------------------------------------------------------------+
+| blurb                                                                    |
++--------------------------------------------------------------------------+
+| The Namesake was released in 2003                                        |
+| Norse Mythology was released in 2016                                     |
+| American Gods was released in 2001                                       |
+| Interpreter of Maladies was released in 1996                             |
+| A Hologram for the King: A Novel was released in 2012                    |
+| The Circle was released in 2013                                          |
+| The Amazing Adventures of Kavalier & Clay was released in 2000           |
+| Just Kids was released in 2010                                           |
+| A Heartbreaking Work of Staggering Genius was released in 2001           |
+| Coraline was released in 2003                                            |
+| What We Talk About When We Talk About Love: Stories was released in 1981 |
+| Where I'm Calling From: Selected Stories was released in 1989            |
+| White Noise was released in 1985                                         |
+| Cannery Row was released in 1945                                         |
+| Oblivion: Stories was released in 2004                                   |
+| Consider the Lobster was released in 2005                                |
++--------------------------------------------------------------------------+
+16 rows in set (0.00 sec)
+
+
+Q. Now print each title along with it's number of characters in it.
+
+Ans.
+
+mysql> SELECT title, CHAR_LENGTH(title) AS 'character count' FROM books;
++-----------------------------------------------------+-----------------+
+| title                                               | character count |
++-----------------------------------------------------+-----------------+
+| The Namesake                                        |              12 |
+| Norse Mythology                                     |              15 |
+| American Gods                                       |              13 |
+| Interpreter of Maladies                             |              23 |
+| A Hologram for the King: A Novel                    |              32 |
+| The Circle                                          |              10 |
+| The Amazing Adventures of Kavalier & Clay           |              41 |
+| Just Kids                                           |               9 |
+| A Heartbreaking Work of Staggering Genius           |              41 |
+| Coraline                                            |               8 |
+| What We Talk About When We Talk About Love: Stories |              51 |
+| Where I'm Calling From: Selected Stories            |              40 |
+| White Noise                                         |              11 |
+| Cannery Row                                         |              11 |
+| Oblivion: Stories                                   |              17 |
+| Consider the Lobster                                |              20 |
++-----------------------------------------------------+-----------------+
+16 rows in set (0.00 sec)
+
+
+Q. Now print a short title upto 10 characters then add '...' along with author name sepearated the lname and fname with a ',' then print the quantity left in stocks along with a string 'in stock'.
+
+Ans.
+
+mysql> SELECT
+    ->  CONCAT(SUBSTRING(title, 1, 10), '...') AS 'short title',
+    ->  CONCAT(author_lname, ',', author_fname) AS author,
+    ->  CONCAT(stock_quantity, ' in stock') AS quantity
+    -> FROM books;
++---------------+----------------------+--------------+
+| short title   | author               | quantity     |
++---------------+----------------------+--------------+
+| The Namesa... | Lahiri,Jhumpa        | 32 in stock  |
+| Norse Myth... | Gaiman,Neil          | 43 in stock  |
+| American G... | Gaiman,Neil          | 12 in stock  |
+| Interprete... | Lahiri,Jhumpa        | 97 in stock  |
+| A Hologram... | Eggers,Dave          | 154 in stock |
+| The Circle... | Eggers,Dave          | 26 in stock  |
+| The Amazin... | Chabon,Michael       | 68 in stock  |
+| Just Kids...  | Smith,Patti          | 55 in stock  |
+| A Heartbre... | Eggers,Dave          | 104 in stock |
+| Coraline...   | Gaiman,Neil          | 100 in stock |
+| What We Ta... | Carver,Raymond       | 23 in stock  |
+| Where I'm ... | Carver,Raymond       | 12 in stock  |
+| White Nois... | DeLillo,Don          | 49 in stock  |
+| Cannery Ro... | Steinbeck,John       | 95 in stock  |
+| Oblivion: ... | Foster Wallace,David | 172 in stock |
+| Consider t... | Foster Wallace,David | 92 in stock  |
++---------------+----------------------+--------------+
+16 rows in set (0.00 sec)
+
+
+
+
+
+**** Refining Slections ****
+
+1st we will insert 3 new books to our books table.
+
+mysql> INSERT INTO books
+    -> (title, author_fname, author_lname, released_year, stock_quantity, pages)
+    -> VALUES
+    -> ('10% Happier', 'Dan', 'Harris', 2014, 29, 256),
+    -> ('fake_book', 'Freida', 'Harris', 2001, 287, 428),
+    -> ('Lincoln In The Bardo', 'George', 'Saunders', 2017, 1000, 367);
+Query OK, 3 rows affected (0.17 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+
+mysql>
+mysql>
+mysql> SELECT * FROM books;
++---------+-----------------------------------------------------+--------------+----------------+---------------+----------------+-------+
+| book_id | title                                               | author_fname | author_lname   | released_year | stock_quantity | pages |
++---------+-----------------------------------------------------+--------------+----------------+---------------+----------------+-------+
+|       1 | The Namesake                                        | Jhumpa       | Lahiri         |          2003 |             32 |   291 |
+|       2 | Norse Mythology                                     | Neil         | Gaiman         |          2016 |             43 |   304 |
+|       3 | American Gods                                       | Neil         | Gaiman         |          2001 |             12 |   465 |
+|       4 | Interpreter of Maladies                             | Jhumpa       | Lahiri         |          1996 |             97 |   198 |
+|       5 | A Hologram for the King: A Novel                    | Dave         | Eggers         |          2012 |            154 |   352 |
+|       6 | The Circle                                          | Dave         | Eggers         |          2013 |             26 |   504 |
+|       7 | The Amazing Adventures of Kavalier & Clay           | Michael      | Chabon         |          2000 |             68 |   634 |
+|       8 | Just Kids                                           | Patti        | Smith          |          2010 |             55 |   304 |
+|       9 | A Heartbreaking Work of Staggering Genius           | Dave         | Eggers         |          2001 |            104 |   437 |
+|      10 | Coraline                                            | Neil         | Gaiman         |          2003 |            100 |   208 |
+|      11 | What We Talk About When We Talk About Love: Stories | Raymond      | Carver         |          1981 |             23 |   176 |
+|      12 | Where I'm Calling From: Selected Stories            | Raymond      | Carver         |          1989 |             12 |   526 |
+|      13 | White Noise                                         | Don          | DeLillo        |          1985 |             49 |   320 |
+|      14 | Cannery Row                                         | John         | Steinbeck      |          1945 |             95 |   181 |
+|      15 | Oblivion: Stories                                   | David        | Foster Wallace |          2004 |            172 |   329 |
+|      16 | Consider the Lobster                                | David        | Foster Wallace |          2005 |             92 |   343 |
+|      17 | 10% Happier                                         | Dan          | Harris         |          2014 |             29 |   256 |
+|      18 | fake_book                                           | Freida       | Harris         |          2001 |            287 |   428 |
+|      19 | Lincoln In The Bardo                                | George       | Saunders       |          2017 |           1000 |   367 |
++---------+-----------------------------------------------------+--------------+----------------+---------------+----------------+-------+
+19 rows in set (0.00 sec)
+
+
+
+
+-- DISTINCT :
+To see the unique items.
+
+mysql> SELECT DISTINCT author_lname FROM books;
++----------------+
+| author_lname   |
++----------------+
+| Lahiri         |
+| Gaiman         |
+| Eggers         |
+| Chabon         |
+| Smith          |
+| Carver         |
+| DeLillo        |
+| Steinbeck      |
+| Foster Wallace |
+| Harris         |
+| Saunders       |
++----------------+
+11 rows in set (0.00 sec)
+
+But here two authors have same lname so let's get the distinct full names of every author.
+
+mysql> SELECT DISTINCT CONCAT(author_fname,' ', author_lname) AS "Author's Full Name" FROM books;
++----------------------+
+| Author's Full Name   |
++----------------------+
+| Jhumpa Lahiri        |
+| Neil Gaiman          |
+| Dave Eggers          |
+| Michael Chabon       |
+| Patti Smith          |
+| Raymond Carver       |
+| Don DeLillo          |
+| John Steinbeck       |
+| David Foster Wallace |
+| Dan Harris           |
+| Freida Harris        |
+| George Saunders      |
++----------------------+
+12 rows in set (0.00 sec)
+
+We can also get the unique rows by using the author_fname and author_lname column also.
+
+mysql> SELECT DISTINCT author_fname, author_lname FROM books;
++--------------+----------------+
+| author_fname | author_lname   |
++--------------+----------------+
+| Jhumpa       | Lahiri         |
+| Neil         | Gaiman         |
+| Dave         | Eggers         |
+| Michael      | Chabon         |
+| Patti        | Smith          |
+| Raymond      | Carver         |
+| Don          | DeLillo        |
+| John         | Steinbeck      |
+| David        | Foster Wallace |
+| Dan          | Harris         |
+| Freida       | Harris         |
+| George       | Saunders       |
++--------------+----------------+
+12 rows in set (0.00 sec)
+
+
+
+
+
+-- ORDER BY:
+How we sort the results.
+
+let's set the author_lname in descending order. By default it is in ascending order.
+
+mysql> SELECT DISTINCT author_lname FROM books ORDER BY author_lname DESC;
++----------------+
+| author_lname   |
++----------------+
+| Steinbeck      |
+| Smith          |
+| Saunders       |
+| Lahiri         |
+| Harris         |
+| Gaiman         |
+| Foster Wallace |
+| Eggers         |
+| DeLillo        |
+| Chabon         |
+| Carver         |
++----------------+
+11 rows in set (0.00 sec)
+
+We can also see the titles in ascending order
+
+
+mysql> SELECT title FROM books ORDER BY title;
++-----------------------------------------------------+
+| title                                               |
++-----------------------------------------------------+
+| 10% Happier                                         |
+| A Heartbreaking Work of Staggering Genius           |
+| A Hologram for the King: A Novel                    |
+| American Gods                                       |
+| Cannery Row                                         |
+| Consider the Lobster                                |
+| Coraline                                            |
+| fake_book                                           |
+| Interpreter of Maladies                             |
+| Just Kids                                           |
+| Lincoln In The Bardo                                |
+| Norse Mythology                                     |
+| Oblivion: Stories                                   |
+| The Amazing Adventures of Kavalier & Clay           |
+| The Circle                                          |
+| The Namesake                                        |
+| What We Talk About When We Talk About Love: Stories |
+| Where I'm Calling From: Selected Stories            |
+| White Noise                                         |
++-----------------------------------------------------+
+19 rows in set (0.00 sec)
+
+
+Here we use the released year as order for the books along with their pages.
+
+mysql> SELECT released_year, title, pages FROM books ORDER BY released_year;
++---------------+-----------------------------------------------------+-------+
+| released_year | title                                               | pages |
++---------------+-----------------------------------------------------+-------+
+|          1945 | Cannery Row                                         |   181 |
+|          1981 | What We Talk About When We Talk About Love: Stories |   176 |
+|          1985 | White Noise                                         |   320 |
+|          1989 | Where I'm Calling From: Selected Stories            |   526 |
+|          1996 | Interpreter of Maladies                             |   198 |
+|          2000 | The Amazing Adventures of Kavalier & Clay           |   634 |
+|          2001 | American Gods                                       |   465 |
+|          2001 | A Heartbreaking Work of Staggering Genius           |   437 |
+|          2001 | fake_book                                           |   428 |
+|          2003 | The Namesake                                        |   291 |
+|          2003 | Coraline                                            |   208 |
+|          2004 | Oblivion: Stories                                   |   329 |
+|          2005 | Consider the Lobster                                |   343 |
+|          2010 | Just Kids                                           |   304 |
+|          2012 | A Hologram for the King: A Novel                    |   352 |
+|          2013 | The Circle                                          |   504 |
+|          2014 | 10% Happier                                         |   256 |
+|          2016 | Norse Mythology                                     |   304 |
+|          2017 | Lincoln In The Bardo                                |   367 |
++---------------+-----------------------------------------------------+-------+
+19 rows in set (0.00 sec)
+
+
+We can also do the short cut like we can provide the column number instead of the column name in ORDER BY, here the number will be in the order they are selected like in previous case the released_year is 1 as it is in the 1st selection. Now let's select the books on the basis of their author_fname by using number of the column.
+
+
+mysql> SELECT title, author_fname, author_lname FROM books ORDER BY 2;
++-----------------------------------------------------+--------------+----------------+
+| title                                               | author_fname | author_lname   |
++-----------------------------------------------------+--------------+----------------+
+| 10% Happier                                         | Dan          | Harris         |
+| A Hologram for the King: A Novel                    | Dave         | Eggers         |
+| The Circle                                          | Dave         | Eggers         |
+| A Heartbreaking Work of Staggering Genius           | Dave         | Eggers         |
+| Oblivion: Stories                                   | David        | Foster Wallace |
+| Consider the Lobster                                | David        | Foster Wallace |
+| White Noise                                         | Don          | DeLillo        |
+| fake_book                                           | Freida       | Harris         |
+| Lincoln In The Bardo                                | George       | Saunders       |
+| The Namesake                                        | Jhumpa       | Lahiri         |
+| Interpreter of Maladies                             | Jhumpa       | Lahiri         |
+| Cannery Row                                         | John         | Steinbeck      |
+| The Amazing Adventures of Kavalier & Clay           | Michael      | Chabon         |
+| Norse Mythology                                     | Neil         | Gaiman         |
+| American Gods                                       | Neil         | Gaiman         |
+| Coraline                                            | Neil         | Gaiman         |
+| Just Kids                                           | Patti        | Smith          |
+| What We Talk About When We Talk About Love: Stories | Raymond      | Carver         |
+| Where I'm Calling From: Selected Stories            | Raymond      | Carver         |
++-----------------------------------------------------+--------------+----------------+
+19 rows in set (0.00 sec)
+
+
+
+We can also sort by 2 different columns, here it gets first sorted by the 1st column and then by the 2nd column provided in the ORDER BY clause.
+As here it 1st sort on the basis of the last name and then by the first name.
+
+
+mysql> SELECT author_fname, author_lname FROM books ORDER BY author_lname, author_fname;
++--------------+----------------+
+| author_fname | author_lname   |
++--------------+----------------+
+| Raymond      | Carver         |
+| Raymond      | Carver         |
+| Michael      | Chabon         |
+| Don          | DeLillo        |
+| Dave         | Eggers         |
+| Dave         | Eggers         |
+| Dave         | Eggers         |
+| David        | Foster Wallace |
+| David        | Foster Wallace |
+| Neil         | Gaiman         |
+| Neil         | Gaiman         |
+| Neil         | Gaiman         |
+| Dan          | Harris         |
+| Freida       | Harris         |
+| Jhumpa       | Lahiri         |
+| Jhumpa       | Lahiri         |
+| George       | Saunders       |
+| Patti        | Smith          |
+| John         | Steinbeck      |
++--------------+----------------+
+19 rows in set (0.00 sec)
+
+
+
+
+-- LIMIT:
+It allows us to specify a number that how many results we want to see in one go.
+
+Let's see the top 10 oldest books on the basis of their year of release.
+
+
+mysql> SELECT released_year, title FROM books ORDER BY 1 LIMIT 10;
++---------------+-----------------------------------------------------+
+| released_year | title                                               |
++---------------+-----------------------------------------------------+
+|          1945 | Cannery Row                                         |
+|          1981 | What We Talk About When We Talk About Love: Stories |
+|          1985 | White Noise                                         |
+|          1989 | Where I'm Calling From: Selected Stories            |
+|          1996 | Interpreter of Maladies                             |
+|          2000 | The Amazing Adventures of Kavalier & Clay           |
+|          2001 | American Gods                                       |
+|          2001 | A Heartbreaking Work of Staggering Genius           |
+|          2001 | fake_book                                           |
+|          2003 | The Namesake                                        |
++---------------+-----------------------------------------------------+
+10 rows in set (0.00 sec)
+
+
+Let's now see the top 5 recent books.
+
+
+mysql> SELECT released_year, title FROM books ORDER BY 1 DESC LIMIT 5;
++---------------+----------------------------------+
+| released_year | title                            |
++---------------+----------------------------------+
+|          2017 | Lincoln In The Bardo             |
+|          2016 | Norse Mythology                  |
+|          2014 | 10% Happier                      |
+|          2013 | The Circle                       |
+|          2012 | A Hologram for the King: A Novel |
++---------------+----------------------------------+
+5 rows in set (0.00 sec)
+
+We can also change the starting point of the limit like if we want to the the most recent books from 4th to 8th. Remember index starts with 0. So 4th will be indexed as 3. And the 5 is here is the  books from index 3 i.e. 4th book.
+It is mainly used for pagination.
+
+
+mysql> SELECT released_year, title FROM books ORDER BY 1 DESC LIMIT 3,5;
++---------------+----------------------------------+
+| released_year | title                            |
++---------------+----------------------------------+
+|          2013 | The Circle                       |
+|          2012 | A Hologram for the King: A Novel |
+|          2010 | Just Kids                        |
+|          2005 | Consider the Lobster             |
+|          2004 | Oblivion: Stories                |
++---------------+----------------------------------+
+5 rows in set (0.00 sec)
+
+
+
+-- LIKE:
+It allows a better search and for this there are some wild cards are used. It is used with the WHERE clause. The wild cards are case insensitive.
+
+Mainly 2 characters are use most
+
+%   it represents zero, one, or multiple characters.
+_   it represents only single character.
+
+Pattern             Description
+
+LIKE 'a%'           Start with "a".
+LIKE '%a'           End with "a".
+LIKE '%am%'         Have "am" in any position.
+LIKE 'a%m'          Start with "a" and ends with "m".
+LIKE '_a%'          "a" in the second position.
+LIKE '__a%'         "a" in the third position.
+LIKE '_oy'          "o" in the second and "y" in third position.
+
+
+Let's find all the books whose author's fname start with 'Da'.
+
+mysql> SELECT title, author_fname FROM books WHERE author_fname LIKE 'da%';
++-------------------------------------------+--------------+
+| title                                     | author_fname |
++-------------------------------------------+--------------+
+| A Hologram for the King: A Novel          | Dave         |
+| The Circle                                | Dave         |
+| A Heartbreaking Work of Staggering Genius | Dave         |
+| Oblivion: Stories                         | David        |
+| Consider the Lobster                      | David        |
+| 10% Happier                               | Dan          |
++-------------------------------------------+--------------+
+6 rows in set (0.00 sec)
+
+*** Remember if the wildcard characters % and _ is in your search pattern then use escape character '\' before them. like if we want to search the book with % or _ sign in it's title.
+
+mysql> SELECT title FROM books WHERE title LIKE '%\%%' OR title LIKE '%\_%';
++-------------+
+| title       |
++-------------+
+| 10% Happier |
+| fake_book   |
++-------------+
+2 rows in set (0.00 sec)
+
+
+
+
+
+**** Challenge ****
+Q. Select all the titles that contains the phrase 'stories'.
+
+Ans.
+
+mysql> SELECT title FROM books WHERE title LIKE '%stories%';
++-----------------------------------------------------+
+| title                                               |
++-----------------------------------------------------+
+| What We Talk About When We Talk About Love: Stories |
+| Where I'm Calling From: Selected Stories            |
+| Oblivion: Stories                                   |
++-----------------------------------------------------+
+3 rows in set (0.00 sec)
+
+
+
+Q. Print out the title and page count of the longest book.
+
+Ans.
+
+mysql> SELECT title, pages FROM books ORDER BY pages DESC LIMIT 1;
++-------------------------------------------+-------+
+| title                                     | pages |
++-------------------------------------------+-------+
+| The Amazing Adventures of Kavalier & Clay |   634 |
++-------------------------------------------+-------+
+1 row in set (0.00 sec)
+
+
+Q. Print a summary containing the title, year for the 3 most recent books.
+
+Ans.
+
+mysql> SELECT CONCAT(title, ' - ', released_year) AS summary FROM books ORDER BY released_year DESC LIMIT 3;
++-----------------------------+
+| summary                     |
++-----------------------------+
+| Lincoln In The Bardo - 2017 |
+| Norse Mythology - 2016      |
+| 10% Happier - 2014          |
++-----------------------------+
+3 rows in set (0.00 sec)
+
+
+Q. Find all books with an author_lname that contains a space.
+
+Ans.
+
+mysql> SELECT title, author_lname FROM books WHERE author_lname LIKE '% %';
++----------------------+----------------+
+| title                | author_lname   |
++----------------------+----------------+
+| Oblivion: Stories    | Foster Wallace |
+| Consider the Lobster | Foster Wallace |
++----------------------+----------------+
+2 rows in set (0.00 sec)
+
+
+Q. Find the 3 books with lowest stock in alphabetical order, print their title, year and stock.
+
+Ans.
+
+
+mysql> SELECT title, released_year, stock_quantity FROM books ORDER BY stock_quantity, title LIMIT 3;
++-----------------------------------------------------+---------------+----------------+
+| title                                               | released_year | stock_quantity |
++-----------------------------------------------------+---------------+----------------+
+| American Gods                                       |          2001 |             12 |
+| Where I'm Calling From: Selected Stories            |          1989 |             12 |
+| What We Talk About When We Talk About Love: Stories |          1981 |             23 |
++-----------------------------------------------------+---------------+----------------+
+3 rows in set (0.00 sec)
+
+
+Q. Print title and author_lname, sorted first by author_lname and then by title.
+
+Ans.
+
+mysql> SELECT title, author_lname FROM books ORDER BY author_lname, title;
++-----------------------------------------------------+----------------+
+| title                                               | author_lname   |
++-----------------------------------------------------+----------------+
+| What We Talk About When We Talk About Love: Stories | Carver         |
+| Where I'm Calling From: Selected Stories            | Carver         |
+| The Amazing Adventures of Kavalier & Clay           | Chabon         |
+| White Noise                                         | DeLillo        |
+| A Heartbreaking Work of Staggering Genius           | Eggers         |
+| A Hologram for the King: A Novel                    | Eggers         |
+| The Circle                                          | Eggers         |
+| Consider the Lobster                                | Foster Wallace |
+| Oblivion: Stories                                   | Foster Wallace |
+| American Gods                                       | Gaiman         |
+| Coraline                                            | Gaiman         |
+| Norse Mythology                                     | Gaiman         |
+| 10% Happier                                         | Harris         |
+| fake_book                                           | Harris         |
+| Interpreter of Maladies                             | Lahiri         |
+| The Namesake                                        | Lahiri         |
+| Lincoln In The Bardo                                | Saunders       |
+| Just Kids                                           | Smith          |
+| Cannery Row                                         | Steinbeck      |
++-----------------------------------------------------+----------------+
+19 rows in set (0.00 sec)
+
+
+
+Q. Sort alphabetically by Last name that sounds like: "MY FAVOURITE AUTHOR IS AUTHOR-FNAME AUTHOR-LNAME!" and title is 'yell'.
+
+Ans.
+
+mysql> SELECT CONCAT("MY FAVOURITE AUTHOR IS ", UPPER(author_fname), " ", UPPER(author_lname), "!") AS yell FROM books ORDER BY author_lname;
++----------------------------------------------+
+| yell                                         |
++----------------------------------------------+
+| MY FAVOURITE AUTHOR IS RAYMOND CARVER!       |
+| MY FAVOURITE AUTHOR IS RAYMOND CARVER!       |
+| MY FAVOURITE AUTHOR IS MICHAEL CHABON!       |
+| MY FAVOURITE AUTHOR IS DON DELILLO!          |
+| MY FAVOURITE AUTHOR IS DAVE EGGERS!          |
+| MY FAVOURITE AUTHOR IS DAVE EGGERS!          |
+| MY FAVOURITE AUTHOR IS DAVE EGGERS!          |
+| MY FAVOURITE AUTHOR IS DAVID FOSTER WALLACE! |
+| MY FAVOURITE AUTHOR IS DAVID FOSTER WALLACE! |
+| MY FAVOURITE AUTHOR IS NEIL GAIMAN!          |
+| MY FAVOURITE AUTHOR IS NEIL GAIMAN!          |
+| MY FAVOURITE AUTHOR IS NEIL GAIMAN!          |
+| MY FAVOURITE AUTHOR IS DAN HARRIS!           |
+| MY FAVOURITE AUTHOR IS FREIDA HARRIS!        |
+| MY FAVOURITE AUTHOR IS JHUMPA LAHIRI!        |
+| MY FAVOURITE AUTHOR IS JHUMPA LAHIRI!        |
+| MY FAVOURITE AUTHOR IS GEORGE SAUNDERS!      |
+| MY FAVOURITE AUTHOR IS PATTI SMITH!          |
+| MY FAVOURITE AUTHOR IS JOHN STEINBECK!       |
++----------------------------------------------+
+19 rows in set (0.00 sec)
+
+
+
+
+
+
+-- AGGREGATE FUNCTIONS ---
+
+1. COUNT:
+It counts things.
+
+
+mysql> SELECT COUNT(*) FROM books;
++----------+
+| COUNT(*) |
++----------+
+|       19 |
++----------+
+1 row in set (0.11 sec)
+
+
+How many title contain "the"?
+
+
+mysql> SELECT COUNT(*) AS NUMBER FROM books WHERE title LIKE "%the%";
++--------+
+| NUMBER |
++--------+
+|      6 |
++--------+
+1 row in set (0.00 sec)
+
+
+
+
+2. GROUP BY:
+It is very important. Here it summarizes or aggregates identical data into single rows.
+
+
+mysql> SELECT author_fname, author_lname, COUNT(*) AS no_of_books FROM books GROUP BY author_lname, author_fname;
++--------------+----------------+-------------+
+| author_fname | author_lname   | no_of_books |
++--------------+----------------+-------------+
+| Jhumpa       | Lahiri         |           2 |
+| Neil         | Gaiman         |           3 |
+| Dave         | Eggers         |           3 |
+| Michael      | Chabon         |           1 |
+| Patti        | Smith          |           1 |
+| Raymond      | Carver         |           2 |
+| Don          | DeLillo        |           1 |
+| John         | Steinbeck      |           1 |
+| David        | Foster Wallace |           2 |
+| Dan          | Harris         |           1 |
+| Freida       | Harris         |           1 |
+| George       | Saunders       |           1 |
++--------------+----------------+-------------+
+12 rows in set (0.00 sec)
+
+
+
+
+3. MIN and MAX:
+To find the minimum and maimum values.
+
+To find the title of the longest book:
+
+mysql> SELECT title AS longest_title FROM books WHERE CHAR_LENGTH(title) = (SELECT MAX(CHAR_LENGTH(title)) FROM books);
++-----------------------------------------------------+
+| longest_title                                       |
++-----------------------------------------------------+
+| What We Talk About When We Talk About Love: Stories |
++-----------------------------------------------------+
+1 row in set (0.00 sec)
+
+
+To find the author_name along with the title of the shortest book:
+
+
+mysql> SELECT CONCAT(author_fname, " ", author_lname) AS author_name, title AS shortest_title FROM books WHERE CHAR_LENGTH(title) = (SELECT MIN(CHAR_LENGTH(title)) FROM books);
++-------------+----------------+
+| author_name | shortest_title |
++-------------+----------------+
+| Neil Gaiman | Coraline       |
++-------------+----------------+
+1 row in set (0.03 sec)
+
+
+
+
+MIN / MAX with GROUP BY:
+
+Find the year each author published their first book.
+
+
+mysql> SELECT author_fname, author_lname, MIN(released_year) FROM books GROUP BY author_lname, author_fname;
++--------------+----------------+--------------------+
+| author_fname | author_lname   | MIN(released_year) |
++--------------+----------------+--------------------+
+| Jhumpa       | Lahiri         |               1996 |
+| Neil         | Gaiman         |               2001 |
+| Dave         | Eggers         |               2001 |
+| Michael      | Chabon         |               2000 |
+| Patti        | Smith          |               2010 |
+| Raymond      | Carver         |               1981 |
+| Don          | DeLillo        |               1985 |
+| John         | Steinbeck      |               1945 |
+| David        | Foster Wallace |               2004 |
+| Dan          | Harris         |               2014 |
+| Freida       | Harris         |               2001 |
+| George       | Saunders       |               2017 |
++--------------+----------------+--------------------+
+12 rows in set (0.04 sec)
+
+
+
+
+4. SUM, AVG, 
+
+Sum all pages in the entire database
+
+mysql> SELECT SUM(pages) AS total_pages FROM books;
++-------------+
+| total_pages |
++-------------+
+|        6623 |
++-------------+
+1 row in set (0.00 sec)
+
+Now with GROUP By
+
+Sum all the pages each author has written.
+
+
+mysql> SELECT author_lname, author_fname, SUM(pages) AS total_pages FROM books GROUP BY author_lname, author_fname;
++----------------+--------------+-------------+
+| author_lname   | author_fname | total_pages |
++----------------+--------------+-------------+
+| Lahiri         | Jhumpa       |         489 |
+| Gaiman         | Neil         |         977 |
+| Eggers         | Dave         |        1293 |
+| Chabon         | Michael      |         634 |
+| Smith          | Patti        |         304 |
+| Carver         | Raymond      |         702 |
+| DeLillo        | Don          |         320 |
+| Steinbeck      | John         |         181 |
+| Foster Wallace | David        |         672 |
+| Harris         | Dan          |         256 |
+| Harris         | Freida       |         428 |
+| Saunders       | George       |         367 |
++----------------+--------------+-------------+
+12 rows in set (0.00 sec)
+
+
+AVG:
+
+mysql> SELECT AVG(stock_quantity) AS avg_quantity FROM books;
++--------------+
+| avg_quantity |
++--------------+
+|     128.9474 |
++--------------+
+1 row in set (0.00 sec)
+
+
+Calculate the average stock quantity for books released in the same year.
+
+mysql> SELECT released_year, AVG(stock_quantity) AS avg_quantity FROM books GROUP BY released_year ORDER BY released_year;
++---------------+--------------+
+| released_year | avg_quantity |
++---------------+--------------+
+|          1945 |      95.0000 |
+|          1981 |      23.0000 |
+|          1985 |      49.0000 |
+|          1989 |      12.0000 |
+|          1996 |      97.0000 |
+|          2000 |      68.0000 |
+|          2001 |     134.3333 |
+|          2003 |      66.0000 |
+|          2004 |     172.0000 |
+|          2005 |      92.0000 |
+|          2010 |      55.0000 |
+|          2012 |     154.0000 |
+|          2013 |      26.0000 |
+|          2014 |      29.0000 |
+|          2016 |      43.0000 |
+|          2017 |    1000.0000 |
++---------------+--------------+
+16 rows in set (0.00 sec)
+
+
+
+
+
+**** CHALLENGE ****
+
+Q. Print the number of books in the database.
+
+Ans.
+
+mysql> SELECT COUNT(*) AS number_of_books FROM BOOKS;
++-----------------+
+| number_of_books |
++-----------------+
+|              19 |
++-----------------+
+1 row in set (0.05 sec)
+
+Q. Print out how many books are released in each year?
+
+Ans.
+
+mysql> SELECT released_year,COUNT(*) AS number_of_books_each_year FROM books GROUP BY released_year ORDER BY released_year;
++---------------+---------------------------+
+| released_year | number_of_books_each_year |
++---------------+---------------------------+
+|          1945 |                         1 |
+|          1981 |                         1 |
+|          1985 |                         1 |
+|          1989 |                         1 |
+|          1996 |                         1 |
+|          2000 |                         1 |
+|          2001 |                         3 |
+|          2003 |                         2 |
+|          2004 |                         1 |
+|          2005 |                         1 |
+|          2010 |                         1 |
+|          2012 |                         1 |
+|          2013 |                         1 |
+|          2014 |                         1 |
+|          2016 |                         1 |
+|          2017 |                         1 |
++---------------+---------------------------+
+16 rows in set (0.00 sec)
+
+Q. Print out the total number of books in stock.
+
+Ans.
+
+mysql> SELECT SUM(stock_quantity) AS total_number_of_books_in_stock FROM books;
++--------------------------------+
+| total_number_of_books_in_stock |
++--------------------------------+
+|                           2450 |
++--------------------------------+
+1 row in set (0.00 sec)
+
+Q. Find the average released_year for each author.
+
+Ans.
+
+mysql> SELECT CONCAT(author_fname, " ", author_lname) AS author_name, AVG(released_year) AS avg_released_year FROM books GROUP BY author_lname, author_fname;
++----------------------+-------------------+
+| author_name          | avg_released_year |
++----------------------+-------------------+
+| Jhumpa Lahiri        |         1999.5000 |
+| Neil Gaiman          |         2006.6667 |
+| Dave Eggers          |         2008.6667 |
+| Michael Chabon       |         2000.0000 |
+| Patti Smith          |         2010.0000 |
+| Raymond Carver       |         1985.0000 |
+| Don DeLillo          |         1985.0000 |
+| John Steinbeck       |         1945.0000 |
+| David Foster Wallace |         2004.5000 |
+| Dan Harris           |         2014.0000 |
+| Freida Harris        |         2001.0000 |
+| George Saunders      |         2017.0000 |
++----------------------+-------------------+
+12 rows in set (0.00 sec)
+
+Q. Find the full_author_name who wrote the longest titled book.
+
+Ans.
+
+mysql> SELECT CONCAT(author_fname, " ", author_lname) AS author_name, title FROM books WHERE CHAR_LENGTH(title) = (SELECT MAX(CHAR_LENGTH(title)) FROM books);
++----------------+-----------------------------------------------------+
+| author_name    | title                                               |
++----------------+-----------------------------------------------------+
+| Raymond Carver | What We Talk About When We Talk About Love: Stories |
++----------------+-----------------------------------------------------+
+1 row in set (0.00 sec)
+
+Q. Make a sheet containing the columns year, number of books released in that year (# books), avg_pages of those books released in that year.
+
+Ans.
+
+mysql> SELECT released_year AS year, COUNT(*) AS "# books", AVG(pages) AS avg_pages FROM books GROUP BY released_year ORDER BY released_year;
++------+---------+-----------+
+| year | # books | avg_pages |
++------+---------+-----------+
+| 1945 |       1 |  181.0000 |
+| 1981 |       1 |  176.0000 |
+| 1985 |       1 |  320.0000 |
+| 1989 |       1 |  526.0000 |
+| 1996 |       1 |  198.0000 |
+| 2000 |       1 |  634.0000 |
+| 2001 |       3 |  443.3333 |
+| 2003 |       2 |  249.5000 |
+| 2004 |       1 |  329.0000 |
+| 2005 |       1 |  343.0000 |
+| 2010 |       1 |  304.0000 |
+| 2012 |       1 |  352.0000 |
+| 2013 |       1 |  504.0000 |
+| 2014 |       1 |  256.0000 |
+| 2016 |       1 |  304.0000 |
+| 2017 |       1 |  367.0000 |
++------+---------+-----------+
+16 rows in set (0.00 sec)
+
+
+
+
+-- Data Types --
+
+*** Strings ***
+
+CHAR has a fixed length that is declared. It is faster for fixed length text.
+CHAR(3) -> Only 3 characters are allowed.
+The length can be any value from 0 to 25. When CHAR values are stored, they are right-padded with spaces to the specified length. When CHAR values are retrieved, trailing spaces are removed unless the PAD_CHAR_TO_FULL_LENGTH SQL mode is enabled.
+
+
+
+VARCHAR is variable length character. It provides more flexibility. Here it will truncate all the values other than the declared ones are truncated and the storage size also increases according to that which is not the case for CHAR().
+
+So for the same data 'abcdefg' stored in CHAR(4) and VARCHAR(4) the result will be:
+CHAR(4) : 'abcd'
+VARCHAR(4): 'abcdefg'
+
+
+
+*** Numbers ***
+
+INT(n) -> works with whole numbers.
+DECIMAL(m, d) -> It works with decimal numbers, here 2 arguements are passed. 1st one(m) is the maximum number of digits that the number can have, and the 2nd one(d) is the digits after the decimal point.
+So DECIMAL(5, 2) means 999.99 i.e. 5 digits long and 2 digits after the '.' point.
+FLOAT() -> It also works with decimal points but here it is floating point whereas DECIMAL() was exact. It also take small spaces but not as accurate as DECIMAL(). Here the precision issue is on ~7 digits.
+DOUBLE() -> Same as FLOAT(). Here the precision issue is on ~15 digits. They are bigger than FLOAT. So better to use DOUBLE().
+
+
+
+*** DATE and TIME ***
+
+DATE : stores values with date but without time. The format is: "YYYY-MM-DD".
+TIME : stores values with time but without date. Format is: "HH:MM:SS".
+DATETIME : stores values with a date and a time. Most preferable. Format is: "YYYY-MM-DD HH:MM:SS".
+
+We will use database demo1 for this. Here we will create a table named 'people'.
+
+
+mysql> CREATE TABLE people (
+    -> name VARCHAR(100),
+    -> birthdate DATE,
+    -> birthtime TIME,
+    -> birth_dt DATETIME
+    -> );
+Query OK, 0 rows affected (2.09 sec)
+
+mysql> INSERT INTO people (name, birthdate, birthtime, birth_dt)
+    -> VALUES
+    -> ("Padma", '1983-11-11', '10:07:35', '1983-11-11 10:07:35'),
+    -> ("Larry", '1943-12-25', '04:10:42', '1943-12-25 04:10:42')
+    -> ;
+Query OK, 2 rows affected (0.19 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM people;
++-------+------------+-----------+---------------------+
+| name  | birthdate  | birthtime | birth_dt            |
++-------+------------+-----------+---------------------+
+| Padma | 1983-11-11 | 10:07:35  | 1983-11-11 10:07:35 |
+| Larry | 1943-12-25 | 04:10:42  | 1943-12-25 04:10:42 |
++-------+------------+-----------+---------------------+
+2 rows in set (0.00 sec)
+
+** Now let's work with this dates **
+
+CURDATE() : gives the current date.
+CURTIME() : gives the current time.
+NOW() : gives the current date-time.
+
+mysql> SELECT CURDATE();
++------------+
+| CURDATE()  |
++------------+
+| 2022-05-22 |
++------------+
+1 row in set (0.04 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT CURTIME();
++-----------+
+| CURTIME() |
++-----------+
+| 18:36:19  |
++-----------+
+1 row in set (0.03 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> SELECT NOW();
++---------------------+
+| NOW()               |
++---------------------+
+| 2022-05-22 18:36:29 |
++---------------------+
+1 row in set (0.00 sec)
+
+
+Now let's add another data using the methods.
+
+mysql> INSERT INTO people(name, birthdate, birthtime, birth_dt)
+    -> VALUES
+    -> ('Michael', CURDATE(), CURTIME(), NOW())
+    -> ;
+Query OK, 1 row affected (0.07 sec)
+
+mysql>
+mysql>
+mysql> SELECT * FROM people;
++---------+------------+-----------+---------------------+
+| name    | birthdate  | birthtime | birth_dt            |
++---------+------------+-----------+---------------------+
+| Padma   | 1983-11-11 | 10:07:35  | 1983-11-11 10:07:35 |
+| Larry   | 1943-12-25 | 04:10:42  | 1943-12-25 04:10:42 |
+| Michael | 2022-05-22 | 18:39:31  | 2022-05-22 18:39:31 |
++---------+------------+-----------+---------------------+
+3 rows in set (0.00 sec)
+
+
+
+
+-- Formatting dates --
+
+DAY() : Shows the day of that date.
+
+mysql> SELECT name, birthdate, DAY(birthdate) AS date FROM people;
++---------+------------+------+
+| name    | birthdate  | date |
++---------+------------+------+
+| Padma   | 1983-11-11 |   11 |
+| Larry   | 1943-12-25 |   25 |
+| Michael | 2022-05-22 |   22 |
++---------+------------+------+
+3 rows in set (0.00 sec)
+
+
+
+DAYNAME(): Shows the dayname.
+
+mysql> SELECT name, birthdate, DAY(birthdate) AS date, DAYNAME(birthdate) AS day FROM people;
++---------+------------+------+----------+
+| name    | birthdate  | date | day      |
++---------+------------+------+----------+
+| Padma   | 1983-11-11 |   11 | Friday   |
+| Larry   | 1943-12-25 |   25 | Saturday |
+| Michael | 2022-05-22 |   22 | Sunday   |
++---------+------------+------+----------+
+3 rows in set (0.04 sec)
+
+DAYOFWEEK(): Shows the number of that day in the week, starting Sunday as 1.
+DAYOFYEAR(): Shows the number of that day in the year, starting 1st January as 1.
+*** These donot work with time but works with datetime. ***
+
+MONTH() : To get the month.
+MONTHNAME() : To get the month name.
+
+
+mysql> SELECT name, birth_dt, MONTH(birth_dt) AS month, MONTHNAME(birth_dt) AS month_name FROM people;
++---------+---------------------+-------+------------+
+| name    | birth_dt            | month | month_name |
++---------+---------------------+-------+------------+
+| Padma   | 1983-11-11 10:07:35 |    11 | November   |
+| Larry   | 1943-12-25 04:10:42 |    12 | December   |
+| Michael | 2022-05-22 18:39:31 |     5 | May        |
++---------+---------------------+-------+------------+
+3 rows in set (0.00 sec)
+
+
+HOUR() : To get the hour.
+MINUTE() : To get the minute.
+
+mysql> SELECT name, birthtime, HOUR(birthtime) AS hour, MINUTE(birthtime) AS minute FROM people;
++---------+-----------+------+--------+
+| name    | birthtime | hour | minute |
++---------+-----------+------+--------+
+| Padma   | 10:07:35  |   10 |      7 |
+| Larry   | 04:10:42  |    4 |     10 |
+| Michael | 18:39:31  |   18 |     39 |
++---------+-----------+------+--------+
+3 rows in set (0.00 sec)
+
+
+** Now if we try to write the date format in like 'May 22, 2022' we may use CONCAT() 
+
+mysql> SELECT CONCAT(MONTHNAME(birthdate), ' ', DAY(birthdate), ', ', YEAR(birthdate)) AS Date FROM people;
++-------------------+
+| Date              |
++-------------------+
+| November 11, 1983 |
+| December 25, 1943 |
+| May 22, 2022      |
++-------------------+
+3 rows in set (0.00 sec)
+
+
+But there is a better way called DATE_FORMAT().
+DATE_FORMAT() : it is important.To format a date. e.g. SELECT DATE_FORMAT("2019-06-15", "%d/%m/%Y"); returns 15/06/2019
+
+%a	Abbreviated weekday name (Sun..Sat)
+%b	Abbreviated month name (Jan..Dec)
+%c	Month, numeric (0..12)
+%D	Day of the month with English suffix (0th, 1st, 2nd, 3rd, …)
+%d	Day of the month, numeric (00..31)
+%e	Day of the month, numeric (0..31)
+%f	Microseconds (000000..999999)
+%H	Hour (00..23)
+%h	Hour (01..12)
+%I	Hour (01..12)
+%i	Minutes, numeric (00..59)
+%j	Day of year (001..366)
+%k	Hour (0..23)
+%l	Hour (1..12)
+%M	Month name (January..December)
+%m	Month, numeric (00..12)
+%p	AM or PM
+%r	Time, 12-hour (hh:mm:ss followed by AM or PM)
+%S	Seconds (00..59)
+%s	Seconds (00..59)
+%T	Time, 24-hour (hh:mm:ss)
+%U	Week (00..53), where Sunday is the first day of the week; WEEK() mode 0
+%u	Week (00..53), where Monday is the first day of the week; WEEK() mode 1
+%V	Week (01..53), where Sunday is the first day of the week; WEEK() mode 2; used with %X
+%v	Week (01..53), where Monday is the first day of the week; WEEK() mode 3; used with %x
+%W	Weekday name (Sunday..Saturday)
+%w	Day of the week (0=Sunday..6=Saturday)
+%X	Year for the week where Sunday is the first day of the week, numeric, four digits; used with %V
+%x	Year for the week, where Monday is the first day of the week, numeric, four digits; used with %v
+%Y	Year, numeric, four digits
+%y	Year, numeric (two digits)
+%%	A literal % character
+%x	x, for any “x” not listed above
+
+Now using this concept let's try to print the concat.
+
+mysql> SELECT DATE_FORMAT(birthdate, "%M %d, %Y") AS Date FROM people;
++-------------------+
+| Date              |
++-------------------+
+| November 11, 1983 |
+| December 25, 1943 |
+| May 22, 2022      |
++-------------------+
+3 rows in set (0.03 sec)
+
+mysql> SELECT DATE_FORMAT(birth_dt, "%W - %M %d, %Y") AS Weekday_Date FROM people;
++------------------------------+
+| Weekday_Date                 |
++------------------------------+
+| Friday - November 11, 1983   |
+| Saturday - December 25, 1943 |
+| Sunday - May 22, 2022        |
++------------------------------+
+3 rows in set (0.00 sec)
+
+We can also put a string in it.
+
+mysql> SELECT CONCAT(name, " ", DATE_FORMAT(birth_dt, 'was born on a %W.')) AS birthday FROM people;
++-------------------------------+
+| birthday                      |
++-------------------------------+
+| Padma was born on a Friday.   |
+| Larry was born on a Saturday. |
+| Michael was born on a Sunday. |
++-------------------------------+
+3 rows in set (0.00 sec)
+
+
+
+
+** Now let's do some date math **
+
+DATEDIFF() : shows difference between 2 dates.
+
+
+mysql> SELECT name, birthdate, DATEDIFF(NOW(), birthdate) AS number_of_days FROM people;
++---------+------------+----------------+
+| name    | birthdate  | number_of_days |
++---------+------------+----------------+
+| Padma   | 1983-11-11 |          14074 |
+| Larry   | 1943-12-25 |          28640 |
+| Michael | 2022-05-22 |              2 |
++---------+------------+----------------+
+3 rows in set (0.04 sec)
+
+
+DATE_ADD() : adding days with a date using 'INTERVAL' keyword.
+
+unit Value				Expected expr Format
+MICROSECOND				MICROSECONDS
+SECOND					SECONDS
+MINUTE					MINUTES
+HOUR					HOURS
+DAY						DAYS
+WEEK					WEEKS
+MONTH					MONTHS
+QUARTER					QUARTERS
+YEAR					YEARS
+SECOND_MICROSECOND		'SECONDS.MICROSECONDS'
+MINUTE_MICROSECOND		'MINUTES:SECONDS.MICROSECONDS'
+MINUTE_SECOND			'MINUTES:SECONDS'
+HOUR_MICROSECOND		'HOURS:MINUTES:SECONDS.MICROSECONDS'
+HOUR_SECOND				'HOURS:MINUTES:SECONDS'
+HOUR_MINUTE				'HOURS:MINUTES'
+DAY_MICROSECOND			'DAYS HOURS:MINUTES:SECONDS.MICROSECONDS'
+DAY_SECOND				'DAYS HOURS:MINUTES:SECONDS'
+DAY_MINUTE				'DAYS HOURS:MINUTES'
+DAY_HOUR				'DAYS HOURS'
+YEAR_MONTH				'YEARS-MONTHS'
+
+mysql> SELECT birth_dt, DATE_ADD(birth_dt, INTERVAL 1 MONTH) AS one_month_later FROM people;
++---------------------+---------------------+
+| birth_dt            | one_month_later     |
++---------------------+---------------------+
+| 1983-11-11 10:07:35 | 1983-12-11 10:07:35 |
+| 1943-12-25 04:10:42 | 1944-01-25 04:10:42 |
+| 2022-05-22 18:39:31 | 2022-06-22 18:39:31 |
++---------------------+---------------------+
+3 rows in set (0.04 sec)
+
+-- To do multiple addition/subtraction we use 'date + or date -'
+
+mysql> SELECT birth_dt, birth_dt + INTERVAL 15 MONTH + INTERVAL 10 HOUR AS new_date_time FROM people;
++---------------------+---------------------+
+| birth_dt            | new_date_time       |
++---------------------+---------------------+
+| 1983-11-11 10:07:35 | 1985-02-11 20:07:35 |
+| 1943-12-25 04:10:42 | 1945-03-25 14:10:42 |
+| 2022-05-22 18:39:31 | 2023-08-23 04:39:31 |
++---------------------+---------------------+
+3 rows in set (0.00 sec)
+
+
+-- TIMESTAMP --
+
+In MySQL it is also a datatype. Difference between DATETIME and TIMESTAMP is the previous has a range from 1000 to 9999 years whereas the later has a range from 1970 to 2038. So TIMESTAMP will not work for dates beyond that range but it is very helpful when we store current time information, also it uses less space. Also remember always use the default value as NOW()to make it more usable.
+
+
+mysql> CREATE TABLE comments(
+    -> content VARCHAR(100),
+    -> created_at TIMESTAMP DEFAULT NOW()
+    -> );
+Query OK, 0 rows affected (1.38 sec)
+
+mysql> INSERT INTO comments(content) VALUES ('Lol, what a funny comment!');
+Query OK, 1 row affected (0.52 sec)
+
+mysql> INSERT INTO comments(content) VALUES ('I found this very offensive.');
+Query OK, 1 row affected (0.15 sec)
+
+mysql> SELECT * FROM comments;
++------------------------------+---------------------+
+| content                      | created_at          |
++------------------------------+---------------------+
+| Lol, what a funny comment!   | 2022-05-24 11:18:27 |
+| I found this very offensive. | 2022-05-24 11:19:02 |
++------------------------------+---------------------+
+2 rows in set (0.00 sec)
+
+
+-- Now when we want the timestamp of an update we use the keyword 'ON UPDATE CURRENT_TIMESTAMP'.
+
+
+mysql> CREATE TABLE comments2(
+    -> content VARCHAR(100),
+    -> created_at TIMESTAMP DEFAULT NOW(),
+    -> changed_at TIMESTAMP DEFAULT NOW() ON UPDATE CURRENT_TIMESTAMP
+    -> );
+Query OK, 0 rows affected (0.44 sec)
+
+mysql> INSERT INTO comments2(content) VALUES ('skdhfgr');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> INSERT INTO comments2(content) VALUES ('I found this very offensive.');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> INSERT INTO comments2(content) VALUES ('I like both dogs and cats.');
+Query OK, 1 row affected (0.09 sec)
+
+
+mysql> SELECT * FROM comments2;
++------------------------------+---------------------+---------------------+
+| content                      | created_at          | changed_at          |
++------------------------------+---------------------+---------------------+
+| skdhfgr                      | 2022-05-24 11:27:44 | 2022-05-24 11:27:44 |
+| I found this very offensive. | 2022-05-24 11:28:14 | 2022-05-24 11:28:14 |
+| I like both dogs and cats.   | 2022-05-24 11:28:48 | 2022-05-24 11:28:48 |
++------------------------------+---------------------+---------------------+
+3 rows in set (0.00 sec)
+
+-- Now let's update a comment
+
+mysql> UPDATE comments2 SET content = 'This is not gibberish.' WHERE content = 'skdhfgr';
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+-- Now let's see the changed_at column with the update time.
+
+mysql> ALTER TABLE comments2 RENAME COLUMN created_at TO created_at_current_time;
+Query OK, 0 rows affected (0.88 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE comments2 RENAME COLUMN changed_at TO changed_at_update_time;
+Query OK, 0 rows affected (0.29 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM comments2;
++------------------------------+-------------------------+------------------------+
+| content                      | created_at_current_time | changed_at_update_time |
++------------------------------+-------------------------+------------------------+
+| This is not gibberish.       | 2022-05-24 11:27:44     | 2022-05-24 11:31:15    |
+| I found this very offensive. | 2022-05-24 11:28:14     | 2022-05-24 11:28:14    |
+| I like both dogs and cats.   | 2022-05-24 11:28:48     | 2022-05-24 11:28:48    |
++------------------------------+-------------------------+------------------------+
+3 rows in set (0.00 sec)
+
+
+
+
+--- LOGICAL OPERATORS ---
+
+-- NOT EQUAL '!='
+
+mysql> SELECT title, released_year FROM books WHERE released_year != 2017;
++-----------------------------------------------------+---------------+
+| title                                               | released_year |
++-----------------------------------------------------+---------------+
+| The Namesake                                        |          2003 |
+| Norse Mythology                                     |          2016 |
+| American Gods                                       |          2001 |
+| Interpreter of Maladies                             |          1996 |
+| A Hologram for the King: A Novel                    |          2012 |
+| The Circle                                          |          2013 |
+| The Amazing Adventures of Kavalier & Clay           |          2000 |
+| Just Kids                                           |          2010 |
+| A Heartbreaking Work of Staggering Genius           |          2001 |
+| Coraline                                            |          2003 |
+| What We Talk About When We Talk About Love: Stories |          1981 |
+| Where I'm Calling From: Selected Stories            |          1989 |
+| White Noise                                         |          1985 |
+| Cannery Row                                         |          1945 |
+| Oblivion: Stories                                   |          2004 |
+| Consider the Lobster                                |          2005 |
+| 10% Happier                                         |          2014 |
+| fake_book                                           |          2001 |
++-----------------------------------------------------+---------------+
+18 rows in set (0.00 sec)
+
+
+
+
+-- NOT LIKE 
+
+mysql> SELECT title FROM books WHERE title NOT LIKE 'W%';
++-------------------------------------------+
+| title                                     |
++-------------------------------------------+
+| The Namesake                              |
+| Norse Mythology                           |
+| American Gods                             |
+| Interpreter of Maladies                   |
+| A Hologram for the King: A Novel          |
+| The Circle                                |
+| The Amazing Adventures of Kavalier & Clay |
+| Just Kids                                 |
+| A Heartbreaking Work of Staggering Genius |
+| Coraline                                  |
+| Cannery Row                               |
+| Oblivion: Stories                         |
+| Consider the Lobster                      |
+| 10% Happier                               |
+| fake_book                                 |
+| Lincoln In The Bardo                      |
++-------------------------------------------+
+16 rows in set (0.02 sec)
+
+
+
+
+-- GREATER/LESS THAN '>' / '<' and GREATER/LESS THAN OR EQUAL TO '>=' / '<='
+
+mysql> SELECT title, released_year FROM books WHERE released_year > 2010;
++----------------------------------+---------------+
+| title                            | released_year |
++----------------------------------+---------------+
+| Norse Mythology                  |          2016 |
+| A Hologram for the King: A Novel |          2012 |
+| The Circle                       |          2013 |
+| 10% Happier                      |          2014 |
+| Lincoln In The Bardo             |          2017 |
++----------------------------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT title, released_year FROM books WHERE released_year < 2000;
++-----------------------------------------------------+---------------+
+| title                                               | released_year |
++-----------------------------------------------------+---------------+
+| Interpreter of Maladies                             |          1996 |
+| What We Talk About When We Talk About Love: Stories |          1981 |
+| Where I'm Calling From: Selected Stories            |          1989 |
+| White Noise                                         |          1985 |
+| Cannery Row                                         |          1945 |
++-----------------------------------------------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT title, stock_quantity FROM books WHERE stock_quantity >= 100 ORDER BY stock_quantity;
++-------------------------------------------+----------------+
+| title                                     | stock_quantity |
++-------------------------------------------+----------------+
+| Coraline                                  |            100 |
+| A Heartbreaking Work of Staggering Genius |            104 |
+| A Hologram for the King: A Novel          |            154 |
+| Oblivion: Stories                         |            172 |
+| fake_book                                 |            287 |
+| Lincoln In The Bardo                      |           1000 |
++-------------------------------------------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT title, pages FROM books WHERE pages <= 300 ORDER BY pages;
++-----------------------------------------------------+-------+
+| title                                               | pages |
++-----------------------------------------------------+-------+
+| What We Talk About When We Talk About Love: Stories |   176 |
+| Cannery Row                                         |   181 |
+| Interpreter of Maladies                             |   198 |
+| Coraline                                            |   208 |
+| 10% Happier                                         |   256 |
+| The Namesake                                        |   291 |
++-----------------------------------------------------+-------+
+6 rows in set (0.00 sec)
+
+
+
+
+
+-- LOGICAL AND: '&&' or 'AND'
+
+Getting books written by 'Eggers' and published after year 2010:
+
+mysql> SELECT title, author_lname, released_year FROM books WHERE author_lname = 'eggers' AND released_year > 2010;
++----------------------------------+--------------+---------------+
+| title                            | author_lname | released_year |
++----------------------------------+--------------+---------------+
+| A Hologram for the King: A Novel | Eggers       |          2012 |
+| The Circle                       | Eggers       |          2013 |
++----------------------------------+--------------+---------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT title, author_lname, released_year FROM books WHERE author_lname = 'eggers' && released_year > 2010;
++----------------------------------+--------------+---------------+
+| title                            | author_lname | released_year |
++----------------------------------+--------------+---------------+
+| A Hologram for the King: A Novel | Eggers       |          2012 |
+| The Circle                       | Eggers       |          2013 |
++----------------------------------+--------------+---------------+
+2 rows in set, 1 warning (0.00 sec)
+
+** A bit complicated where book has the word novel and released after 2010 and author is 'eggers':
+
+mysql> SELECT title, author_fname, author_lname, released_year FROM books WHERE author_lname = 'eggers' AND released_year > 2010 && title LIKE '%novel%';
++----------------------------------+--------------+--------------+---------------+
+| title                            | author_fname | author_lname | released_year |
++----------------------------------+--------------+--------------+---------------+
+| A Hologram for the King: A Novel | Dave         | Eggers       |          2012 |
++----------------------------------+--------------+--------------+---------------+
+1 row in set, 1 warning (0.00 sec)
+
+
+
+
+-- LOGICAL OR: '||' or 'OR'
+
+Getting books written by 'Eggers' or 'Carver':
+
+mysql> SELECT title, author_lname FROM books WHERE author_lname = 'eggers' OR author_lname = 'carver';
++-----------------------------------------------------+--------------+
+| title                                               | author_lname |
++-----------------------------------------------------+--------------+
+| A Hologram for the King: A Novel                    | Eggers       |
+| The Circle                                          | Eggers       |
+| A Heartbreaking Work of Staggering Genius           | Eggers       |
+| What We Talk About When We Talk About Love: Stories | Carver       |
+| Where I'm Calling From: Selected Stories            | Carver       |
++-----------------------------------------------------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT title, author_lname FROM books WHERE author_lname = 'eggers' || author_lname = 'carver';
++-----------------------------------------------------+--------------+
+| title                                               | author_lname |
++-----------------------------------------------------+--------------+
+| A Hologram for the King: A Novel                    | Eggers       |
+| The Circle                                          | Eggers       |
+| A Heartbreaking Work of Staggering Genius           | Eggers       |
+| What We Talk About When We Talk About Love: Stories | Carver       |
+| Where I'm Calling From: Selected Stories            | Carver       |
++-----------------------------------------------------+--------------+
+5 rows in set, 1 warning (0.00 sec)
+
+
+
+
+
+-- BETWEEN --
+This gives a result within a range.
+
+Now without using the BETWEEN we can also achieve same result using Logical AND
+
+mysql> SELECT title, released_year FROM books WHERE released_year >= 2004 && released_year <= 2015;
++----------------------------------+---------------+
+| title                            | released_year |
++----------------------------------+---------------+
+| A Hologram for the King: A Novel |          2012 |
+| The Circle                       |          2013 |
+| Just Kids                        |          2010 |
+| Oblivion: Stories                |          2004 |
+| Consider the Lobster             |          2005 |
+| 10% Happier                      |          2014 |
++----------------------------------+---------------+
+6 rows in set, 1 warning (0.00 sec)
+
+
+Now using BETWEEN 
+Syntax is: BETWEEN lower_range AND upper_range
+Remember it always use AND for the upper and lower range
+
+mysql> SELECT title, released_year FROM books WHERE released_year BETWEEN 2004 AND 2015;
++----------------------------------+---------------+
+| title                            | released_year |
++----------------------------------+---------------+
+| A Hologram for the King: A Novel |          2012 |
+| The Circle                       |          2013 |
+| Just Kids                        |          2010 |
+| Oblivion: Stories                |          2004 |
+| Consider the Lobster             |          2005 |
+| 10% Happier                      |          2014 |
++----------------------------------+---------------+
+6 rows in set (0.03 sec)
+
+
+The NOT BETWEEN is same as BETWEEN
+mysql> SELECT title, released_year FROM books WHERE released_year NOT BETWEEN 2004 AND 2015 ORDER BY released_year;
++-----------------------------------------------------+---------------+
+| title                                               | released_year |
++-----------------------------------------------------+---------------+
+| Cannery Row                                         |          1945 |
+| What We Talk About When We Talk About Love: Stories |          1981 |
+| White Noise                                         |          1985 |
+| Where I'm Calling From: Selected Stories            |          1989 |
+| Interpreter of Maladies                             |          1996 |
+| The Amazing Adventures of Kavalier & Clay           |          2000 |
+| American Gods                                       |          2001 |
+| A Heartbreaking Work of Staggering Genius           |          2001 |
+| fake_book                                           |          2001 |
+| The Namesake                                        |          2003 |
+| Coraline                                            |          2003 |
+| Norse Mythology                                     |          2016 |
+| Lincoln In The Bardo                                |          2017 |
++-----------------------------------------------------+---------------+
+13 rows in set (0.00 sec)
+
+
+**** NOTE: For best result when using BETWEEN with date or time values, use CAST() to explicitly convert the values to the desired data type.
+
+mysql> SELECT CAST('2017-05-02' AS DATETIME);
++--------------------------------+
+| CAST('2017-05-02' AS DATETIME) |
++--------------------------------+
+| 2017-05-02 00:00:00            |
++--------------------------------+
+1 row in set (0.04 sec)
+
+
+
+We will use people table from demo1 database.
+
+mysql> use demo1;
+Database changed
+mysql> show tables;
++-----------------+
+| Tables_in_demo1 |
++-----------------+
+| cats            |
+| comments        |
+| comments2       |
+| employees       |
+| people          |
++-----------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM people;
++---------+------------+-----------+---------------------+
+| name    | birthdate  | birthtime | birth_dt            |
++---------+------------+-----------+---------------------+
+| Padma   | 1983-11-11 | 10:07:35  | 1983-11-11 10:07:35 |
+| Larry   | 1943-12-25 | 04:10:42  | 1943-12-25 04:10:42 |
+| Michael | 2022-05-22 | 18:39:31  | 2022-05-22 18:39:31 |
++---------+------------+-----------+---------------------+
+3 rows in set (0.05 sec)
+
+Now we will use the BETWEEN with CAST() to find people whose birthdate is between 1980 and 2000.
+
+mysql> SELECT name, birth_dt FROM people WHERE birth_dt BETWEEN CAST('1980-01-01' AS DATETIME) AND CAST('2000-01-01' AS DATETIME);
++-------+---------------------+
+| name  | birth_dt            |
++-------+---------------------+
+| Padma | 1983-11-11 10:07:35 |
++-------+---------------------+
+1 row in set (0.02 sec)
+
+
+
+-- IN --
+Allows us to set of values and check whether a value exist in the set. It is a shortcut of multiple OR clause.
+
+mysql> SELECT title, author_lname FROM books WHERE author_lname IN ('Carver', 'Lahiri', 'Smith');
++-----------------------------------------------------+--------------+
+| title                                               | author_lname |
++-----------------------------------------------------+--------------+
+| The Namesake                                        | Lahiri       |
+| Interpreter of Maladies                             | Lahiri       |
+| Just Kids                                           | Smith        |
+| What We Talk About When We Talk About Love: Stories | Carver       |
+| Where I'm Calling From: Selected Stories            | Carver       |
++-----------------------------------------------------+--------------+
+5 rows in set (0.00 sec)
+
+Same logic for NOT IN.
+
+mysql> SELECT book_id, title FROM books WHERE book_id NOT IN (2,4,6,8,10,12,14,16,18);
++---------+-----------------------------------------------------+
+| book_id | title                                               |
++---------+-----------------------------------------------------+
+|       1 | The Namesake                                        |
+|       3 | American Gods                                       |
+|       5 | A Hologram for the King: A Novel                    |
+|       7 | The Amazing Adventures of Kavalier & Clay           |
+|       9 | A Heartbreaking Work of Staggering Genius           |
+|      11 | What We Talk About When We Talk About Love: Stories |
+|      13 | White Noise                                         |
+|      15 | Oblivion: Stories                                   |
+|      17 | 10% Happier                                         |
+|      19 | Lincoln In The Bardo                                |
++---------+-----------------------------------------------------+
+10 rows in set (0.00 sec)
+
+
+
+
+-- CASE --
+
+Here we will use conditional logic to create new changes in an existing table.
+Syntax is:
+	CASE
+		WHEN condition1 THEN result1
+		ELSE default result
+	END AS 'column_name'
+
+Like here if a book published before 2000 it will be '20th Century list' and after 2000 it will be 'Modern list' in a new column named 'Era'
+
+mysql> SELECT title, released_year,
+    ->  CASE
+    ->     WHEN released_year >= 2000 THEN 'Modern List'
+    ->     ELSE '20TH Century List'
+    ->  END AS Era
+    -> FROM books;
++-----------------------------------------------------+---------------+-------------------+
+| title                                               | released_year | Era               |
++-----------------------------------------------------+---------------+-------------------+
+| The Namesake                                        |          2003 | Modern List       |
+| Norse Mythology                                     |          2016 | Modern List       |
+| American Gods                                       |          2001 | Modern List       |
+| Interpreter of Maladies                             |          1996 | 20TH Century List |
+| A Hologram for the King: A Novel                    |          2012 | Modern List       |
+| The Circle                                          |          2013 | Modern List       |
+| The Amazing Adventures of Kavalier & Clay           |          2000 | Modern List       |
+| Just Kids                                           |          2010 | Modern List       |
+| A Heartbreaking Work of Staggering Genius           |          2001 | Modern List       |
+| Coraline                                            |          2003 | Modern List       |
+| What We Talk About When We Talk About Love: Stories |          1981 | 20TH Century List |
+| Where I'm Calling From: Selected Stories            |          1989 | 20TH Century List |
+| White Noise                                         |          1985 | 20TH Century List |
+| Cannery Row                                         |          1945 | 20TH Century List |
+| Oblivion: Stories                                   |          2004 | Modern List       |
+| Consider the Lobster                                |          2005 | Modern List       |
+| 10% Happier                                         |          2014 | Modern List       |
+| fake_book                                           |          2001 | Modern List       |
+| Lincoln In The Bardo                                |          2017 | Modern List       |
++-----------------------------------------------------+---------------+-------------------+
+19 rows in set (0.00 sec)
+
+**** Remember there are no ',' between two WHEN clauses.
+
+mysql> SELECT title, stock_quantity,
+    ->   CASE
+    ->     WHEN stock_quantity <= 50 THEN '*'
+    ->     WHEN stock_quantity <= 100 THEN '**'
+    ->     WHEN stock_quantity <= 150 THEN '***'
+    ->     WHEN stock_quantity <= 200 THEN '****'
+    ->     ELSE '*****'
+    ->   END AS stock
+    -> FROM books;
++-----------------------------------------------------+----------------+-------+
+| title                                               | stock_quantity | stock |
++-----------------------------------------------------+----------------+-------+
+| The Namesake                                        |             32 | *     |
+| Norse Mythology                                     |             43 | *     |
+| American Gods                                       |             12 | *     |
+| Interpreter of Maladies                             |             97 | **    |
+| A Hologram for the King: A Novel                    |            154 | ****  |
+| The Circle                                          |             26 | *     |
+| The Amazing Adventures of Kavalier & Clay           |             68 | **    |
+| Just Kids                                           |             55 | **    |
+| A Heartbreaking Work of Staggering Genius           |            104 | ***   |
+| Coraline                                            |            100 | **    |
+| What We Talk About When We Talk About Love: Stories |             23 | *     |
+| Where I'm Calling From: Selected Stories            |             12 | *     |
+| White Noise                                         |             49 | *     |
+| Cannery Row                                         |             95 | **    |
+| Oblivion: Stories                                   |            172 | ****  |
+| Consider the Lobster                                |             92 | **    |
+| 10% Happier                                         |             29 | *     |
+| fake_book                                           |            287 | ***** |
+| Lincoln In The Bardo                                |           1000 | ***** |
++-----------------------------------------------------+----------------+-------+
+19 rows in set (0.00 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,134 @@
+import mysql.connector as conn
+from mysql.connector import Error
+from sqlalchemy import create_engine
+
+
+# Creating functions for MySQL
+
+# Server connection
+def create_server_connection(host_name, user_name, user_pwd):
+    connection = None
+    try:
+        connection = conn.connect(host=host_name, user=user_name, passwd=user_pwd)
+
+        print("Connection to MySQL is successful.")
+
+    except Error as err:
+        print(f"Error is: {err}")
+
+    else:
+        return connection
+    
+
+  
+  
+# Creating database
+def create_database(connection, query):
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute(query)
+        print("Database created successfully")
+
+    except Error as err:
+        print(f"Error is: {err}")
+        
+
+ 
+ 
+# Connecting to the database
+def create_db_connection(host_name, user_name, user_password, db_name):
+    connection = None
+    try:
+        connection = conn.connect(host=host_name, user=user_name, passwd=user_password, database=db_name)
+        print("Connected to the Database Successfully")
+
+    except Error as err:
+        print(f"Error is: {err}")
+
+    else:
+        return connection
+
+
+
+ 
+# Executing query
+def execute_query(connection, query):
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute(query)
+        connection.commit()
+        print("Query execution was successful")
+
+    except Error as err:
+        print(f"Error is: {err}")
+        
+
+        
+        
+# Showing query results
+def read_query(connection, query):
+    cursor = connection.cursor()
+    result = None
+
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        print("Query reading was successful")
+
+    except Error as err:
+        print(f"Error: {err}")
+
+    else:
+        return result
+		
+		
+
+# Creating table and inserting data using sqlalchemy and to_sql()
+
+engine = create_engine("mysql+pymysql://root:Password@localhost:3306/panda_exercise")
+
+
+try:
+    df.to_sql(name='fitbit', con=engine, index=False, if_exists='replace')
+except Exception as e:
+    print("Error is: ", e)
+else:
+    print("Query is Successful")
+
+
+	
+
+# reading the datasets directly in pandas as dataframes from sql using read_sql()
+
+q1 = "SELECT * FROM attributes"
+q2 = "SELECT * FROM sales"
+
+df_attr = pd.read_sql(q1, con=engine, index_col='Dress_ID')
+df_sale = pd.read_sql(q2, con=engine, index_col='Dress_ID')
+
+
+
+
+# reading dataset from sql in pandas after performing a query
+
+# query
+q = 'SELECT COUNT(DISTINCT Dress_ID) AS "Number of dresses" FROM attributes;'
+
+# calling the function to get result
+results = read_query(db_connection, q)
+
+# collecting the result from the database
+from_db = []
+
+for result in results:
+    result = list(result)
+    from_db.append(result)
+    
+# creating column names
+cols = ['Number of Unique dresses']
+
+# creating dtaframe of the result
+df = pd.DataFrame(from_db, columns = cols)
+display(df)

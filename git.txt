@@ -1,0 +1,698 @@
+# Create a github repository. Here we will use "gitTutorials" in Github as repository.
+# Now install Git CLI in the PC.
+# To check whether Git is installed or not just open a terminal/command prompt and type 'git --version'
+
+PS F:\online courses\Courses\Python> git --version
+git version 2.37.1.windows.1
+
+
+# Now we will create a readme file and going to commit it into the repository. It is a good practice to have a readme file.
+
+# Now go to the filepath from where we want to sent the file.
+# Now initialize git in that folder. So type 'git init'. It will create a '.git' folder in that folder.
+# Make sure that it creates the folder '.git' and this folder will not get committed inside the repository in the Github, this is just for the configuration.
+
+PS F:\Git> git init
+Initialized empty Git repository in F:/Git/.git/
+
+
+# Now if we type 'dir' we will see all the files.
+
+
+# Now because we have to commit in this repository so we need to setup the basic configuration at first. 
+# This configuration is with respect to the user.name and user.email id so the git will understand where to get committed.
+# In google search for git global config. Ther we will find that we need to set mainly 2 things:
+
+$ git config --global user.name "John Doe"
+$ git config --global user.email johndoe@example.com
+
+# Type the upper code without '$' for windows. The email id should be the same as used in the Github.
+# To check whether we have already configured or not just type upto 'user.name' and 'user.email' and press enter. If we havenot configured before then we can type our name like in the example.
+
+PS F:\Git> git config --global user.name
+Arunava
+PS F:\Git> git config --global user.email
+arunavabiswas44@gmail.com
+
+
+# Now to check the git status
+
+
+PS F:\Git> git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        readme.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+
+# Now to make the file tracked we need to 'add' the file.
+# Then check the status
+
+
+PS F:\Git> git add readme.txt  
+PS F:\Git> git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   readme.txt
+
+
+
+
+# Now we can make our "first commit", this commit will send the file to the staging environment.
+# This staging environment is the place where we keep all the files that needed to be pushed to the github repository.
+
+
+PS F:\Git> git commit -m "This is the first commit"
+[master (root-commit) 5fe388e] This is the first commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 readme.txt
+
+
+
+# To check the status again
+
+PS F:\Git> git status
+On branch master
+nothing to commit, working tree clean
+
+
+
+
+# Now to see the branch name
+
+
+PS F:\Git> git branch
+* master
+
+
+
+# Now whenever we create a repository there is a branch by default called as 'main'. So here we will rename the 'master' as 'main'.
+
+
+PS F:\Git> git branch -M main
+
+PS F:\Git> git branch        
+* main
+
+
+# Now the branch is changed to 'main' branch.
+
+# So now to make sure that this local repository (PC) is connected with the main repository (Github), we need to copy the link of the repository in the Github and put it with the following command.
+# This is to tell Git that from local repository this is the address where it needed to be commit.
+# Then to check the remote
+
+
+PS F:\Git> git remote add origin https://github.com/Arunava-Biswas/gitTutorials.git
+PS F:\Git> git remote -v
+origin  https://github.com/Arunava-Biswas/gitTutorials.git (fetch)
+origin  https://github.com/Arunava-Biswas/gitTutorials.git (push) 
+
+# The origin variable is representing the staging environment.
+
+# Now we will push the file from origin (local repository) to the main (branch repository).
+
+
+PS F:\Git> git push -f origin main
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 261 bytes | 261.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0        
+To https://github.com/Arunava-Biswas/gitTutorials.git
+ * [new branch]      main -> main
+
+
+
+# Here the new url is the location where the code has gone.
+
+
+# Now if we make some changes in that file.
+# Now if we check status
+
+
+PS F:\Git> git status
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   readme.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+# Here we can see the status as 'modified'.
+# Now we can do two things.
+# If we feel the modification is correct then we can add this file.
+# Otherwise we can restore the file.
+
+
+PS F:\Git> git restore readme.txt
+
+
+# If we restore then the file will stay at the condition it was before the updation.
+# Now again make some updates in the file and also create another file.
+
+
+PS F:\Git> git status
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   readme.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed) 
+        newfile.md.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+
+# Here we can see there are two tasks to be done one is modified file and one is new file to be pushed to the repository.
+# So to the both task is one go we will us '.' after the git add command.
+
+
+PS F:\Git> git add .
+PS F:\Git> git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   newfile.md.txt
+        modified:   readme.txt
+
+
+
+# Now again we need to make the commit.
+
+
+PS F:\Git> git commit -m "This is second commit"
+[main 33f8d65] This is second commit
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+ create mode 100644 newfile.md.txt
+PS F:\Git> git remote -v
+origin  https://github.com/Arunava-Biswas/gitTutorials.git (fetch)
+origin  https://github.com/Arunava-Biswas/gitTutorials.git (push)
+
+
+
+# Now make the push
+
+
+PS F:\Git> git push origin main
+Enumerating objects: 6, done.
+Counting objects: 100% (6/6), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 788 bytes | 788.00 KiB/s, done.
+Total 4 (delta 0), reused 0 (delta 0), pack-reused 0        
+To https://github.com/Arunava-Biswas/gitTutorials.git
+   5fe388e..33f8d65  main -> main
+
+
+
+# Now we can see all the commits from the github commit section in the repository.
+
+# Now if we want to clone all the files inside another folder then in CLI go to that folder location and type the url of the repository along with the command 'git clone'
+
+
+PS F:\Git> cd F:\gitclone
+PS F:\gitclone> git clone https://github.com/Arunava-Biswas/gitTutorials.git
+Cloning into 'gitTutorials'...
+remote: Enumerating objects: 7, done.
+remote: Counting objects: 100% (7/7), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 7 (delta 0), reused 7 (delta 0), pack-reused 0
+Receiving objects: 100% (7/7), done.
+
+
+# Remember when we make the push for the 1st time it will ask for authentication.
+
+
+
+
+
+# Now for Merge, Push, Checkout and Log:
+
+# So when working on a project then the actual code is available on the 'main' branch, so we need to create a new branch from that which will have the copy of all the codes of the 'main' branch. Then after coding and commit into this new branch, we need to merge this new branch with that particular 'main' branch.
+
+
+
+# The command to unstage a file is by using restore command.
+# Creating a new file to test it.
+
+
+
+PS F:\Git> git status
+On branch main
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        New Text Document (2).txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+# here the file is 'Untracked'
+
+PS F:\Git> git add .
+PS F:\Git> git status
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   New Text Document (2).txt
+
+# here the file is added
+
+
+PS F:\Git> git restore --staged "New Text Document (2).txt"
+PS F:\Git> git status
+On branch main
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        New Text Document (2).txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+
+# here the file again becomes 'Untracked' after using the 'restore --staged'
+
+
+
+# Another way of doing this is by using the reset option.
+
+
+
+PS F:\Git> git reset ".\New Text Document (2).txt"
+PS F:\Git> git status
+On branch main
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        New Text Document (2).txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+
+
+
+# Now if we use the 'git diff' and 'git diff --staged' after the 'git add .'
+# With 'git diff' and staged is that they show what are the files that are added but not committed to the staging yet.
+
+
+PS F:\Git> git diff --staged
+diff --git a/New Text Document (2).txt b/New Text Document (2).txt
+new file mode 100644
+index 0000000..e69de29
+
+
+# Now let's commit it
+
+PS F:\Git> git commit -m  "This is my fourth commit"
+[main 1e871d9] This is my fourth commit
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 New Text Document (2).txt
+
+
+# Now again if we see the diff then there will be nothing in the staged as everything is moved to the staging environment.
+# Now let's push the file.
+
+
+
+
+
+# Now the branching:
+
+
+PS F:\Git> git branch
+* main
+
+# So here we are at the main branch. Now to create a new branch we need to give that branchName along with the git branch command.
+
+
+PS F:\Git> git branch developer
+PS F:\Git> git branch
+  developer
+* main
+
+# Here we have created a new branch named 'developer' while working on the main branch.
+# Now to move to that new branch and work in there we use the 'git checkout branchName' command.
+# Now if we check the working branch we will see that it is changed to developer now.
+
+
+PS F:\Git> git checkout developer
+Switched to branch 'developer'
+PS F:\Git> git branch
+* developer
+  main
+
+
+
+# Now whatever commit we do it will go to the developer branch.
+# Let's create a new file and then add it.
+# Then we need to commit it.
+
+
+
+
+PS F:\Git> git status
+On branch developer
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        New Text Document (3).txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+PS F:\Git> git add .
+PS F:\Git> git commit -m "This is the first commit in the developer branch"
+[developer b253bbd] This is the first commit in the developer branch
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 New Text Document (3).txt
+PS F:\Git> git status
+On branch developer
+nothing to commit, working tree clean
+
+
+
+# Now let's say we have to merge this developer branch with our main branch in the local repository. 
+# For this first checkout to the main branch.
+# Now we will merge our new branch with the main branch.
+
+
+
+PS F:\Git> git checkout main
+Switched to branch 'main'
+PS F:\Git> git merge developer
+Updating 1e871d9..b253bbd
+Fast-forward
+ New Text Document (3).txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 New Text Document (3).txt   
+PS F:\Git> git status
+On branch main
+nothing to commit, working tree clean
+
+
+
+# Now make the push from origin to main.
+
+
+PS F:\Git> git push origin main
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (2/2), 256 bytes | 256.00 KiB/s, done.
+Total 2 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/Arunava-Biswas/gitTutorials.git
+   1e871d9..b253bbd  main -> main
+
+
+
+
+# The git logs will give a log of all the commits of the previous instances.
+# To see specific number of commits use the '-p -number'
+# Press 'q' to comeout of the logs.
+
+
+PS F:\Git> git log -p -3
+commit b253bbd761a4ef209470be5adf5cbc2705fccea0 (HEAD -> main, origin/main, developer)
+Author: Arunava <arunavabiswas44@gmail.com>
+Date:   Sun Jul 24 19:22:29 2022 +0530
+
+    This is the first commit in the developer branch
+
+diff --git a/New Text Document (3).txt b/New Text Document (3).txt
+new file mode 100644
+index 0000000..e69de29
+
+commit 1e871d990f9b930635553acdcadbe6493d98fa6e
+Author: Arunava <arunavabiswas44@gmail.com>
+Date:   Sun Jul 24 19:09:48 2022 +0530
+
+    This is my fourth commit
+
+diff --git a/New Text Document (2).txt b/New Text Document (2).txt
+new file mode 100644
+index 0000000..e69de29
+
+commit f8ef98f25fe210ffc085d5b5601dda12a3ef99b7
+Author: Arunava <arunavabiswas44@gmail.com>
+Date:   Sat Jul 23 20:55:35 2022 +0530
+
+    This is third commit
+
+diff --git a/new text document.txt b/new text document.txt
+new file mode 100644
+index 0000000..e69de29
+
+
+
+
+
+
+# Now Resolving Git Branch Merge Conflicts in simple steps in CLI:
+
+
+
+- In most of the companies when working on a project many people will submit their part in the same project at the same time. Let's say in a company we have a 'main' branch and two 'developer' branches in the git repository. The 'main' branch has the entire code based repository whereas each 'developer' branch is for the new works done by each developer.
+- Now each developer will create a branch from the main branch and in that branch they work on their modules.
+- Now developer A will create his module and merge his branch back with the main branch. Suppose he had make some changes in file1 which was a part of the 'main' repository at the time both developers were branching out.
+- Now when developer B will try to merge his branch with the main branch, developer A has already merged his branch and as a result there in the main branch may some changes take place even with the files on which developer B is working on. Like developer B has also made some changes in file1, but by now it has already being updated due to submission of developer A.
+- Now in this scenario there will be a situation arise which is called as 'Conflict'.
+- Now when developer B will try to Push his clone there will be a error stating that 'some conflict has occurred'.
+- Now to fix that we need to resolve that.
+
+
+- Today for this we will use a new repository named 'Application' and two folders 'Developer A' and 'Developer B' inside a folder named 'Gitmerge And Conflict'.
+
+- 1st of all we need to clone the repository to the both Developer A and Developer B folder.
+- 2nd open two different Command prompts to create the codes.
+- Now in both developers we will have the Application folder.
+- Now if we see the branch in dev A we will find the main branch.
+- Now make a branch for dev A named as 'devA', and then switch to that branch.
+- Now we can check the status.
+- Now from Developer A open the readme file in notepad.
+- There we can find '# Application'.
+- We update it as '# Update Application Adding Developer A Story.' Now save it.
+- Now if we see status we will see new status.
+- Now add it and then commit it.
+- Now if we check the branch it will show 'devA'.
+- Now checkout to the main branch so we can merge the 'main' branch with the 'devA' branch.
+- Now we can again check the status.
+- Now push it to the main branch.
+
+- Now let's go to Developer B and do the same things there also.
+- Now after reaching to the merge with the main branch when we try to push as because already Developer A has updated the 'readme' file we will find the following error:
+error: failed to push some refs to 'https://github.com/Arunava-Biswas/Application.git'
+
+- And when we do git pull we get:
+CONFLICT (content): Merge conflict in README.md
+Automatic merge failed; fix conflicts and then commit the result.
+
+- This conflict is because dev A has already push something in the same file 'readme' in the 'main' repository.
+- Now if we open the readme file in Developer B in notepad we will find all new things.
+- Now we need to make this conflict changes manually.
+**** Remember this is very sensitive and important to make changes in the conflict zone, so do it with patience and in cool head ****
+
+
+
+
+
+
+- For Developer A:
+
+
+C:\Users\Arunava>cd /d "F:\Gitmerge And Conflict\Developer A"
+
+F:\Gitmerge And Conflict\Developer A>git clone https://github.com/Arunava-Biswas/Application.git
+Cloning into 'Application'...
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 5 (delta 0), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (5/5), 13.46 KiB | 6.73 MiB/s, done.
+
+F:\Gitmerge And Conflict\Developer A>cd Application
+
+F:\Gitmerge And Conflict\Developer A\Application>git branch
+* main
+
+F:\Gitmerge And Conflict\Developer A\Application>git branch devA
+
+F:\Gitmerge And Conflict\Developer A\Application>git checkout devA
+Switched to branch 'devA'
+
+F:\Gitmerge And Conflict\Developer A\Application>git status
+On branch devA
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+F:\Gitmerge And Conflict\Developer A\Application>git add .
+
+F:\Gitmerge And Conflict\Developer A\Application>git commit -m "Developer A story"
+[devA 9140ec2] Developer A story
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+F:\Gitmerge And Conflict\Developer A\Application>git branch
+* devA
+  main
+
+F:\Gitmerge And Conflict\Developer A\Application>git checkout main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+
+F:\Gitmerge And Conflict\Developer A\Application>git merge devA
+Updating 2626b4c..9140ec2
+Fast-forward
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+F:\Gitmerge And Conflict\Developer A\Application>git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+F:\Gitmerge And Conflict\Developer A\Application>git push origin main
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 303 bytes | 303.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/Arunava-Biswas/Application.git
+   2626b4c..9140ec2  main -> main
+
+
+
+
+
+
+
+- For Developer B:
+
+Microsoft Windows [Version 10.0.19044.1826]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Arunava>cd /d "F:\Gitmerge And Conflict\Developer B"
+
+F:\Gitmerge And Conflict\Developer B>git clone https://github.com/Arunava-Biswas/Application.git
+Cloning into 'Application'...
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 5 (delta 0), reused 0 (delta 0), pack-reused 0
+Receiving objects: 100% (5/5), 13.46 KiB | 1.12 MiB/s, done.
+
+F:\Gitmerge And Conflict\Developer B>cd Application
+
+F:\Gitmerge And Conflict\Developer B\Application>git branch devB
+
+F:\Gitmerge And Conflict\Developer B\Application>git checkout devB
+Switched to branch 'devB'
+
+F:\Gitmerge And Conflict\Developer B\Application>git status
+On branch devB
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+F:\Gitmerge And Conflict\Developer B\Application>git add .
+
+F:\Gitmerge And Conflict\Developer B\Application>git commit -m "Developer B story"
+[devB f4c45b6] Developer B story
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+F:\Gitmerge And Conflict\Developer B\Application>git branch
+* devB
+  main
+
+F:\Gitmerge And Conflict\Developer B\Application>git checkout main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+
+F:\Gitmerge And Conflict\Developer B\Application>git merge devB
+Updating 2626b4c..f4c45b6
+Fast-forward
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+F:\Gitmerge And Conflict\Developer B\Application>git push origin main
+To https://github.com/Arunava-Biswas/Application.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/Arunava-Biswas/Application.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+F:\Gitmerge And Conflict\Developer B\Application>git pull
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (1/1), done.
+remote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0
+Unpacking objects: 100% (3/3), 283 bytes | 1024 bytes/s, done.
+From https://github.com/Arunava-Biswas/Application
+   2626b4c..9140ec2  main       -> origin/main
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Automatic merge failed; fix conflicts and then commit the result.
+
+F:\Gitmerge And Conflict\Developer B\Application>git status
+On branch main
+Your branch and 'origin/main' have diverged,
+and have 1 and 1 different commits each, respectively.
+  (use "git pull" to merge the remote branch into yours)
+
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+        both modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+F:\Gitmerge And Conflict\Developer B\Application>git add .
+
+F:\Gitmerge And Conflict\Developer B\Application>git status
+On branch main
+Your branch and 'origin/main' have diverged,
+and have 1 and 1 different commits each, respectively.
+  (use "git pull" to merge the remote branch into yours)
+
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+        modified:   README.md
+
+F:\Gitmerge And Conflict\Developer B\Application>git commit -m "Developer B story"
+[main 6032e35] Developer B story
+
+F:\Gitmerge And Conflict\Developer B\Application>git push origin main
+Enumerating objects: 10, done.
+Counting objects: 100% (10/10), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (6/6), 611 bytes | 611.00 KiB/s, done.
+Total 6 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), completed with 1 local object.
+To https://github.com/Arunava-Biswas/Application.git
+   9140ec2..6032e35  main -> main
