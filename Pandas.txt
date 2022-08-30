@@ -1,0 +1,1137 @@
+## 1st import pandas
+
+import pandas as pd
+
+## to fasten the panda by 3 to 4 times use the library named modin
+
+
+
+
+## reading from .csv file for this we will use .read_csv()
+
+df = pd.read_csv('data/survey_results_public.csv')
+
+
+
+
+## for more information use .info() it will provide row cols along with their datatypes
+## Print a concise summary of a DataFrame.
+
+df.info()
+
+
+
+
+
+## to see broad overview of the data we use describe()
+
+df.describe()
+
+
+
+
+## Now by default the rows and column are concatinated but if we want to see all the columns we can do that also
+## For that we need to use .set_option('display.max_columns', desired colmn number)
+## now we can see all 85 columns in one go
+## now to see all the rows
+## .set_option('display.max_rows', desired row number)
+## now we can see all 85 rows in one go
+
+
+pd.set_option('display.max_columns', 85)
+pd.set_option('display.max_rows', 85)
+
+
+
+
+
+## now we will use the schema.csv file for the rows as there the columns of the original file becomes rows.
+## so we can see all the rows with the help of that file.
+## also it helps to understand what that column means in the original file for the data provided.
+
+schema_df = pd.read_csv('data/survey_results_schema.csv')
+
+
+
+
+
+
+## now to see certain number of rows
+## for 1st 5 rows by default we use .head()
+## for last 5 rows by default we use .tail()
+## to see certain number of rows we can pass the number as parameter
+## to see 1st 10 rows
+## to see last 10 rows
+
+df.head()
+df.tail()
+df.head(10)
+df.tail(10)
+
+
+
+
+
+
+<-------- DataFrame and Series --------->
+
+
+## for multiple person's records here the keys are the same but it stores different values for different peoples
+
+people = {
+    "fname": ["Arunava", "Corey", "Jane", "John"],
+    "lname": ["Biswas", "Schafer", "Doe", "Doe"],
+    "email": ["arun_biswas@gmail.com", "CoreyMSchafer@gmail.com", "JaneDoe@email.com", "JohnDoe@email.com"]
+}
+
+
+
+
+
+## Dataframe is a container for multiple series objects.
+## for creating data frames we need to use inbuilt function .DataFrame()
+## now for accessing values of a single column we use dataframeName['column_name']
+## here it is a series as it returns only one column.
+## now to access multiple columns
+## here we pass the name of the keys as list so the inner[] is necessary or else there will be key error.
+## now because in here it returns more than 1 column so it is no longer a series it itself has become a dataframe.
+## now to see all the columns in one go
+
+
+
+people_df = pd.DataFrame(people)
+people_df['email']
+type(people_df['email'])                // pandas.core.series.Series
+people_df[['lname','email']]
+type(people_df[['lname','email']])      // pandas.core.frame.DataFrame
+people_df.columns                       // Index(['fname', 'lname', 'email'], dtype='object')
+
+
+
+
+
+## now to get row we use .loc and .iloc
+## iloc - allow us to acces rows by integer location.
+
+people_df.iloc[0]       // here we access the 1st row. Here it will return a series that contains the data of the 1st row.
+people_df.iloc[[0,1]]   // for multiple rows we again need to pass them as list like here accessing 1st and 2nd row.
+## Here it will return a dataframe with multiple rows.
+
+
+
+
+
+## we can also access column using iloc and loc
+## here the 1st parameter is the row and the 2nd one is the column.
+## As this is iloc which is based on integer so we can't use the name insted the index of that column.
+
+people_df.iloc[[0,1], [2]]      // like here accessing the email column of both 1st and 2nd row.
+
+
+
+
+
+## now by loc we can search by label.
+## as there is no name in the rows so we need to use the index here.
+## now for columns as they have names so we don't need to pass index instead we can use labels.
+
+
+people_df.loc[0]        // here we will see all the columns for the 1st row.
+people_df.loc[[0,1]]    // and for multiple rows.
+people_df.loc[[0,1],['lname','email']]      // like here acessing lname and email for 1st and 2nd row.
+
+
+
+
+
+## now we want to grab all the responses for the column named 'Hobbyist'.
+## for that we pass the column name as a key.
+
+df['Hobbyist']
+
+
+
+
+## now we want to see how many answers are 'yes' and how many are 'no'.
+## for this we use .value_counts() to calculate.
+
+df['Hobbyist'].value_counts()
+
+
+
+## now we want to see only the 'Hobbyist' column for the 1st row.
+
+df.loc[0, 'Hobbyist']
+
+
+
+
+## now for 1st 3 responses for the 'Hobbyist' column.
+
+df.loc[[0,1,2], 'Hobbyist']
+
+
+
+
+
+
+## now if we use slicing then the last value will be inclusive for loc.
+## doing same thing for 1st 3 responses for the 'Hobbyist' column with slice.
+
+df.loc[0:2, 'Hobbyist']
+
+
+
+
+
+## now seeing all the values from column 'Hobbyist' to 'Employment' for 1st 3 rows using slice.
+
+df.loc[0:2, 'Hobbyist':'Employment']
+
+
+## Remember in case of slice in loc the last value is inclusive means it will be counted.
+
+
+
+
+
+
+
+<--------------------Krish Naik Part------------------>
+
+
+
+## We can also create dataframe like this :
+
+df = pd.DataFrame(np.arange(0,20).reshape(5,4),index=['Row1','Row2','Row3','Row4','Row5'],columns=["Column1","Column2","Column3","Coulmn4"])
+
+## 1st parameter is the data we want to give as here it is numbers ranging from 0 to 20. This data will be in 2D format.
+## also we are creating the array in 2D format by putting reshape() along with range.
+## 2nd parameter is index of the rows values as here it is 'Row1', 'Row2' and so long.
+## 3rd parameter is the columns index as here it is 'Column1', 'Column2' and so long.
+## last parameter is the datatype.
+
+
+
+
+
+## we can also convert it into an excel sheet
+
+df.to_csv('Test1')
+
+
+
+
+## convert Dataframes into array.
+## here it will skip the columnName or column-index and the row-index.
+## the .values is converting the dataframes into array.
+
+
+df.iloc[:,1:].values
+
+
+
+
+## to see the shape.
+
+df.iloc[:,1:].values.shape
+
+
+
+
+
+
+## How to check the null condition.
+## we use .isnull().sum() to see the number of null values in that column.
+
+df.isnull().sum()
+
+
+
+
+
+## to see how many unique categories we have in column 1 we use .value_count()
+## we can also do it by using .unique()
+
+
+df['Column1'].value_counts()
+df['Column1'].unique()
+
+
+
+
+
+## to see more details use .describe()
+## remember here only integer and floating columns will be taken into consideration but the object column will not be considered, like in this case when we use describe() the categories like X0, X1 that don't have an integer or float value are not considered.
+## here it is percentile and not percent i.e. %
+
+df.describe()
+
+
+
+
+## using a ';' inplace of ',' as a seperator now.
+## in this case we need to provide the parameter 'sep' with the seperator that is ';' in this case.
+
+test_df = pd.read_csv('test2.csv', sep=';')
+
+
+
+
+from io import StringIO, BytesIO
+
+
+data = ('col1,col2,col3\n'
+            'x,y,1\n'
+            'a,b,2\n'
+            'c,d,3')
+
+
+
+## StringIo() it will convert whatever value we provide in it to a text memory buffer.
+## and then with .read_csv() we will read it as csv file.
+
+pd.read_csv(StringIO(data))
+
+
+
+
+## in read_csv() there is a parameter named 'usecols' what it does that out of all the columns in the csv file if we need just some specific columns.
+## e.g. we want only 2 column values that are col1 and col3.
+
+df = pd.read_csv(StringIO(data), usecols=['col1','col3'])
+
+
+
+
+
+## now changing each columns datatype as different datatypes.
+## for this we will create a dictionary of key, value pairs for the 'dtype' parameter.
+## so here each columns datatypes are changed.
+
+df=pd.read_csv(StringIO(data),dtype={'b':int,'c':float,'a':'Int64','d':'str'})
+
+
+
+
+## Combining usecols and index_col
+data = ('a,b,c\n'
+           '4,apple,bat,\n'
+            '8,orange,cow,')
+
+
+
+pd.read_csv(StringIO(data), usecols=['b', 'c'],index_col=False)
+
+
+
+
+
+
+
+<--------------  Indexes ----------->
+
+## By default the index is the integer identifier for the rows starting from 0. These are the labels for the rows.
+## now for index we need unique values like in this case the email addresses.
+## So if we want to put the email address as index here we can use that to label the index unlike default.
+## for this we use .set_index()
+## now to keep our customised index as permanent we need to pass another parameter named 'inplace' and set it's value to 'True'.
+## or we can do it while reading the csv file with an additional arguement 'index_col' to the .read_csv() and name the column name as value as in this case it is 'Respondent'.
+## here the column 'Respondent' already has unique ids so we can use it as our index. Here we can also see the index values.
+## to reset the index back to default we use .reset_index() with parameter inplace=True
+
+
+
+people_df.set_index('email', inplace=True) 
+df = pd.read_csv('data/survey_results_public.csv', index_col='Respondent')
+people_df.index
+people_df.reset_index(inplace=True)
+
+
+
+
+## so now we can find a specific row by it's name instead of it's index number.
+## so previously we use to do people_df.loc[1] but now:
+
+people_df.loc['CoreyMSchafer@gmail.com']
+
+
+
+
+## we can also find specific column in that. 
+## here 'CoreyMSchafer@gmail.com' acts as row and 'lname' acts as column.
+
+people_df.loc['CoreyMSchafer@gmail.com', 'lname']
+
+
+
+
+## to see the value on the basis of number we need to use iloc.
+
+people_df.iloc[1]
+
+
+
+
+
+## If we want to know what a specific column means without searching the entire dataframe manually.
+## For this we set the column name as index and use the .loc indexer
+
+schema_df = pd.read_csv('data/survey_results_schema.csv', index_col='Column')
+
+
+
+
+## now we can use .loc to search for these column directly.
+## So now if we want to see the information for the 'MgrIdiot' column.
+
+schema_df.loc['MgrIdiot']
+
+
+
+
+## But here the total text was not visible as it was truncated by default now to see the entire text we can pass the row name and column name directly.
+## here 'MgrIdiot' is the row name and 'QuestionText' is the column name.
+
+schema_df.loc['MgrIdiot', 'QuestionText']
+
+
+
+
+
+
+## now to sort the index alphabetically so searching becomes easier we use .sort_index()
+## and if we want the index alphabetically in descending order i.e. in reverse order then put a parameter ascending with value false
+## to make the sorting to be permanent use 'inplace=True'
+
+
+schema_df.sort_index()
+schema_df.sort_index(ascending=False)
+schema_df.sort_index(inplace=True)
+
+
+pd.Categorical(df['columnName']) : It will give a synopsys of data of that column categorically.
+
+
+
+
+
+
+
+<--------- Filter ----------->
+
+## Filtering is the process through which we seperate between the data we want and the data we don't want.
+
+
+
+
+## so let's find all the people from this dataframe with the last name 'Doe'.
+## What we get as result is a series with bunch of true/flase values. Here the true values are the rows that match the filter.
+## This is called 'Filter Mask'. When it applied with any dataframe it will return all the rows that match the conditions.
+
+people_df['lname'] == 'Doe'
+
+
+
+
+## So here now 1st assign the condition to a variable named 'filt'.
+## Remember 'Filter' is a builtin keyword so use some other name.
+## now let's apply the filter to our dataframe to find the results.
+## there are a few ways to do that.
+## 1st is to pass the filter as a column name directly.
+
+
+filt = (people_df['lname'] == 'Doe')
+people_df[filt]
+
+
+## Another way is to put the entire condition in the dataframe. But this is bad practice.
+people_df[people_df['lname'] == 'Doe']
+
+
+
+
+## Another way is to use .loc indexer.
+## The advantage of .loc indexer way is that we can grab specific columns if we want.
+## Here if we want to grab the email of those where the last name is Doe we can do that.
+## here filt works as the rows and email works as the columns.
+
+people_df.loc[filt]
+people_df.loc[filt, 'email']
+
+
+
+
+## we can also use 'and', 'or' operators.
+## '&' is for 'and' and '|' is for 'or'.
+## So now let's try to find all the email address where the last name is Doe and first name is John.
+## So now let's try to find all the email address where the last name is Schafer or first name is John.
+## Now let's get the exact opposite of the filter that is all the results where the filter will not match.
+
+
+filt = (people_df['lname'] == 'Doe') & (people_df['fname'] == 'John')
+filt = (people_df['lname'] == 'Schafer') | (people_df['fname'] == 'John')
+people_df.loc[filt, 'email']
+
+
+
+## This is the 'not' operator.
+## For this we only have to put a '~' infront of the filter.
+
+
+people_df.loc[~filt, 'email']
+
+
+
+
+
+
+
+## now filtering with multiple values
+## now we want to see people belong to USA, Uk, India, Germany and Canada.
+## for this create a list with the name of the countries and pass it as a condition of the filter.
+## here we will use the .isin()
+
+
+countries = ['United States', 'United Kingdom', 'India', 'Germany', 'Canada']
+
+## now creating the filter
+cntry = df['Country'].isin(countries)
+
+## now applying the filter.
+df.loc[cntry, 'Country']        // Here 'cntry' is the filter.
+
+
+
+
+
+## now let's find people who said they know python as programming language.
+## here we can see there are many languages for a person seperated by ';'.
+## now by using string method we want to find all the person who has python in their programming language.
+## we provide fill value for the NaN 'na=False' else we will get error.
+## Now applying the filter. Here the filter becomes row and the column_name becomes column.
+
+
+df['LanguageWorkedWith']
+lang = (df['LanguageWorkedWith'].str.contains('Python', na=False))
+df.loc[lang, 'LanguageWorkedWith']
+
+
+
+
+
+
+
+
+
+
+<-------Updating Rows and Columns-Modifying data with dataframes-------------->
+
+people = {
+    "fname": ["Arunava", "Corey", "Jane", "John"],
+    "lname": ["Biswas", "Schafer", "Doe", "Doe"],
+    "email": ["arun_biswas@gmail.com", "CoreyMSchafer@gmail.com", "JaneDoe@email.com", "JohnDoe@email.com"]
+}
+
+
+people_df = pd.DataFrame(people)
+
+
+
+## Updating columns.
+## First lets see how many columns are there.
+
+people_df.columns           // Index(['fname', 'lname', 'email'], dtype='object')
+
+
+
+
+## now lets update it.
+## lets say we want to update the names of the columns. There are various ways to do it.
+## 1st way we can assign new names to the columns. We can pass the list of new names and assign them to the .columns
+## here all the names need to be changed.
+## now the column names are changed.
+
+
+people_df.columns = ['first','last','email']
+people_df.columns           // Index(['first', 'last', 'email'], dtype='object')
+
+
+
+
+## Now we want to make the names in uppercase for this we will use list comprehension.
+## Also if we want to replace space in column names with '_' then we will use .str.replace()
+## people_df.columns = people_df.columns.str.replace(' ', '_')
+
+
+people_df.columns = [x.upper() for x in people_df.columns]
+
+
+
+
+
+
+
+## now when we don't want to make changes in all the columns and only to some specific columns.
+## for this we will use .rename() with a dictionary where the key will be the old value and the value will be new value.
+## here to make the changes appear in the dataframe we need another parameter 'inplace' to be true.
+
+
+people_df.rename(columns={'FIRST': 'first_name', 'LAST': 'last_name'}, inplace=True)
+
+
+
+
+
+## now updating data in rows.
+## here also we will use same .loc and .iloc which we use for find data in rows.
+## let's change John's surname from 'Doe' to 'Smith'.
+## we can also use filter where we set condition for the firstname and the last name and then apply that.
+## now to update
+## here again we can pass the new value by passing a list like.
+## people_df.loc[3] = ['John', 'Smith', 'JohnSmith@email.com']
+## there is also another way where we can specifically change the values we want to change.
+## here again we can specifically set the column names for the rows we want to change as a list.
+## now to change assign the new values.
+
+people_df.loc[3, ['last_name', 'EMAIL']] = ['Smith', 'JohnSmith@email.com']
+
+
+
+
+## now when we want to change just a specific value instead of multiple values we just need to specify the row and column and then assign the new value.
+## There is another way to change single value by using .at()
+
+
+people_df.loc[2, 'last_name'] = 'Smith'
+people_df.at[2, 'last_name'] = 'Doe'
+
+
+
+
+
+## for updating multiple rows.
+## lets say we want to change all the email addresses to lower case.
+## 1st way is to use .str.lower() and assign it to the column.
+
+people_df['EMAIL'] = people_df['EMAIL'].str.lower()
+
+
+
+
+## Advance way there are 4 methods: apply, map, applymap and replace.
+
+                                ## Apply :
+## 1st method apply().
+## it is use to call a function on the values.
+## it can work on both dataframes and series of objects.
+
+## using apply on series
+## here it will applied to every value of that series.
+## we want to see the length of the email addresses here we use the 'len' function in apply.
+
+people_df['EMAIL'].apply(len)
+
+
+
+
+## we can also update using the apply function.
+## the functions can be as complicated as we want.
+## now using apply we can write a function to make changes in the email addresses.
+## like here we want to make our email addresses in uppercase.
+
+def update_email(email):
+    return email.upper()
+
+## to see the changes in effect we need to assign them to the column.
+
+people_df['EMAIL'] = people_df['EMAIL'].apply(update_email)
+
+
+
+## we can also use lambda function for simple functions.
+## lets reset them to lower case using lambda().
+
+people_df['EMAIL'] = people_df['EMAIL'].apply(lambda x: x.lower())
+
+
+
+
+
+## apply with dataframes.
+## here it will applied to every series of that dataframe.
+## here it will return the number of rows or columns in that dataframe instead of the length of each value.
+## by default the 'axis' is 'rows' and we can change it to 'columns'.
+## lets grab the minimum value from each column of the series.
+
+
+people_df.apply(len, axis='columns')
+people_df.apply(pd.Series.min)
+
+
+
+##                                      Applymap :
+## to apply a function on each individual element of the dataframe.
+## for this we need to use applymap().
+## applymap only works on dataframes.
+## so by using applymap we can change all the values to lowercase in one go.
+## people_df.applymap(str.lower)
+
+people_df.applymap(len)
+
+
+
+
+##                      Map & Replace :
+## map method only works on a series.
+## it is use to substitute each value in a series with another value.
+## let's substitue some first name.
+## but in map we see NaN for the other values so to keep the other values as it is we use replace().
+## And remember to make the changes applied to the dataframe we need to assign them.
+
+
+people_df['first_name'].map({'Arunava': 'Arun', 'Jane': 'Mary'})
+people_df['first_name'].replace({'Arunava': 'Arun', 'Jane': 'Mary'})
+people_df['first_name'] = people_df['first_name'].replace(['Arunava', 'Jane'], ['Arun','Mary'])
+
+
+
+
+
+
+## lets change 'ConvertedComp' to 'Salary_Usd'.
+## then use 'inplace' parameter to True to make the changes permanent once we are sure that the changes are correct.
+
+
+df.rename(columns={'ConvertedComp': 'Salary_USD'}, inplace=True)
+
+
+
+## so lets say we want to change these values to boolean for this we will use the map method
+## Remember if there are other values than 'Yes' or 'No' then they will become 'NaN'. So if there are multiple values and we just want to change few of them then instead of map we should use replace.
+
+df['Hobbyist'] = df['Hobbyist'].map({'Yes': True, 'No': False})
+
+
+
+
+
+
+
+
+
+
+<-----------Add and Remove rows and columns----------------->
+
+
+## Adding columns
+## It is almost same as updating. Here again we need to create a column and pass in the series of values that we need the column to have.
+## Combining 'fname' and 'lname' column and named it 'full_name'.
+## we can also use apply() to add columns.
+
+people_df['full_name'] = people_df['fname'] + ' ' + people_df['lname']
+
+
+
+
+## Removing columns
+## for this we use drop().
+## let's remove the 'fname' and 'lname' columns.
+## we need to pass a list as there are more than one column.
+
+people_df.drop(columns=['fname', 'lname'], inplace=True)
+
+
+
+
+## now if we want to break the 'full_name' column into 'fname' and 'lname' we will use str.split()
+## then assign them to 2 different columns named 'fname' and 'lname' for this we need to use 'expand' arguement to 'True'.
+## now set 2 columns for the returned columns.
+
+people_df[['fname', 'lname']] = people_df['full_name'].str.split(' ', expand=True)
+
+
+
+
+
+## Adding rows
+## there are a couple of ways:
+## adding a single row to the dataframe of new data.
+## combine 2 dataframes together to a single dataframe by appending the rows from one to another.
+## Single row
+## for this we use append()
+## now to make it happen without error we need to pass along with the dictionary 'ignore_index=True'
+
+people_df.append({'fname': 'Tony'}, ignore_index=True)
+
+
+
+
+## combining 2 dataframes
+## now we can append the one dataframe to the other. The problem is that there are conflicting indexes and the columns are not in same order.
+## so for that again we use 'ignore_index=True'
+## In this case we don't need to use inplace method to make the changes permanent instead we need to assign this new dataframe to the original one.
+
+
+people_df = people_df.append(people_df2, ignore_index=True)
+
+
+
+
+
+## removing rows
+## here again we use the .drop() but instead of passing the column name here we will pass the index of that row.
+## Remember to make this changes permanent we need to pass 'inplace=True'
+## we can also use filter for this.
+## here we will remove all the rows with lname as Doe.
+
+
+people_df.drop(index=5, inplace=True)
+
+filt = people_df['lname'] == 'Doe'
+people_df.drop(index=people_df[filt].index)
+
+
+
+
+
+
+
+
+
+
+<---------Sorting Data--------->
+
+## Sorting the data.
+## for this we can use sort_values() with a 'by' arguement.
+## lets sort them on the basis of lname.
+## For descending order use 'ascending=False'.
+## lets complicate, Lets sort them on the basis of 'lname' and when 2 people have same 'lname' we sort them on the basis of 'fname'.
+## for doing this we need to pass a list in 'by' arguement.
+
+
+people_df.sort_values(by='lname', inplace=True)
+people_df.sort_values(by='lname', ascending=False, inplace=True)
+people_df.sort_values(by=['lname', 'fname'], inplace=True)
+
+
+
+## now one column in descending and another in ascending order.
+## for this we pass boolean value in corresponding to the list passed in the 'by' arguement.
+## so here the lname will be in descending order and fname in ascending order.
+## to make the sort permanent we need inplace=True.
+
+
+people_df.sort_values(by=['lname', 'fname'], ascending=[False, True], inplace=True)
+
+## to see the changes
+
+people_df[['lname', 'fname']].head()
+
+
+
+
+
+## we can also use sort_index() to sort the values.
+## we can also sort a series or a single column by using sort_values()
+
+
+people_df.sort_index()
+people_df['fname'].sort_values()
+
+
+
+
+## now to see the largest and smallest value in the dataframe.
+## for this we use 'nlargest()'
+## lets say we want to see the 10 heighest salaries of the survey.
+
+df['ConvertedComp'].nlargest(10)
+
+
+
+
+
+## now to see all the columns along with the largest 10 salaries.
+## for smallest we use nsmallest()
+
+df.nlargest(10, 'ConvertedComp')
+df.nsmallest(10, 'ConvertedComp')
+
+
+
+
+
+
+
+
+
+
+<--------------Grouping and Aggregating - Analyzing and exploring data-------------->
+
+## Aggregate :
+## Aggregating : Combining multiple pieces of data into a single result. Like 'mean','median','mode' these are aggregate functions.
+## What is the typical salary of a developer who answer this survey?
+## To do this we need to grab the median salary of this dataframe.
+
+df['ConvertedComp'].median()
+
+
+
+
+## lets run median on the entire dataframe. Here it will grab median values for all the columns that have numerical values.
+
+df.median()
+
+
+
+
+
+## count() is the number of respondents excluding those who did not answer the question.
+
+df['ConvertedComp'].count()
+
+
+
+## how many people answered 'yes' and how many 'no'. For this we use value_counts() as it provides unique sets differently.
+
+df['Hobbyist'].value_counts()
+
+
+
+## Now to see which of these social media was more popular among the users
+df['SocialMedia'].value_counts()
+
+
+## now to see them in % we need to use 'normalize=True' as parameter in value_counts()
+df['SocialMedia'].value_counts(normalize=True)
+
+
+
+
+Grouping :
+
+## Most popular social media on the basis of country for this we use groupby function.
+## groupby function - 1st we split the object then apply a function and then it will combine those results.
+## 1st value counts for each country.
+## now using groupby function on the country column.
+## 1st splitting the object.
+## here it will break down all the responses on the basis of country names. It is like running a filter. But here it will differentiate all the results based on all the country names in different groups whereas we need to run different filters for different country names.
+
+
+df['Country'].value_counts()
+df.groupby(['Country'])
+
+
+
+## lets put it in a variable.
+## lets grab the group for a single country let's say 'United States'. For this use get_group()
+
+
+country_grp = df.groupby(['Country'])
+country_grp.get_group('United States')
+
+
+
+## let's see most popular social media on the basis of country names.
+
+country_grp['SocialMedia'].value_counts().head(50)
+
+
+
+
+## now to see popularity of different social medias in a particular country we use loc['countryName']
+## so here we don't need to write different filters each time.
+
+country_grp['SocialMedia'].value_counts().loc['India']
+
+
+
+
+## lets see median salaries for each country using the grouping.
+## now to see data for a specific country we only need to pass the country name as location.
+
+
+country_grp['ConvertedComp'].median()
+country_grp['ConvertedComp'].median().loc['Germany']
+
+
+
+## now to run multiple aggregate functions on the group.
+## for that we use agg() and pass in all the aggregate functions as a list we want to use.
+## lets see the 'median' and 'mean' for the salary.
+## now to see data for a specific country.
+
+
+country_grp['ConvertedComp'].agg(['median', 'mean'])
+country_grp['ConvertedComp'].agg(['median', 'mean']).loc['Canada']
+
+
+
+
+## let's find out how many people in each country know how to use Python?
+## 1st let's check with a single country using filtering approach then with the group.
+## we can use the sum() to find out the number of people with the true boolean value.
+
+
+filt = df['Country'] == 'India'
+df.loc[filt]['LanguageWorkedWith'].str.contains('Python')
+df.loc[filt]['LanguageWorkedWith'].str.contains('Python').sum()
+
+
+
+## now using grouping.
+## so here we cannot use the str directly as it is 'SeriesGroupBy' object.
+## for this we need to use apply() and then pass a function in that in this case it will be the .str.contains()
+## now the correct way.
+
+
+country_grp['LanguageWorkedWith'].str.contains('Python').sum()  // this will throw error
+country_grp['LanguageWorkedWith'].apply(lambda x: x.str.contains('Python').sum())
+
+
+
+
+
+
+
+
+
+
+
+
+
+<-----------Cleaning Data-Casting Datatypes and Handling missing values---------->
+
+
+people = {
+    "fname": ["Corey", "Jane", "John", "Adam", np.nan, None, 'NA'],
+    "lname": ["Schafer", "Doe", "Doe", "Shaw", np.nan, np.nan, 'Missing'],
+    "email": ["CoreyMSchafer@gmail.com", "JaneDoe@email.com", "JohnDoe@email.com", None, np.nan, 'Anonymous@email.com', 'NA'],
+    "age": ['33', '55', '63', '36', None, None, 'Missing']
+}
+
+
+
+
+
+## to remove all the rows having no values we use .dropna()
+## it will clear all the rows with 'NaN' and 'None' values.
+## The custom missing values i.e. 'NA' and 'Missing' will not to be impacted by this.
+
+people_df.dropna()
+
+
+
+## the dropna() have some default arguements. Let's see them.
+## the 'axis' has 2 options. 'index' and 'columns'.
+## 'index' -  to drop the rows that have missing values. It is default arguement.
+## 'columns' - if we pass column then it will clear the columns that have missing values.
+## 'how' - it is the criteria to remove the rows or columns. By default it is set to 'any'. It means it will remove any rows or columns where there is a missing value.
+## If we set it to 'all' it will drop only those rows or columns where all the values are missing.
+## setting the how to all here only index 4 row will be removed as it has missing values in all it's columns.
+## now if we change the 'how' to 'any' and the 'axis' to 'columns' then we will get an empty dataframe as there is atleast 1 missing value in all the columns as the row 4 has all missing values in all the columns.
+
+
+
+people_df.dropna(axis='index', how='any')
+people_df.dropna(axis='index', how='all')
+people_df.dropna(axis='columns', how='any')
+
+
+
+
+## now if we want to drop only those rows where only the email column has a missing value.
+## for doing this we need to pass a subset arguement list. As in this case it will be the single column 'email'.
+## in this case the 'how' arguement is insufficient so doesn't matter it has 'any' or 'all'.
+
+people_df.dropna(axis='index', how='any', subset=['email'])
+
+
+
+
+## now if we want either 'lname' or 'email' but not both.
+## so here we will get all the data even where either 'lname' or 'email' has missing value but not both are missing like for index 4.
+## remember to make the changes permamnent  we need to pass the 'inplace' arguement with 'True' value.
+
+people_df.dropna(axis='index', how='all', subset=['lname', 'email'])
+
+
+
+
+
+## Now for the custom Missing value.
+## it depends on how we load our data as in this case we made the data from the scratch so when creating dataframe we can replace the custom missing values with 'NaN' values.
+## But if we load from a .csv file then there will be a different method.
+
+people_df1 = pd.DataFrame(people)
+
+
+
+## using replace() making all the missing values to NaN values.
+
+people_df1.replace('NA', np.nan, inplace=True)
+people_df1.replace('Missing', np.nan, inplace=True)
+
+
+
+## Now all the custom missing values are 'NaN' values so we can use dropna()
+## to see whether they are na values we use .isna()
+
+
+people_df1.dropna()
+people_df1.dropna(axis='index', how='all', subset=['lname', 'email'])
+people_df1.isna()
+
+
+
+
+## Also we can use .fillna() when using with numerical values we want to make 0 for all the missing values so it helps in calculation.
+## it is mainly usefull for numerical data.
+## As in this case we can change all the missing values with "MISSING".
+## to make the changes permanent use inplace=True
+
+people_df1.fillna("MISSING")    // fills the missing values with "MISSING"
+people_df1.fillna(0)            // fills the missing values with 0
+
+
+
+
+
+
+
+
+<----------------Casting Datatypes-------------->
+
+
+people_df['age'].mean()     //Now as the age is also an object so if we want to see the avg age then it will throw an error.
+
+
+## now let's convert the string to numbers. for this we use .astype()
+## IMPORTANT :  if there is 'NaN' value in that datatype we want to change then we need to change them to float. Because the 'Nan' value actually a float value.
+## so it will throw error as we try to convert it into integer.
+
+people_df['age'] = people_df['age'].astype(int)
+
+
+
+## so if there is a column with a missing value then there are 2 options:
+## change the missing values to '0'.
+## or make the type of that column to 'float'.
+## remember to first make the custome datatypes to 'NaN' as we did for 'people_df1' dataframe. As 'NaN' is a float type by default.
+## let's use .astype() to convert it into float.
+## now lets see the avg age.
+
+
+people_df1['age'] = people_df1['age'].astype(float)
+people_df1['age'].mean()
+
+
+
+## now if we want to convert an entire dataframe having numbers at once then dataframe object has an .astype() as well.
+## e.g. people_df.astype()
+
+
+
+
+## The pickle file format is a binary file format, it stores the data by serializing the (csv) file into an object file. Here data transforms into byte code.
