@@ -36,10 +36,12 @@ df.describe()
 ## now to see all the rows
 ## .set_option('display.max_rows', desired row number)
 ## now we can see all 85 rows in one go
+## To see all the rows or columns use None inplace of the desired number. 
 
 
 pd.set_option('display.max_columns', 85)
 pd.set_option('display.max_rows', 85)
+pd.set_option('display.max_rows', None)		# to see all the rows
 
 
 
@@ -111,7 +113,8 @@ people_df.columns                       // Index(['fname', 'lname', 'email'], dt
 
 
 ## now to get row we use .loc and .iloc
-## iloc - allow us to acces rows by integer location.
+## loc - to access rows and columns by labels of the rows and columns.
+## iloc - allow us to access rows and columns by integer location.
 
 people_df.iloc[0]       // here we access the 1st row. Here it will return a series that contains the data of the 1st row.
 people_df.iloc[[0,1]]   // for multiple rows we again need to pass them as list like here accessing 1st and 2nd row.
@@ -139,6 +142,16 @@ people_df.iloc[[0,1], [2]]      // like here accessing the email column of both 
 people_df.loc[0]        // here we will see all the columns for the 1st row.
 people_df.loc[[0,1]]    // and for multiple rows.
 people_df.loc[[0,1],['lname','email']]      // like here acessing lname and email for 1st and 2nd row.
+
+
+## Difference between 'loc' and 'iloc':
+- Both are use to filter the dataframe but there are certain differences, like with 'loc' we can find the location of the rows and columns on the basis of labels and with 'iloc' we can do it on the basis of their index position.
+- During slicing operation in case of 'loc' it is all inclusive but for 'iloc' the outer limit is excluded.
+i.e.
+df.loc[0:2, 2:5]	# it means it will return all the 3 rows from row[0] to row[2] i.e. [0, 1, 2] along with 4 columns from column[2] to column[5] i.e. [2, 3, 4, 5].
+df.iloc[0:2, 2:5]	# it means it will return 2 rows from row[0] to row[1] leaving row[2] as it is the outer limit, along with 3 columns from column[2] to column[4] i.e. [2, 3, 4] leaving column[5].
+
+- So we can say that iloc behaves like the range() where the outer limit is excluded.
 
 
 
