@@ -265,3 +265,27 @@ Remove all packages in environment C:\Users\Arunava\anaconda3\envs\myenv:
 base                  *  C:\Users\Arunava\anaconda3
 Machine Learning         C:\Users\Arunava\anaconda3\envs\Machine Learning
 data                     C:\Users\Arunava\anaconda3\envs\data
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+- Run Jupyter server and kernel inside the conda environment:
+
+conda create -n my-conda-env         # creates new virtual env
+conda activate my-conda-env          # activate environment in terminal
+conda install jupyter                # install jupyter + notebook
+jupyter notebook                     # start server + kernel inside my-conda-env
+
+
+- Jupyter will be completely installed in the conda environment. Different versions of Jupyter can be used for different conda environments, but this option might be a bit of overkill. It is enough to include the kernel in the environment, which is the component wrapping Python which runs the code. The rest of Jupyter notebook can be considered as editor or viewer and it is not necessary to install this separately for every environment and include it in every env.yml file. Therefore one of the next two options might be preferable, but this one is the simplest one and definitely fine.
+
+- Create special kernel for the conda environment :
+
+conda create -n my-conda-env                               # creates new virtual env
+conda activate my-conda-env                                # activate environment in terminal
+conda install ipykernel                                    # install Python kernel in new conda env
+ipython kernel install --user --name=my-conda-env-kernel   # configure Jupyter to use Python kernel
+
+Then run jupyter from the system installation or a different conda environment.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
